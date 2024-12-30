@@ -39,7 +39,7 @@ const Orders = () => {
 
     return (
         <>
-            <div className="grid place-content-start pr-12 w-screen p-3 ">
+            <div className="grid place-content-end pr-12 w-screen p-3 ">
                 {!searchClicked && <FontAwesomeIcon onClick={() => setsearchClicked(true)} icon={faSearch} style={{ 'margin': 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" /> || <FontAwesomeIcon onClick={() => setsearchClicked(false)} icon={faClose} style={{ 'margin': 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" />}
             </div>
             {searchClicked && (<div className="mb-4">
@@ -52,7 +52,7 @@ const Orders = () => {
                 />
             </div>
             )}
-            <Section header="Order History" style={{ marginTop: '-0.5rem', background: 'red', border: '2px solid red' }}>
+            <Section header="Deposit">
                 <div style={{ width: "100%"}} className=" mx-auto">
                     {loader && <MyLoader />}
                     <div style={{ borderRadius: "10px" }} className="scrollabler w-full overflow-x-auto">
@@ -78,11 +78,11 @@ const Orders = () => {
                                     <tbody className=" ">
                                         {filteredData.map((items, index) => (
                                             <tr key={index}>
-                                                <td className="px-6 py-4 text-sm text-white">{items.did}</td>
-                                                <td className="px-6 py-4 text-sm text-white">{items.amount}</td>
-                                                <td className="px-6 py-4 text-sm text-white">{items.uid}</td>
-                                                <td className="px-6 py-4 text-sm text-white">{items.pm}</td>
-                                                <td className="px-6 py-4 text-sm text-white">{items.status}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.did}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.amount}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.uid}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.pm}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.status}</td>
                                             </tr>
                                         ))}
                                     </tbody>

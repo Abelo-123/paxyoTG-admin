@@ -39,7 +39,7 @@ const Orders = () => {
     );
     return (
         <>
-            <div className="grid place-content-start pr-12 w-screen p-3 ">
+            <div className="grid place-content-end pr-12 w-screen p-3 ">
                 {!searchClicked && <FontAwesomeIcon onClick={() => setsearchClicked(true)} icon={faSearch} style={{ 'margin': 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" /> || <FontAwesomeIcon onClick={() => setsearchClicked(false)} icon={faClose} style={{ 'margin': 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" />}
             </div>
             {searchClicked && (<div className="mb-4">
@@ -52,7 +52,7 @@ const Orders = () => {
                 />
             </div>
             )}
-            <Section header={(<div style={{ background:'red' }}>Orders</div>)} style={{ background:'red'}}>
+            <Section header="Orders">
                 <div style={{ width: "100%" }} className=" mx-auto">
                     {loader && <MyLoader />}
                     <div style={{ borderRadius: "10px" }} className="scrollabler w-full overflow-x-auto">

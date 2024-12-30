@@ -97,7 +97,7 @@ const Smm = () => {
     return (
         <>
 
-            <div className="grid place-content-start pr-12 w-screen p-3 ">
+            <div className="grid place-content-end pr-12 w-screen p-3 ">
                 {!searchClicked && <FontAwesomeIcon onClick={() => setsearchClicked(true)} icon={faSearch} style={{ 'margin': 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" /> || <FontAwesomeIcon onClick={() => setsearchClicked(false)} icon={faClose} style={{ 'margin': 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" />}
             </div>
             {searchClicked && (
@@ -124,7 +124,7 @@ const Smm = () => {
                     </div>
                 </div>
             )}
-            <ul>
+            <ul className="overflow-hidden">
 
                 {filteredUsers.map((items, index) => (
                     <li key={index} className="block p-2 " style={{ borderTop: '1px solid var(--tgui--header_bg_color)', borderBottom: '1px solid var(--tgui--header_bg_color)' }}>
@@ -223,6 +223,7 @@ const Smm = () => {
                 }
 
             </ul>
+
 
             {isModalOpenn && (
                 <div
