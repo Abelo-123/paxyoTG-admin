@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  margin-top:3.4rem;
+  background: var(--tgui--section_bg_color);
+}
+
+.common-styles {
+  @apply flex p-2 border-2 border-blue-200; /* Using Tailwind's @apply directive */
+}
+
+.modal-pops {
+  animation: popIn 0.02s linear forwards;
+}
+
+.modal-pop {
+  animation: popIn 0.05s ease-in forwards;
+}
+
+.modal-popp {
+  animation: popInn 0.1s ease-in forwards;
+}
+
+@keyframes popIn {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  100% {
+    display: block;
+    opacity: 1;
+  }
+}
+
+@keyframes popInn {
+  0% {
+    display: none;
+    opacity:0;
+    transform: scale(0.9);
+  }
+  100% {
+    display: block;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+.scrollable {
+  overflow: auto; /* Enable vertical scrolling */
+  border: 1px solid #ccc; /* Optional border for visibility */
+  padding: 10px; /* Add some padding for content */
+  scrollbar-width: thin; /* For Firefox: thin scrollbar */
+  scrollbar-color: var(--tgui--section_header_text_color) var(--tgui--secondary_bg_color); /* For Firefox: thumb and track color */
+}
+
+/* Webkit Browsers (Chrome, Edge, Safari) */
+.scrollable::-webkit-scrollbar {
+  width: 8px; /* Width of scrollbar */
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background:  var(--tgui--section_header_text_color);
+  border-radius: 4px; /* Rounded corners */
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--tgui--section_header_text_color); /* Darker thumb on hover */
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: var(--tgui--secondary_bg_color); /* Track background */
+  border-radius: 4px; /* Rounded track corners */
+}
+
+
+.scrollabler {
+  overflow: auto; /* Enable vertical scrolling */
+  /* Optional border for visibility */
+  scrollbar-width: thin; /* For Firefox: thin scrollbar */
+  scrollbar-color: var(--tgui--section_header_text_color) var(--tgui--secondary_bg_color); /* For Firefox: thumb and track color */
+}
+
+/* Webkit Browsers (Chrome, Edge, Safari) */
+.scrollabler::-webkit-scrollbar {
+  width: 8px; /* Width of scrollbar */
+}
+
+.scrollabler::-webkit-scrollbar-thumb {
+  background:  var(--tgui--section_header_text_color);
+  border-radius: 4px; /* Rounded corners */
+}
+
+.scrollabler::-webkit-scrollbar-thumb:hover {
+  background: var(--tgui--section_header_text_color); /* Darker thumb on hover */
+}
+
+.scrollabler::-webkit-scrollbar-track {
+  background: var(--tgui--secondary_bg_color); /* Track background */
+  border-radius: 4px; /* Rounded track corners */
+}
+
+thead {
+  background-color: var(--tgui--secondary_bg_color);
+  color: var(--tgui--text_color);
+}
+tbody tr:nth-child(odd) {
+  color: var(--tgui--text_color);
+  background-color: var(--tgui--bg_color); /* Odd rows have red background */
+}
+
+tbody tr:nth-child(even) {
+  color: var(--tgui--text_color);
+  background-color: var(--tgui--header_bg_color); /* Even rows have blue background */
+}
+
+.fa-lock {
+	animation: lock 1.5s cubic-bezier(.36,.07,.57,.99) infinite;
+}
+
+@keyframes lock {
+	0% {
+		transform: translateY(0);
+    color: 'var(--tgui--subtitle_text_color)';
+	}
+	20% {
+		transform:  translateY(-3px);
+	}
+	30% {
+		transform: translateY(3px);
+	}
+	50% {
+		transform:  translateY(-3px);
+	}
+	60% {
+		transform:  translateY(3px);
+	}
+	100% {
+		transform:  translateY(0);
+    color: 'var(--tgui--section_header_text_color)';
+	}
+}
+
+.buttonload {
+  color: white; /* White text */
+}
+
+/* Add a right margin to each icon */
+.fa {
+  margin-left: -12px;
+  margin-right: 8px;
+}
+
+.spin {
+  display: inline-block; /* Ensure it respects block-level properties */
+  animation: spin 1s linear infinite; /* Infinite spinning animation */
+}
+
+@keyframes spin {
+  from {
+      transform: rotate(0deg); /* Start at 0 degrees */
+  }
+  to {
+      transform: rotate(360deg); /* End at 360 degrees */
+  }
+}
+button:disabled {
+  cursor: not-allowed; /* Show a not-allowed cursor */
+  opacity: 0.7; /* Slightly transparent */
+}
+
+/* Custom SweetAlert2 Modal Style */
+.swal2-popup {
+  background-color: #333; /* Set background color */
+  color: #fff;            /* Set text color */
+}
+
+.swal2-title {
+  color: #ffcc00;          /* Set title color */
+}
+
+.swal2-confirm {
+  background-color: #007bff; /* Button color */
+  color: white;              /* Button text color */
+}
+
+.swal2-cancel {
+  background-color: #dc3545; /* Cancel button color */
+  color: white;              /* Cancel button text color */
+}
+
+/* Container to hide overflow */
+

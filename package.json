@@ -1,0 +1,62 @@
+{
+  "name": "paxyo-a",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-tooltip": "^1.1.3",
+    "@shadcn/ui": "^0.0.4",
+    "@supabase/supabase-js": "^2.46.2",
+    "@telegram-apps/telegram-ui": "^2.1.8",
+    "@twa-dev/sdk": "^7.10.1",
+    "axios": "^1.7.7",
+    "chart.js": "3.9.1",
+    "drizzle-kit": "^0.28.1",
+    "drizzle-orm": "^0.36.3",
+    "express": "^4.21.2",
+    "next": "15.0.2",
+    "next-twa": "^1.2.0",
+    "node-telegram-bot-api": "^0.66.0",
+    "pg": "^8.11.0",
+    "postgres": "^3.4.5",
+    "react": "19.0.0-rc-02c0e824-20241028",
+    "react-chartjs-2": "^5.2.0",
+    "react-content-loader": "^7.0.2",
+    "react-datepicker": "^7.5.0",
+    "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "sweetalert2": "^11.15.0",
+    "tgui-core": "^1.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "15.0.2",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.12.0",
+    "postcss": "^8",
+    "raw-loader": "^4.0.2",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5",
+    "typescript-eslint": "^8.14.0"
+  },
+  "overrides": {
+    "@supabase/supabase-js": {
+      "@supabase/gotrue-js": "2.61.0"
+    }
+  }
+}
