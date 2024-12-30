@@ -2,12 +2,11 @@
 import { useEffect } from "react";
 import '@telegram-apps/telegram-ui/dist/styles.css';
 import { AppRoot } from '@telegram-apps/telegram-ui';// Adjust as necessary
-import Smm from './components/smm/smm';
-import Admin from "./components/admin/page";
-import Smmhistory from './components/Smmhistory/page';
-import Deposit from './components/deposit/page';
-//import Account from './components/Account/account';
-import TelegramApp from './components/theme/theme';
+import '@telegram-apps/telegram-ui/dist/styles.css';
+import Deposit from "./components/Deposit/page";
+import Smm from "./components/User/page";
+import Orders from './components/Orders/page';
+import Accounts from './components/Accounts/page';
 import React from "react";
 
 import { useActivePage } from './components/ActivePageContext';
@@ -47,27 +46,30 @@ const Telegram = () => {
     <>
 
       <AppRoot>
+
         <div className='w-screen' >
 
           <div
             id="1"
-            className={`w-screen ${activePage === 1 ? '' : 'hidden'}`}><Smm /></div>
+            className={`w-screen ${activePage === 1 ? '' : 'hidden'}`}>
+            <Smm />
+          </div>
           <div
             id="2"
-            className={`w-screen ${activePage === 2 ? '' : 'hidden  '} `}><Smmhistory />
+            className={`w-screen ${activePage === 2 ? '' : 'hidden  '} `}><Deposit />
           </div>
           <div
             id="3"
-            className={`w-screen ${activePage === 3 ? '' : 'hidden'}`}><Deposit /></div>
-          {/* <div id="5"
-            className={`w-screen ${activePage === 3 ? '' : 'hidden'}`}><Account /></div> */}
-          <div id="6"
-            className={`w-screen ${activePage === 5 ? '' : 'hidden'}`}><TelegramApp /></div>
-          <div id="7"
-            className={`w-screen ${activePage === 6 ? '' : 'hidden'}`}><Admin /></div>
+            className={`w-screen ${activePage === 3 ? '' : 'hidden  '} `}><Orders />
+          </div>
+          <div
+            id="4"
+            className={`w-screen ${activePage === 4 ? '' : 'hidden  '} `}><Accounts />
+          </div>
+
         </div>
 
-      </AppRoot >
+      </AppRoot>
     </>
   );
 };
