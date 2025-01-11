@@ -14,7 +14,7 @@ const Tab = () => {
 
         <>
 
-            <Tabbar style={{ background: 'var(--tgui--section_bg_color)', border: '2px solid var(--tgui--section_bg_color)', display: 'grid', margin: '0rem', placeItems: 'center', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+            <Tabbar style={{ background: 'var(--tgui--section_bg_color)', border: '2px solid var(--tgui--section_bg_color)', display: 'grid', margin: '0rem', placeItems: 'center', gridTemplateColumns: 'repeat(5, 1fr)' }}>
                 <Tabbar.Item onClick={() => updateActivePage(1)}>
                     <div className='flex flex-col'>
 
@@ -42,6 +42,13 @@ const Tab = () => {
 
                         <FontAwesomeIcon icon={faUser} style={{ color: activePage === 4 ? 'var(--tgui--link_color)' : 'var(--tgui--subtitle_text_color)', fontSize: '1.2rem' }} />
                         <Text weight="3" style={{ color: activePage === 4 ? 'var(--tgui--link_color)' : 'var(--tgui--subtitle_text_color)', fontSize: '0.82rem' }}>Account</Text>
+                    </div>
+                </Tabbar.Item>
+                <Tabbar.Item onClick={() => updateActivePage(5)}>
+                    <div className='flex flex-col'>
+
+                        <FontAwesomeIcon icon={faUser} style={{ color: activePage === 5 ? 'var(--tgui--link_color)' : 'var(--tgui--subtitle_text_color)', fontSize: '1.2rem' }} />
+                        <Text weight="3" style={{ color: activePage === 5 ? 'var(--tgui--link_color)' : 'var(--tgui--subtitle_text_color)', fontSize: '0.82rem' }}>John</Text>
                     </div>
                 </Tabbar.Item>
             </Tabbar>

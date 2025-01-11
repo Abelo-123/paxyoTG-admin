@@ -8,6 +8,8 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "@/app/lib/supabaseClient";
 import { useEffect, useState } from "react";
 import { Avatar, Input } from '@telegram-apps/telegram-ui';// Adjust as necessary
+import { useUser } from "../UserContext";
+
 
 const Smm = () => {
 
@@ -48,6 +50,7 @@ const Smm = () => {
         setIsModalOpenn(false);
     };
 
+    const { userData } = useUser();
 
 
     const filteredUsers = users.filter((item) =>
@@ -100,6 +103,7 @@ const Smm = () => {
             <div className="grid place-content-end pr-12 w-screen p-3 ">
                 {!searchClicked && <FontAwesomeIcon onClick={() => setsearchClicked(true)} icon={faSearch} style={{ 'margin': 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" /> || <FontAwesomeIcon onClick={() => setsearchClicked(false)} icon={faClose} style={{ 'margin': 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" />}
             </div>
+            {userData.userId}
             {searchClicked && (
                 <div>
                     <div className="mb-0">
