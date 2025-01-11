@@ -459,7 +459,7 @@ const John = () => {
             if (updateError) throw updateError;
 
 
-            console.log('Updated successfully:', updatedValue);
+            console.log('Updated sccessfully:', updatedValue);
         } catch (error) {
             console.error('Error updating bigvalue:', error.message);
         }
