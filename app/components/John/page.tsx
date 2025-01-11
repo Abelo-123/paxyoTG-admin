@@ -129,14 +129,15 @@ const John = () => {
 
                                 // Set user data in localStorage with a unique key
                                 localStorage.setItem(storageKey, userName);
-                                setUserData({
+                                setUserData((prevNotification) => ({
+                                    ...prevNotification,
                                     username: user.username,
                                     firstName: user.first_name,
                                     lastName: user.last_name,
                                     userId: user.id,
                                     profile: user.photo_url,
 
-                                });
+                                }));
                             }
 
                             // Store the name with a unique key
@@ -283,7 +284,7 @@ const John = () => {
             const { data: setNotify, error: setError } = await supabase
                 .from('panel')
                 .select('value')
-                .eq('father', userData.father)
+                .eq('owner', userData.userId)
                 .eq('key', 'rate')
                 .single()
 
@@ -294,7 +295,6 @@ const John = () => {
                 const { data, error: fetchError } = await supabase
                     .from('panel')
                     .select('bigvalue')
-                    .eq('father', userData.firstName)
                     .eq('owner', userData.userId)
                     .eq('key', 'disabled')
                     .single(); // Assumes a single row or adjusts query if needed
@@ -317,7 +317,7 @@ const John = () => {
             const { data, error: findErrorC } = await supabase
                 .from("panel")
                 .select('minmax')
-                .eq('father', userData.father)
+                .eq('owner', userData.userId)
                 .eq('key', 'minmax')// Pass 100 as a string
                 .single()
 
@@ -343,12 +343,14 @@ const John = () => {
             .on("postgres_changes", { event: "UPDATE", schema: "public", table: "panel" }, (payload) => {
                 //console.log("New order inserted:", payload.new);
                 // Add the new order to the state
-                setUserData((prevNotification) => ({
-                    ...prevNotification, // Spread the previous state
-                    recentDisabled: [...prevNotification.recentDisabled, payload.new.bigvalue], // Append new value to the array
+                if (payload.new.owner === userData.userId && payload.new.key === 'disabled') {
+                    setUserData((prevNotification) => ({
+                        ...prevNotification, // Spread the previous state
+                        recentDisabled: [...prevNotification.recentDisabled, payload.new.bigvalue], // Append new value to the array
 
-                    // Update the `deposit` field
-                }));
+                        // Update the `deposit` field
+                    }));
+                }
 
                 //console.log(payload.new)
             })
@@ -367,28 +369,7 @@ const John = () => {
 
                 //console.log(payload.new)
             })
-            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_deposit" }, (payload) => {
-                //console.log("New order inserted:", payload.new);
-                // Add the new order to the state
-                if (payload.new.father == userData.father) {
-                    setDepo((prevWith) =>
-                        prevWith.map((item) =>
-                            item.wid === payload.new.wid
-                                ? { ...item, status: 'Sent' } // Update status to 'sent' if wid matches id
-                                : item // Keep the other items unchanged
-                        )
-                    );
-                    setDepoo((prevWith) =>
-                        prevWith.map((item) =>
-                            item.wid === payload.new.wid
-                                ? { ...item, status: 'Sent' } // Update status to 'sent' if wid matches id
-                                : item // Keep the other items unchanged
-                        )
-                    );
-                }
 
-                //console.log(payload.new)
-            })
 
 
 
@@ -397,7 +378,7 @@ const John = () => {
     }, [])
 
     const updateRate = async () => {
-        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('father', userData.father).eq('key', 'rate'); // Update all rows where `did` is greater than 0
+        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', userData.userId).eq('key', 'rate'); // Update all rows where `did` is greater than 0
         if (findErrorC) {
             console.error(findErrorC.message)
         } else {
@@ -452,7 +433,6 @@ const John = () => {
             const { error: updateError } = await supabase
                 .from('panel')
                 .update({ bigvalue: updatedValue })
-                .eq('father', userData.firstName)
                 .eq('owner', userData.userId)
                 .eq('key', 'disabled')
 
@@ -478,7 +458,6 @@ const John = () => {
                 .from('panel')
                 .select('bigvalue')
                 .eq('key', 'disabled')
-                .eq('father', userData.firstName)
                 .eq('owner', userData.userId)// Filter based on the 'father' or any other condition
                 .single();
 
@@ -503,7 +482,6 @@ const John = () => {
             const { error: updateError } = await supabase
                 .from('panel')
                 .update({ bigvalue: updatedBigValue })
-                .eq('father', userData.firstName)
                 .eq('owner', userData.userId)// Filter by correct row
 
             if (updateError) {
@@ -622,7 +600,7 @@ const John = () => {
     }
 
     const updateDeposit = async () => {
-        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('father', userData.father).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
+        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', userData.userId).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
         if (findErrorB) {
             console.error(findErrorB.message)
         } else {
@@ -747,8 +725,13 @@ const John = () => {
             <div className="block flex flex-col w-full bg-blue-100">
                 <div className="bg-red-100 p-2">
                     <div className="flex flex-col">
-                        <i>admin message</i>
+                        <i>admin {userData.father}</i>
+                        {<button onClick={() => {
+                            localStorage.clear();
 
+                        }}>
+                            Clean
+                        </button>}
                         all: <input type="text" placeholder="admin | user" onChange={(e) => {
                             setAll(e.target.value)
                             setIndi(e.target.value)

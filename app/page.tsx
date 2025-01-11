@@ -37,14 +37,15 @@ const Telegram = () => {
       if (window.Telegram && window.Telegram.WebApp) {
         Telegram.WebApp.expand() // Get the app version
         const { user } = Telegram.WebApp.initDataUnsafe;
-        setUserData({
+        setUserData((prevNotification) => ({
+          ...prevNotification,
           username: user.username,
           firstName: user.first_name,
           lastName: user.last_name,
           userId: user.id,
           profile: user.photo_url,
-
-        });
+          father: user.first_name,
+        }));
       }
 
     };
