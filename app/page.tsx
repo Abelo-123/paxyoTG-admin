@@ -58,7 +58,7 @@ const Telegram = () => {
 
   useEffect(() => {
     const checkNot = async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('adminmessage')
         .select('message')
         .eq('to', userData.userId)
