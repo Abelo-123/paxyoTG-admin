@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
         lastName: '',
         father: 'none',
         userId: 100, //userId: undefined,
-        recentDisabled: "666",
+        recentDisabled: "666,9090",
         profile: "https://png.pngtree.com/png-clipart/20230511/ourmid/pngtree-isolated-cat-on-white-background-png-image_7094927.png"
 
     });

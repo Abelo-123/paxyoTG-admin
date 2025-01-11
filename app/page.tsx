@@ -44,7 +44,7 @@ const Telegram = () => {
           lastName: user.last_name,
           userId: user.id,
           profile: user.photo_url,
-          father: user.first_name,
+          father: user.first_name
         }));
       }
 
