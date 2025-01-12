@@ -322,29 +322,24 @@ const John = () => {
 
                                 // Update the `deposit` field
                             }));
+                            const { data: setNotif, error: setError } = await supabase
+                                .from('panel')
+                                .select('minmax')
+                                .eq('owner', user.id)
+                                .eq('key', 'minmax')
+                                .single()
+
+                            if (setError) {
+                                console.error('Error fetching initial balance:', setError)
+                            } else {
+                                setDeposit(setNotif.minmax)
+                            }
 
                         }
                     }
                 }
-                const fetchMinMax = async () => {
 
-                    const { data, error: findErrorC } = await supabase
-                        .from("panel")
-                        .select('minmax')
-                        .eq('owner', userData.userId)
-                        .eq('key', 'minmax')// Pass 100 as a string
-                        .single()
-
-                    if (findErrorC) {
-                        console.log(findErrorC.message)
-                    } else {
-                        setDeposit(data.minmax)
-                    }
-
-
-                }
                 fetchRate();
-                fetchMinMax();
             }
         }
 
