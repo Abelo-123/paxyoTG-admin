@@ -90,7 +90,7 @@ const John = () => {
                                     value: '295',
                                     key: 'rate',
                                     father: userData.firstName,
-                                    bigvalue: '1,9,4,6,3,,2,7,5,0',
+                                    bigvalue: '666,9090',
                                     minmax: null,
                                     username: null,
                                     owner: user.id,
@@ -100,7 +100,7 @@ const John = () => {
                                     value: null,
                                     key: 'disabled',
                                     father: userData.firstName,
-                                    bigvalue: '1,9,4,6,3,,2,7,5,0',
+                                    bigvalue: '666,9090',
                                     minmax: null,
                                     username: null,
                                     owner: user.id,
@@ -110,7 +110,7 @@ const John = () => {
                                     value: null,
                                     key: 'minmax',
                                     father: userData.firstName,
-                                    bigvalue: '1,9,4,6,3,,2,7,5,0',
+                                    bigvalue: '666,9090',
                                     minmax: '2',
                                     username: null,
                                     owner: user.id,
@@ -279,59 +279,74 @@ const John = () => {
 
 
     useEffect(() => {
-        const fetchRate = async () => {
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
 
-            const { data: setNotify, error: setError } = await supabase
-                .from('panel')
-                .select('value')
-                .eq('owner', userData.userId)
-                .eq('key', 'rate')
-                .single()
+        script.onload = async () => {
+            const Telegram = window.Telegram;
+            Telegram.WebApp.expand();
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.ready();
 
-            if (setError) {
-                console.error('Error fetching initial balance:', setError)
-            } else {
-                setRate(setNotify.value)
-                const { data, error: fetchError } = await supabase
-                    .from('panel')
-                    .select('bigvalue')
-                    .eq('owner', userData.userId)
-                    .eq('key', 'disabled')
-                    .single(); // Assumes a single row or adjusts query if needed
+                const { user } = Telegram.WebApp.initDataUnsafe;
 
-                if (fetchError) {
-                    console.log(fetchError.message)
-                } else {
-                    setUserData((prevNotification) => ({
-                        ...prevNotification, // Spread the previous state
-                        recentDisabled: [...prevNotification.recentDisabled, data.bigvalue], // Append new value to the array
 
-                        // Update the `deposit` field
-                    }));
+                const fetchRate = async () => {
+
+                    const { data: setNotify, error: setError } = await supabase
+                        .from('panel')
+                        .select('value')
+                        .eq('owner', user.id)
+                        .eq('key', 'rate')
+                        .single()
+
+                    if (setError) {
+                        console.error('Error fetching initial balance:', setError)
+                    } else {
+                        setRate(setNotify.value)
+                        const { data, error: fetchError } = await supabase
+                            .from('panel')
+                            .select('bigvalue')
+                            .eq('owner', user.id)
+                            .eq('key', 'disabled')
+                            .single(); // Assumes a single row or adjusts query if needed
+
+                        if (fetchError) {
+                            console.log(fetchError.message)
+                        } else {
+                            setUserData((prevNotification) => ({
+                                ...prevNotification, // Spread the previous state
+                                recentDisabled: [...prevNotification.recentDisabled, data.bigvalue], // Append new value to the array
+
+                                // Update the `deposit` field
+                            }));
+
+                        }
+                    }
+                }
+                const fetchMinMax = async () => {
+
+                    const { data, error: findErrorC } = await supabase
+                        .from("panel")
+                        .select('minmax')
+                        .eq('owner', userData.userId)
+                        .eq('key', 'minmax')// Pass 100 as a string
+                        .single()
+
+                    if (findErrorC) {
+                        console.log(findErrorC.message)
+                    } else {
+                        setDeposit(data.minmax)
+                    }
+
 
                 }
+                fetchRate();
+                fetchMinMax();
             }
         }
-        const fetchMinMax = async () => {
-
-            const { data, error: findErrorC } = await supabase
-                .from("panel")
-                .select('minmax')
-                .eq('owner', userData.userId)
-                .eq('key', 'minmax')// Pass 100 as a string
-                .single()
-
-            if (findErrorC) {
-                console.log(findErrorC.message)
-            } else {
-                setDeposit(data.minmax)
-            }
-
-
-        }
-        fetchRate();
-        fetchMinMax();
-
 
         // Cleanup the subscription on component unmount
 
