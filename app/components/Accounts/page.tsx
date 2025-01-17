@@ -50,7 +50,7 @@ const Accounts = () => {
     const [amount, setAmount] = useState(null)
     const [bank, setBank] = useState(null)
     /* eslint-disable @typescript-eslint/no-unused-vars */
-    const [loader, setLoader] = useState(false)
+    const [loader, etLoader] = useState(false)
     /* eslint-disable @typescript-eslint/no-unused-vars */
     const [acc, setAcc] = useState(null)
     const [accountname, setAccountname] = useState('')
