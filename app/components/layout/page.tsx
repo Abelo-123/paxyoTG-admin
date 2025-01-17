@@ -27,6 +27,7 @@ const Lays = () => {
                 .from('adminmessage')
                 .select('message')
                 .eq('to', 'Admin')
+                .eq('father', 9999)
                 .single()
 
             if (setError) {
@@ -77,21 +78,33 @@ const Lays = () => {
         const { data: setNotify, error: setError } = await supabase
             .from('adminmessage')
             .select('*')
-            .eq('to', userData.userId)
+            .eq('to', 7786592015)
+            .eq('father', 9999)
+
 
 
 
         if (setError) {
             console.error('Error fetching initial balance:', setError);
         } else {
+            const { error: setError } = await supabase
+                .from("adminmessage")
+                .update({ seen: false })
+                .eq('to', 7786592015)
+                .eq('father', 999)
 
-            setNotification((prevNotification) => ({
-                ...prevNotification, // Spread the previous state
-                notificationLoader: false,
-                notificationData: setNotify,
-                notificationLight: false,
-                // Update the `deposit` field
-            }));
+
+            if (setError) {
+                console.error('Error fetching initial balance:', setError);
+            } else {
+                setNotification((prevNotification) => ({
+                    ...prevNotification, // Spread the previous state
+                    notificationLoader: false,
+                    notificationData: setNotify,
+                    notificationLight: false,
+                    // Update the `deposit` field
+                }));
+            }
         }
 
 
@@ -120,7 +133,7 @@ const Lays = () => {
                     <div className="flex">
                         <FontAwesomeIcon size="2x" icon={faBell} />
                         {useNotification.notificationLight === true ? (
-                            <div style={{ position: 'absolute', right: '0', padding: '0.4rem', height: '0.4rem', borderRadius: '100px', background: 'red' }}></div>
+                            <div style={{ position: 'absolute', right: '0', padding: '4rem', height: '0.4rem', borderRadius: '100px', background: 'red' }}></div>
                         ) : (<></>)}
                     </div>
                 </div>
