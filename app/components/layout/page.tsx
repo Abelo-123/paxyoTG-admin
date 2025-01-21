@@ -27,7 +27,7 @@ const Lays = () => {
                 .from('adminmessage')
                 .select('message')
                 .eq('to', 'Admin')
-                .eq('father', 9999)
+                .eq('father', 999999999)
                 .single()
 
             if (setError) {
@@ -60,6 +60,7 @@ const Lays = () => {
                 setBalance((payload.new as { balance: number }).balance); // Update balance on real-time changes
 
             })
+
             .subscribe();
     }, [])
 
@@ -78,8 +79,8 @@ const Lays = () => {
         const { data: setNotify, error: setError } = await supabase
             .from('adminmessage')
             .select('*')
-            .eq('to', 7786592015)
-            .eq('father', 9999)
+            .eq('to', 5928771903)
+            .eq('father', 999999999)
 
 
 
@@ -90,7 +91,7 @@ const Lays = () => {
             const { error: setError } = await supabase
                 .from("adminmessage")
                 .update({ seen: false })
-                .eq('to', 7786592015)
+                .eq('to', 5928771903)
                 .eq('father', 999)
 
 

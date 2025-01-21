@@ -21,7 +21,7 @@ const Orders = () => {
             const { data: initialData, error } = await supabase
                 .from("orders")
                 .select("*")
-                .eq('father', 7786592015);
+                .eq('father', 5928771903);
             if (error) {
                 console.log(error);
             } else {

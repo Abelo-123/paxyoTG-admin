@@ -30,7 +30,7 @@ const Smm = () => {
             const { data, error } = await supabase
                 .from("users")
                 .select('*')
-                .eq('father', 7786592015);
+                .eq('father', 5928771903);
             if (error) throw error;
             setUsers(data);
         } catch (error) {
@@ -60,7 +60,7 @@ const Smm = () => {
                         seen: true,
                         message: message,
                         for: messageId,
-                        father: 7786592015,
+                        father: 5928771903,
                         from: "Admin",
                     }
                 ]);

@@ -20,7 +20,7 @@ const Orders = () => {
             const { data: initialData, error } = await supabase
                 .from("deposit")
                 .select("*")
-                .eq('father', 7786592015);
+                .eq('father', 5928771903);
             if (error) {
                 console.log(error);
             } else {

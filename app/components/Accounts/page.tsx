@@ -40,6 +40,7 @@ const Accounts = () => {
     const [iframeKey, setIframeKey] = useState(0);
     /* eslint-disable @typescript-eslint/no-unused-vars */
     const [tb, setTb] = useState('')
+    const [tg, setTg] = useState('')
     const [depo, setDepo] = useState([])
     const [depob, setDepob] = useState([])
     /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -64,7 +65,7 @@ const Accounts = () => {
     const sendAdminMessage = async () => {
         if (!adminMessageFor && !adminMessageFor2 && all == "admin") { //all admin
 
-            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('to', 'Admin').eq('father', 9999); // Update all rows where `did` is greater than 0
+            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('to', 'Admin').eq('father', 999999999); // Update all rows where `did` is greater than 0
             if (findErrorB) {
                 console.error(findErrorB.message)
             } else {
@@ -90,7 +91,7 @@ const Accounts = () => {
             if (error) {
                 console.error("Error inserting into adminmessage:", error);
             } else {
-                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('for', adminMessageFor).eq('father', userData.Id).gt('id', 0); // Update all rows where `did` is greater than 0
+                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('for', adminMessageFor).eq('father', 5928771903).gt('id', 0); // Update all rows where `did` is greater than 0
                 if (findErrorB) {
                     console.error(findErrorB.message)
                 } else {
@@ -110,7 +111,7 @@ const Accounts = () => {
                         from: "Admin", // Replace with the desired value for the "from" column
                         to: adminMessageFor,
                         seen: true,
-                        father: 9999
+                        father: 999999999
                     }
                 ]);
 
@@ -124,7 +125,7 @@ const Accounts = () => {
                 setAll('')
             }
         } else if (!adminMessageFor && !adminMessageFor2 && all == "user") { //all use
-            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('father', userData.userId).eq('for', 'all'); // Update all rows where `did` is greater than 0
+            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('father', 5928771903).eq('for', 'all'); // Update all rows where `did` is greater than 0
             if (findErrorB) {
                 console.error(findErrorB.message)
             } else {
@@ -152,7 +153,7 @@ const Accounts = () => {
             if (error) {
                 console.error("Error inserting into adminmessage:", error);
             } else {
-                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', userData.userId).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
+                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 5928771903).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
                 if (findErrorB) {
                     console.error(findErrorB.message)
                 } else {
@@ -170,7 +171,7 @@ const Accounts = () => {
 
     }
     const updateRate = async () => {
-        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', 7786592015).eq('key', 'rate'); // Update all rows where `did` is greater than 0
+        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', 5928771903).eq('key', 'rate'); // Update all rows where `did` is greater than 0
         if (findErrorC) {
             console.error(findErrorC.message)
         } else {
@@ -213,7 +214,7 @@ const Accounts = () => {
                     const { data: withdrawlForEach, error } = await supabase
                         .from("admin_withdrawl")
                         .select("*")
-                        .eq('for', 7786592015)
+                        .eq('for', 5928771903)
 
                     if (error) {
                         console.log(error);
@@ -230,13 +231,39 @@ const Accounts = () => {
                             const { data: amountForEach, error } = await supabase
                                 .from("admin_amount")
                                 .select("*")
-                                .eq('father', 7786592015)
+                                .eq('father', 5928771903)
 
                             if (error) {
                                 console.log(error);
                             } else {
                                 setDepob(amountForEach)
 
+                                const { data: panelDisable, error } = await supabase
+                                    .from("panel")
+                                    .select("bigvalue")
+                                    .eq('owner', 5928771903)
+
+
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    setUserData((prevNotification) => ({
+                                        ...prevNotification, // Spread the previous state
+                                        recentDisabled: panelDisable[0].bigvalue, // Fallback to `false` if undefined
+                                    }));
+
+                                    const { data: mindepo, error } = await supabase
+                                        .from("panel")
+                                        .select("minmax")
+                                        .eq('owner', 5928771903)
+
+
+                                    if (error) {
+                                        console.log(error);
+                                    } else {
+                                        console.log(mindepo[0].minmax)
+                                    }
+                                }
                             }
                         }
                     }
@@ -302,7 +329,7 @@ const Accounts = () => {
                 //console.log("New order inserted:", payload.new);
                 // Add the new order to the state
 
-                if (payload.new.for === 7786592015) {
+                if (payload.new.for === 5928771903) {
 
                     setWithdrawldatao((prevWith) => (
                         [...prevWith, { status: payload.new.status, date: payload.new.date, wid: payload.new.wid, for: payload.new.for, bank: payload.new.bank, a_name: payload.new.a_name, a_no: payload.new.a_no, amount: payload.new.amount }]
@@ -316,7 +343,7 @@ const Accounts = () => {
             .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
                 //console.log("New order inserted:", payload.new);
                 // Add the new order to the state
-                if (payload.new.for == 7786592015) {
+                if (payload.new.for == 5928771903) {
                     setWithdrawldata((prevWith) =>
                         prevWith.map((item) =>
                             item.wid === payload.new.wid
@@ -338,7 +365,7 @@ const Accounts = () => {
             // .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
             //     //console.log("New order inserted:", payload.new);
             //     // Add the new order to the state
-            //     if (payload.new.for == 7786592015) {
+            //     if (payload.new.for == 5928771903) {
             //         setWithdrawldata((prevWith) =>
             //             prevWith.map((item) =>
             //                 item.wid === payload.new.wid
@@ -371,7 +398,7 @@ const Accounts = () => {
                 .from('panel')
                 .select('bigvalue')
                 .eq('key', 'disabled')
-                .eq('owner', 7786592015)// Filter based on the 'father' or any other condition
+                .eq('owner', 5928771903)// Filter based on the 'father' or any other condition
                 .single();
 
             if (error) {
@@ -395,7 +422,7 @@ const Accounts = () => {
             const { error: updateError } = await supabase
                 .from('panel')
                 .update({ bigvalue: updatedBigValue })
-                .eq('owner', 7786592015)// Filter by correct row
+                .eq('owner', 5928771903)// Filter by correct row
 
             if (updateError) {
                 console.error('Error updating bigvalue:', updateError);
@@ -448,7 +475,7 @@ const Accounts = () => {
             const { error: updateError } = await supabase
                 .from('panel')
                 .update({ bigvalue: updatedValue })
-                .eq('owner', 7786592015)
+                .eq('owner', 5928771903)
                 .eq('key', 'disabled')
 
             if (updateError) throw updateError;
@@ -598,7 +625,7 @@ const Accounts = () => {
         const { error: setError } = await supabase
             .from('admin_withdrawl')
             .insert([{
-                for: 7786592015,
+                for: 5928771903,
                 bank: bank,
                 a_name: accountname,
                 a_no: acc,
@@ -618,7 +645,7 @@ const Accounts = () => {
     }
 
     const updateDeposit = async () => {
-        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', 7786592015).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
+        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', 5928771903).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
         if (findErrorB) {
             console.error(findErrorB.message)
         } else {

@@ -62,8 +62,8 @@ const Telegram = () => {
       const { data } = await supabase
         .from('adminmessage')
         .select('message')
-        .eq('to', 7786592015)
-        .eq('father', 9999)
+        .eq('to', 5928771903)
+        .eq('father', 999999999)
         .eq('seen', true)
 
 
