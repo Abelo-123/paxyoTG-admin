@@ -31,7 +31,7 @@ const Orders = () => {
             }
         };
 
-        auth(); // Call the auth function when the component is mounted
+        auth(); // Call the auth function whethe component is mounted
     }, []);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
