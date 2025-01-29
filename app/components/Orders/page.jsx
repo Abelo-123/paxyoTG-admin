@@ -87,7 +87,7 @@ const Orders = () => {
                 />
             </div>
             )}
-            <Section header="Orders" >
+            <Section header="Orders"style={{color: 'white',backgroundColor: 'var(--tgui--section_header_background_color)'}} >
                 <div style={{ width: "100%" }} className=" mx-auto">
                     {loader && <MyLoader />}
                     <div style={{ borderRadius: "10px" }} className="scrollabler w-full overflow-x-auto">
