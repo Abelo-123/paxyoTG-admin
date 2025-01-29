@@ -3,12 +3,10 @@
 @tailwind utilities;
 
 
-I, Input {
-  color:black;
-}
+
 body {
   color: #ffffff;
-  background: 'var(--tgui--secondary_bg_color)';
+  background: white;
 }
 
 .common-styles {
