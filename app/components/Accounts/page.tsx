@@ -598,7 +598,7 @@ const Accounts = () => {
 
 
             if (!error) {
-                var news = data.a_balance + am
+                const news = data.a_balance + am
                 const { error } = await supabase.from('users')
                     .update({ 'a_balance': news })
                     .eq('id', 6187538792)
