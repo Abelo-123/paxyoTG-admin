@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  color: white;
-}
+
 I, Input {
   color:black;
 }
