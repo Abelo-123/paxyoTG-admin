@@ -77,7 +77,7 @@ const Orders = () => {
                 />
             </div>
             )}
-            <Section header="Deposit" style={{background: 'var(--tgui--secondary_bg_color)'}}>
+            <Section header="Deposit">
                 <div style={{ width: "100%"}} className=" mx-auto">
                     {loader && <MyLoader />}
                     <div style={{ borderRadius: "10px" }} className="scrollabler w-full overflow-x-auto">
