@@ -21,6 +21,10 @@ const Accounts = () => {
     const [modalG, setModalG] = useState(false)
     const [modalH, setModalH] = useState(false)
     const [modalI, setModalI] = useState(false)
+    const [modalww, setModalww] = useState(false)
+    const [modalee, setModalee] = useState(false)
+    const [modalii, setModalii] = useState(false)
+
 
     const [all, setAll] = useState(null)
     const [indi, setIndi] = useState(null)
@@ -36,12 +40,17 @@ const Accounts = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [iframe1Visible, setIframe1Visible] = useState(false);
     const [iframe2Visible, setIframe2Visible] = useState(false);
+    const [iframe31Visible, setIframe31Visible] = useState(false);
+    const [iframe32Visible, setIframe32Visible] = useState(false);
+    const [iframe33Visible, setIframe33Visible] = useState(false);
+    const [iframe34Visible, setIframe34Visible] = useState(false);
     /* eslint-disable @typescript-eslint/no-unused-vars */
-    const [iframeKey, setIframeKey] = useState(0);
     /* eslint-disable @typescript-eslint/no-unused-vars */
     const [tb, setTb] = useState('')
     const [tg, setTg] = useState('')
+    const [but, setBut] = useState(true)
     const [depo, setDepo] = useState([])
+    const [again, setAgain] = useState(true);
     const [depob, setDepob] = useState([])
     /* eslint-disable @typescript-eslint/no-unused-vars */
     const [depoo, setDepoo] = useState([])
@@ -60,12 +69,13 @@ const Accounts = () => {
     const [withdrawlo, setWithdrawldatao] = useState([])
     /* eslint-disable @typescript-eslint/no-unused-vars */
     const [depositmin, setDeposit] = useState(null)
-    const [amounts, setAmounts] = useState(null)
+    const [mm, setMm] = useState(null)
+    const [rr, setRr] = useState(null)
 
     const sendAdminMessage = async () => {
         if (!adminMessageFor && !adminMessageFor2 && all == "admin") { //all admin
 
-            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('to', 'Admin').eq('father', 999999999); // Update all rows where `did` is greater than 0
+            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('to', 'Admin').eq('father', 6528707984); // Update all rows where `did` is greater than 0
             if (findErrorB) {
                 console.error(findErrorB.message)
             } else {
@@ -78,28 +88,52 @@ const Accounts = () => {
 
         } else if (!adminMessageFor && adminMessageFor2) { //specific user
             const { error } = await supabase
-                .from('adminmessage')
-                .insert([
-                    {
-                        message: adminMessage, // Replace with your dynamic value if needed
-                        for: adminMessageFor2, // Replace with the desired value for the "for" column
-                        from: "Admin",
-                        father: userData.userId,
-                    }
-                ]);
+                .from('users')
+                .select('id')
+                .eq("father", adminMessageFor2)
+                .single()
+
+
 
             if (error) {
-                console.error("Error inserting into adminmessage:", error);
+                alert(error);
             } else {
-                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('for', adminMessageFor).eq('father', 5928771903).gt('id', 0); // Update all rows where `did` is greater than 0
-                if (findErrorB) {
-                    console.error(findErrorB.message)
-                } else {
+                const { error } = await supabase
+                    .from('adminmessage')
+                    .insert([
+                        {
+                            message: adminMessage, // Replace with your dynamic value if needed
+                            for: adminMessageFor2, // Replace with the desired value for the "for" column
+                            from: "Admin",
+                            father: userData.userId,
+                        }
+                    ]);
 
-                    setAdminMessageFor('')
-                    setAdminMessageFor2('')
-                    setAdminMessage('')
-                    setAll('')
+                if (error) {
+                    console.error("Error inserting into adminmessage:", error);
+                } else {
+                    const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('for', adminMessageFor).eq('father', 6187538792).gt('id', 0); // Update all rows where `did` is greater than 0
+                    if (findErrorB) {
+                        console.error(findErrorB.message)
+                    } else {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Message sent to user.',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                popup: 'swal2-popup',    // Apply the custom class to the popup
+                                title: 'swal2-title',    // Apply the custom class to the title
+                                confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                                cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                            }
+                        });
+                        setIndi(null)
+                        setAdminMessageFor('')
+                        setAdminMessageFor2('')
+                        setAdminMessage('')
+                        setAll('')
+                    }
                 }
             }
         } else if (adminMessageFor && !adminMessageFor2) { //specici admin
@@ -111,7 +145,7 @@ const Accounts = () => {
                         from: "Admin", // Replace with the desired value for the "from" column
                         to: adminMessageFor,
                         seen: true,
-                        father: 999999999
+                        father: 6528707984
                     }
                 ]);
 
@@ -125,11 +159,23 @@ const Accounts = () => {
                 setAll('')
             }
         } else if (!adminMessageFor && !adminMessageFor2 && all == "user") { //all use
-            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('father', 5928771903).eq('for', 'all'); // Update all rows where `did` is greater than 0
+            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('father', 6187538792).eq('for', 'all'); // Update all rows where `did` is greater than 0
             if (findErrorB) {
                 console.error(findErrorB.message)
             } else {
-                window.alert("sending all users")
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Message sent to all users',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        popup: 'swal2-popup',    // Apply the custom class to the popup
+                        title: 'swal2-title',    // Apply the custom class to the title
+                        confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                        cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                    }
+                });
+                setIndi(null)
                 setAdminMessageFor('')
                 setAdminMessageFor2('')
                 setAdminMessage('')
@@ -153,11 +199,22 @@ const Accounts = () => {
             if (error) {
                 console.error("Error inserting into adminmessage:", error);
             } else {
-                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 5928771903).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
+                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 6187538792).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
                 if (findErrorB) {
                     console.error(findErrorB.message)
                 } else {
-                    window.alert("sending all users")
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Message sent to all users.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            popup: 'swal2-popup',    // Apply the custom class to the popup
+                            title: 'swal2-title',    // Apply the custom class to the title
+                            confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                            cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                        }
+                    });
                     setAdminMessageFor('')
                     setAdminMessageFor2('')
                     setAdminMessage('')
@@ -171,11 +228,23 @@ const Accounts = () => {
 
     }
     const updateRate = async () => {
-        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', 5928771903).eq('key', 'rate'); // Update all rows where `did` is greater than 0
+        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', 6187538792).eq('key', 'rate'); // Update all rows where `did` is greater than 0
         if (findErrorC) {
             console.error(findErrorC.message)
         } else {
-            console.log("updated")
+            setModalB(false)
+            Swal.fire({
+                title: 'Success!',
+                text: 'Rate updated.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'swal2-popup',    // Apply the custom class to the popup
+                    title: 'swal2-title',    // Apply the custom class to the title
+                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                }
+            });
         }
     }
     const updateAllRate = async () => {
@@ -196,7 +265,7 @@ const Accounts = () => {
             const { data: depositForEach, error } = await supabase
                 .from("admin_deposit")
                 .select("*")
-                .eq('father', userData.userId)
+                .eq('admin', userData.userId)
 
             if (error) {
                 console.log(error);
@@ -214,7 +283,7 @@ const Accounts = () => {
                     const { data: withdrawlForEach, error } = await supabase
                         .from("admin_withdrawl")
                         .select("*")
-                        .eq('for', 5928771903)
+                        .eq('for', 6187538792)
 
                     if (error) {
                         console.log(error);
@@ -231,7 +300,7 @@ const Accounts = () => {
                             const { data: amountForEach, error } = await supabase
                                 .from("admin_amount")
                                 .select("*")
-                                .eq('father', 5928771903)
+                                .eq('father', 6187538792)
 
                             if (error) {
                                 console.log(error);
@@ -241,7 +310,7 @@ const Accounts = () => {
                                 const { data: panelDisable, error } = await supabase
                                     .from("panel")
                                     .select("bigvalue")
-                                    .eq('owner', 5928771903)
+                                    .eq('owner', 6187538792)
 
 
                                 if (error) {
@@ -249,13 +318,13 @@ const Accounts = () => {
                                 } else {
                                     setUserData((prevNotification) => ({
                                         ...prevNotification, // Spread the previous state
-                                        recentDisabled: panelDisable[0].bigvalue, // Fallback to `false` if undefined
+                                        recentDisabled: panelDisable[2].bigvalue, // Fallback to `false` if undefined
                                     }));
 
                                     const { data: mindepo, error } = await supabase
                                         .from("panel")
                                         .select("minmax")
-                                        .eq('owner', 5928771903)
+                                        .eq('owner', 6187538792)
 
 
                                     if (error) {
@@ -285,7 +354,7 @@ const Accounts = () => {
             );
             setFilteredServices(filtered);
             setLoading(false);
-        }, 100); // Debounce for better performance
+        }, 80); // Debounce for better performance
 
         return () => clearTimeout(timer);
     }, [searchQuery, services]);
@@ -329,7 +398,7 @@ const Accounts = () => {
                 //console.log("New order inserted:", payload.new);
                 // Add the new order to the state
 
-                if (payload.new.for === 5928771903) {
+                if (payload.new.for === 6187538792) {
 
                     setWithdrawldatao((prevWith) => (
                         [...prevWith, { status: payload.new.status, date: payload.new.date, wid: payload.new.wid, for: payload.new.for, bank: payload.new.bank, a_name: payload.new.a_name, a_no: payload.new.a_no, amount: payload.new.amount }]
@@ -343,7 +412,7 @@ const Accounts = () => {
             .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
                 //console.log("New order inserted:", payload.new);
                 // Add the new order to the state
-                if (payload.new.for == 5928771903) {
+                if (payload.new.for == 6187538792) {
                     setWithdrawldata((prevWith) =>
                         prevWith.map((item) =>
                             item.wid === payload.new.wid
@@ -365,7 +434,7 @@ const Accounts = () => {
             // .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
             //     //console.log("New order inserted:", payload.new);
             //     // Add the new order to the state
-            //     if (payload.new.for == 5928771903) {
+            //     if (payload.new.for == 6187538792) {
             //         setWithdrawldata((prevWith) =>
             //             prevWith.map((item) =>
             //                 item.wid === payload.new.wid
@@ -398,7 +467,7 @@ const Accounts = () => {
                 .from('panel')
                 .select('bigvalue')
                 .eq('key', 'disabled')
-                .eq('owner', 5928771903)// Filter based on the 'father' or any other condition
+                .eq('owner', 6187538792)// Filter based on the 'father' or any other condition
                 .single();
 
             if (error) {
@@ -422,7 +491,8 @@ const Accounts = () => {
             const { error: updateError } = await supabase
                 .from('panel')
                 .update({ bigvalue: updatedBigValue })
-                .eq('owner', 5928771903)// Filter by correct row
+                .eq('owner', 6187538792)// Filter by correct row
+
 
             if (updateError) {
                 console.error('Error updating bigvalue:', updateError);
@@ -475,7 +545,7 @@ const Accounts = () => {
             const { error: updateError } = await supabase
                 .from('panel')
                 .update({ bigvalue: updatedValue })
-                .eq('owner', 5928771903)
+                .eq('owner', 6187538792)
                 .eq('key', 'disabled')
 
             if (updateError) throw updateError;
@@ -487,13 +557,17 @@ const Accounts = () => {
         }
     }
     const generateIframeSrc1 = () => 'https://paxyo.com/chapa.html?amount=1';
-    const generateIframeSrc2 = () => `https://paxyo.com/chapa.html?amount=${amounts}`;
+    const generateIframeSrc2 = () => `https://paxyo.com/chapa.html?amount=1`;
+    const generateIframeSrc31 = () => `https://paxyo.com/chapa.html?amount=10`;
+    const generateIframeSrc32 = () => `https://paxyo.com/chapa.html?amount=500`;
+    const generateIframeSrc33 = () => `https://paxyo.com/chapa.html?amount=2500`;
+    const generateIframeSrc34 = () => `https://paxyo.com/chapa.html?amount=5000`;
 
 
     const send = async (mess) => {
 
         const { error } = await supabase.from('admin_deposit').insert([
-            { tid: mess, amount: 3000, status: 'Pending', father: userData.userId }
+            { tid: mess, amount: 3000, admin: userData.userId }
         ]);
         if (error) {
             console.error(error.message)
@@ -508,23 +582,38 @@ const Accounts = () => {
             }]);
         }
     }
-    const sendb = async (mess) => {
+    const sendb = async (mess, am) => {
 
         const { error } = await supabase.from('admin_amount').insert([
-            { tid: mess, amount: 3000, father: userData.userId }
+            { tid: mess, amount: am, father: 6187538792 }
         ]);
         if (error) {
             console.error(error.message)
         } else {
             // setModalE(false)
+            const { data, error } = await supabase.from('users')
+                .select('a_balance')
+                .eq('id', 6187538792)
+                .single()
 
-            setDepob((prevData) => [...prevData, {
-                status: "Done",
-                date: new Date().toISOString(),
-                tid: mess,
-                amount: 3000
-            }]);
 
+            if (!error) {
+                var news = data.a_balance + am
+                const { error } = await supabase.from('users')
+                    .update({ 'a_balance': news })
+                    .eq('id', 6187538792)
+
+                if (error) {
+                    console.log(error.message)
+                } else {
+                    setDepob((prevData) => [...prevData, {
+                        status: "Done",
+                        date: new Date().toISOString(),
+                        tid: mess,
+                        amount: am
+                    }]);
+                }
+            }
         }
     }
 
@@ -545,6 +634,7 @@ const Accounts = () => {
                         confirmButtonText: 'OK',
                     });
                     send(message);
+                    setModalee(false)
                     setIframe1Visible(false);
                 }
 
@@ -555,13 +645,17 @@ const Accounts = () => {
                 setTg(message)
                 // Hide container and show iframe
                 setIframe1Visible(false);
-
-
+                setModalee(false)
+                setAgain(true);
+                setBut(true)
                 // Hide iframe on failure or closed event
 
             } else if (type === 'payment-closed') {
                 //setChapa(false)
                 setTg(message)
+                setAgain(true);
+                setBut(true)
+                setModalee(false)
                 //  console.log(message); // e.g., "Payment popup closed."
                 setIframe1Visible(false);
 
@@ -577,7 +671,7 @@ const Accounts = () => {
                         icon: 'success',
                         confirmButtonText: 'OK',
                     });
-                    sendb(message);
+                    sendb(message, 1);
                     setIframe2Visible(false);
                 } else if (type === 'payment-failure' || type === 'payment-closed') {
                     //console.error(message); // Handle failure or closed event
@@ -599,6 +693,127 @@ const Accounts = () => {
 
                 }
             }
+            else if (iframeId === 'iframe31') {
+                // Handle messages for iframe2
+                if (type === 'payment-success') {
+                    Swal.fire({
+                        title: '10!',
+                        text: 'Pay.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
+                    sendb(message, 10);
+                    setIframe31Visible(false);
+                } else if (type === 'payment-failure' || type === 'payment-closed') {
+                    //console.error(message); // Handle failure or closed event
+                    // setChapa(false)
+                    setTb(message)
+                    // Hide container and show iframe
+                    setIframe31Visible(false);
+
+
+                    // Hide iframe on failure or closed event
+
+                } else if (type === 'payment-closed') {
+                    //setChapa(false)
+                    setTb(message)
+                    //  console.log(message); // e.g., "Payment popup closed."
+                    setIframe31Visible(false);
+
+                    // Hide iframe on close
+
+                }
+            } else if (iframeId === 'iframe32') {
+                // Handle messages for iframe2
+                if (type === 'payment-success') {
+                    Swal.fire({
+                        title: '500!',
+                        text: 'Pay.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
+                    sendb(message, 500);
+                    setIframe32Visible(false);
+                } else if (type === 'payment-failure' || type === 'payment-closed') {
+                    //console.error(message); // Handle failure or closed event
+                    // setChapa(false)
+                    setTb(message)
+                    // Hide container and show iframe
+                    setIframe32Visible(false);
+
+
+                    // Hide iframe on failure or closed event
+
+                } else if (type === 'payment-closed') {
+                    //setChapa(false)
+                    setTb(message)
+                    //  console.log(message); // e.g., "Payment popup closed."
+                    setIframe32Visible(false);
+
+                    // Hide iframe on close
+
+                }
+            } else if (iframeId === 'iframe33') {
+                // Handle messages for iframe2
+                if (type === 'payment-success') {
+                    Swal.fire({
+                        title: '2500!',
+                        text: 'Pay.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
+                    sendb(message, 2500);
+                    setIframe33Visible(false);
+                } else if (type === 'payment-failure' || type === 'payment-closed') {
+                    //console.error(message); // Handle failure or closed event
+                    // setChapa(false)
+                    setTb(message)
+                    // Hide container and show iframe
+                    setIframe33Visible(false);
+
+
+                    // Hide iframe on failure or closed event
+
+                } else if (type === 'payment-closed') {
+                    //setChapa(false)
+                    setTb(message)
+                    //  console.log(message); // e.g., "Payment popup closed."
+                    setIframe33Visible(false);
+
+                    // Hide iframe on close
+
+                }
+            } else if (iframeId === 'iframe34') {
+                // Handle messages for iframe2
+                if (type === 'payment-success') {
+                    Swal.fire({
+                        title: '5000!',
+                        text: 'Pay.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
+                    sendb(message, 5000);
+                    setIframe34Visible(false);
+                } else if (type === 'payment-failure' || type === 'payment-closed') {
+                    //console.error(message); // Handle failure or closed event
+                    // setChapa(false)
+                    setTb(message)
+                    // Hide container and show iframe
+                    setIframe34Visible(false);
+
+
+                    // Hide iframe on failure or closed event
+
+                } else if (type === 'payment-closed') {
+                    //setChapa(false)
+                    setTb(message)
+                    //  console.log(message); // e.g., "Payment popup closed."
+                    setIframe34Visible(false);
+
+                    // Hide iframe on close
+
+                }
+            }
         };
 
         const handleMessage = (event) => {
@@ -607,6 +822,15 @@ const Accounts = () => {
                 handleIframeMessage(event, 'iframe1');
             } else if (event.source === (document.getElementById('iframe2') as HTMLIFrameElement)?.contentWindow) {
                 handleIframeMessage(event, 'iframe2');
+            }
+            else if (event.source === (document.getElementById('iframe31') as HTMLIFrameElement)?.contentWindow) {
+                handleIframeMessage(event, 'iframe31');
+            } else if (event.source === (document.getElementById('iframe32') as HTMLIFrameElement)?.contentWindow) {
+                handleIframeMessage(event, 'iframe32');
+            } else if (event.source === (document.getElementById('iframe33') as HTMLIFrameElement)?.contentWindow) {
+                handleIframeMessage(event, 'iframe33');
+            } else if (event.source === (document.getElementById('iframe34') as HTMLIFrameElement)?.contentWindow) {
+                handleIframeMessage(event, 'iframe34');
             }
         };
 
@@ -625,7 +849,7 @@ const Accounts = () => {
         const { error: setError } = await supabase
             .from('admin_withdrawl')
             .insert([{
-                for: 5928771903,
+                for: 6187538792,
                 bank: bank,
                 a_name: accountname,
                 a_no: acc,
@@ -645,11 +869,23 @@ const Accounts = () => {
     }
 
     const updateDeposit = async () => {
-        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', 5928771903).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
+        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', 6187538792).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
         if (findErrorB) {
             console.error(findErrorB.message)
         } else {
-            // alert("ola")
+            Swal.fire({
+                title: 'Success!',
+                text: 'Minimum Deposit updated.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'swal2-popup',    // Apply the custom class to the popup
+                    title: 'swal2-title',    // Apply the custom class to the title
+                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                }
+            });
+            setModalG(false)
         }
     }
 
@@ -673,37 +909,62 @@ const Accounts = () => {
     return (
         <>
             <div className="grid  gap-2 grid-row-2  px-12 w-full p-2 bg-red-100">
-                <div className="p-2 h-fit  bg-red-300 ">
+                <div className="p-2 h-fit   ">
                     <Button onClick={() => setModalA(true)} className="w-full">Message</Button>
                 </div>
-                <div className="p-2 h-fit bg-red-300">
-                    <Button onClick={() => setModalB(true)} className="w-full">Rate</Button>
+                <div className="p-2 h-fit ">
+                    <Button onClick={async () => {
+                        setModalB(true)
+                        const { data: fetchRate, error } = await supabase
+                            .from("panel")
+                            .select("value")
+                            .eq('owner', 6187538792)
+                            .eq('key', 'rate')
+
+
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            setRr(fetchRate[0].value)
+                        }
+                    }} className="w-full">Rate</Button>
                 </div>
-                <div className="p-2 h-fit bg-red-300 ">
+                <div className="p-2 h-fit  ">
                     <Button onClick={() => setModalC(true)} className="w-full">Disable</Button>
                     <Button onClick={() => setModalD(true)} className="w-full mt-2">Enable</Button>
                 </div>
-                <div className="p-2 h-fit bg-red-300">
+                <div className="p-2 h-fit ">
                     <Button onClick={() => {
                         setTg('')
                         setModalE(true)
-                    }} className="w-full">Deposit</Button>
+                    }} className="w-full">Deposit M</Button>
                 </div>
-                <div className="p-2 h-fit bg-red-300">
+                <div className="p-2 h-fit ">
                     <Button onClick={() => {
                         setTb('')
                         setModalI(true)
                     }} className="w-full">Deposit</Button>
                 </div>
-                <div className="p-2 h-fit bg-red-300 ">
+                <div className="p-2 h-fit  ">
                     <Button onClick={() => setModalF(true)} className="w-full">Withdrawl</Button>
                 </div>
-                <div className="p-2 h-fit bg-red-300">
-                    <Button onClick={() => setModalG(true)} className="w-full">Minimum Deposit</Button>
+                <div className="p-2 h-fit ">
+                    <Button onClick={async () => {
+
+                        setModalG(true)
+                        const { data: fetchMinmax, error } = await supabase
+                            .from("panel")
+                            .select("minmax")
+                            .eq('owner', 6187538792)
+
+
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            setMm(fetchMinmax[0].minmax)
+                        }
+                    }} className="w-full">Minimum Deposit</Button>
                 </div>
-                {/* <div className="p-2 h-fit bg-red-300">
-                    <Button onClick={() => setModalH(true)} className="w-full">Rate</Button>
-                </div> */}
             </div>
             {modalA && (
                 <div
@@ -734,18 +995,20 @@ const Accounts = () => {
 
                         <div className="amount-container">
 
-                            <Input
-                                header="All"
-                                type="text"
-                                className="w-full"
-                                placeholder="Enter amount"
 
-                                onChange={(e) => {
-                                    setAll(e.target.value)
-                                    setIndi(e.target.value)
-                                }} value={all}
 
-                            />
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={all === "user"} // Checks the checkbox if 'all' is set to 'user'
+                                    onChange={(e) => {
+                                        const value = e.target.checked ? "user" : "";
+                                        setAll(value); // Set 'user' if checked, otherwise empty
+                                        setIndi(value); // Update indi state as well
+                                    }}
+                                />
+                                All Users
+                            </label>
 
                             {!indi && (<Input
                                 header="UserID"
@@ -830,7 +1093,7 @@ const Accounts = () => {
                                 className="w-full"
                                 onChange={(e) => setRate(e.target.value)}
                                 value={rate}
-                                placeholder="Enter rate"
+                                placeholder={rr}
                             />
 
                             {/* <strong style={{ color: 'red' }}>
@@ -1028,47 +1291,8 @@ const Accounts = () => {
                         <div className="amount-container">
 
 
-                            <Input
-                                header="Amount"
-                                type="number"
-                                className="w-full"
 
-                                value="3000"
-                                disabled={true}
-                            />
-
-                            {/* <strong style={{ color: 'red' }}>
-                                {aamount !== '' && parseInt(aamount) <= userData.deposit && `The Minimum Deposit Amount is ${userData.deposit}`}
-                            </strong> */}
-                            <Button
-
-                                onClick={() => {
-                                    setIframeKey((prevKey) => prevKey + 1)
-                                    setIframe1Visible(true)
-                                    setLoading(true)
-                                }}
-                                className="w-full p-4"
-                            // disabled={parseInt(aamount) <= userData.deposit || aamount === ''}
-                            // style={{ display: but ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: parseInt(aamount) >= userData.deposit ? 'var(--tgui--button_color)' : 'gray', color: 'white' }}
-                            >
-                                {/* {(ag && again) ? "Try Again" : "Continue"} */}
-                                Deposit
-                            </Button>
-                            <br />
-                            {tg}
-                            <br />
-                            {loading && <MyLoader />}
-                            {iframe1Visible && (
-                                <iframe
-                                    id="iframe1"
-                                    src={generateIframeSrc1()}
-                                    width="100%"
-                                    height="310rem"
-                                    onLoad={() => setLoading(false)}
-                                    title="Iframe 1"
-                                    frameBorder="0"
-                                />
-                            )}
+                            <Button onClick={() => setModalee(true)} className="w-full">Deposit</Button>
                             {loadingb && <MyLoader />}
                             {!loadingb &&
                                 <table style={{ width: "100%" }} className="  rounded-lg shadow-md">
@@ -1084,11 +1308,6 @@ const Accounts = () => {
                                             <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                                                 date
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">bank</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                                                amount
-                                            </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">sccout number</th>
 
                                         </tr>
                                     </thead>
@@ -1098,8 +1317,8 @@ const Accounts = () => {
                                                 {/* <td className="px-6 py-4 text-sm">{items.status}</td> */}
                                                 <td className="px-6 py-4 text-sm ">{items.tid}</td>
 
-                                                <td className="px-6 py-4 text-sm ">{items.date}</td>
                                                 <td className="px-6 py-4 text-sm ">{items.amount}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.date}</td>
 
                                             </tr>
                                         ))}
@@ -1134,52 +1353,9 @@ const Accounts = () => {
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
                         <p className="mb-4">Enter the amount you want to deposit:</p>
 
+                        <Button onClick={() => setModalww(true)} className="w-full">WITHDRAWL</Button>
                         <div className="amount-container">
-                            <Select header="bank" value={bank} onChange={(e) => setBank(e.target.value)}>
-                                <option value="">Select an option</option>
-                                <option>CBE</option>
-                                <option>Telebirr</option>
-                            </Select>
-                            <Input
-                                header="account name"
-                                type="text"
-                                className="w-full"
-                                placeholder="account name"
-                                value={accountname}
-                                onChange={(e) => setAccountname(e.target.value)}
 
-                            />
-                            <Input
-                                header="acc no"
-                                type="text"
-                                className="w-full"
-                                placeholder="Enter acc"
-                                value={acc}
-
-                                onChange={(e) => setAcc(Number(e.target.value))}
-                            />
-
-                            <Input
-                                header="Amount"
-                                type="text"
-                                className="w-full"
-                                placeholder="Enter amount"
-                                value={amount}
-
-                                onChange={(e) => setAmount(Number(e.target.value))}
-                            />
-
-
-
-
-                            <Button
-                                onClick={addWithdrawl}
-                                className="w-full p-4"
-                                disabled={amount <= 1}
-                                style={{ marginTop: '10px', padding: '10px', backgroundColor: amount > 1 ? 'var(--tgui--button_color)' : 'gray', color: 'white' }}
-                            >
-                                Withdrawl
-                            </Button>
                             {!loader &&
                                 <table style={{ width: "100%" }} className="  rounded-lg shadow-md">
                                     <thead>
@@ -1227,6 +1403,152 @@ const Accounts = () => {
                     </div>
                 </div>
             )}
+            {modalww && (
+                <div
+                    className="fixed  modal-pops inset-0  h-screen bg-black bg-opacity-75 grid content-center z-50"
+                    onClick={() => {
+
+                        setModalww(false)
+                    }}
+                >
+                    <div
+                        className="bg-white mx-auto modal-pop lg:w-4/12 p-8 rounded-lg relative w-96"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ 'width': '90%', background: 'var(--tgui--bg_color)' }}
+                    // Prevent clicking inside the modal from closing it
+                    >
+                        <div
+
+                            className=" text-gray-500 absolute m-2 right-4 top-2 px-4 py-3 rounded-md"
+                            onClick={() => {
+                                setModalww(false)
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
+                        </div>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+
+                        <Select header="bank" value={bank} onChange={(e) => setBank(e.target.value)}>
+                            <option value="">Select an option</option>
+                            <option>CBE</option>
+                            <option>Telebirr</option>
+                        </Select>
+                        <Input
+                            header="account name"
+                            type="text"
+                            className="w-full"
+                            placeholder="account name"
+                            value={accountname}
+                            onChange={(e) => setAccountname(e.target.value)}
+
+                        />
+                        <Input
+                            header="acc no"
+                            type="text"
+                            className="w-full"
+                            placeholder="Enter acc"
+                            value={acc}
+
+                            onChange={(e) => setAcc(Number(e.target.value))}
+                        />
+
+                        <Input
+                            header="Amount"
+                            type="text"
+                            className="w-full"
+                            placeholder="Enter amount"
+                            value={amount}
+
+                            onChange={(e) => setAmount(Number(e.target.value))}
+                        />
+
+
+
+
+                        <Button
+                            onClick={addWithdrawl}
+                            className="w-full p-4"
+                            disabled={amount <= 1}
+                            style={{ marginTop: '10px', padding: '10px', backgroundColor: amount > 1 ? 'var(--tgui--button_color)' : 'gray', color: 'white' }}
+                        >
+                            Withdrawl
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {modalee && (
+                <div
+                    className="fixed  modal-pops inset-0  h-screen bg-black bg-opacity-75 grid content-center z-50"
+                    onClick={() => {
+                        setBut(true)
+                        setModalee(false)
+                    }}
+                >
+                    <div
+                        className="bg-white mx-auto modal-pop lg:w-4/12 p-8 rounded-lg relative w-96"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ 'width': '90%', background: 'var(--tgui--bg_color)' }}
+                    // Prevent clicking inside the modal from closing it
+                    >
+                        <div
+
+                            className=" text-gray-500 absolute m-2 right-4 top-2 px-4 py-3 rounded-md"
+                            onClick={() => {
+                                setBut(true)
+                                setModalee(false)
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
+                        </div>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+
+                        <Input
+                            header="Amount"
+                            type="number"
+                            className="w-full"
+
+                            value="3000"
+                            disabled={true}
+                        />
+
+                        {/* <strong style={{ color: 'red' }}>
+                                {aamount !== '' && parseInt(aamount) <= userData.deposit && `The Minimum Deposit Amount is ${userData.deposit}`}
+                            </strong> */}
+
+                        <Button
+                            onClick={() => {
+
+                                setBut(false)
+                                setLoading(true)
+
+                                setIframe1Visible(true)
+                                setLoading(true)
+                            }}
+                            className="w-full p-4"
+
+                            style={{ display: but ? 'block' : 'none', marginTop: '10px', padding: '10px' }}
+                        >
+                            {(tg && again) ? "Try Again" : "Continue"}
+                        </Button>
+                        <br />
+                        {tg}
+                        <br />
+                        {loading && <MyLoader />}
+                        {iframe1Visible && (
+                            <iframe
+                                id="iframe1"
+                                src={generateIframeSrc1()}
+                                width="100%"
+                                height="310rem"
+                                onLoad={() => setLoading(false)}
+                                title="Iframe 1"
+                                frameBorder="0"
+                            />
+                        )}
+                    </div>
+                </div>
+            )}
             {modalG && (
                 <div
                     className="fixed  modal-pops inset-0  h-screen bg-black bg-opacity-75 grid content-center z-50"
@@ -1260,7 +1582,7 @@ const Accounts = () => {
                                 type="number"
                                 className="w-full"
                                 onChange={(e) => setDeposit(e.target.value)} value={depositmin}
-                                placeholder="Enter minimum"
+                                placeholder={mm}
                             />
 
                             {/* <strong style={{ color: 'red' }}>
@@ -1342,7 +1664,10 @@ const Accounts = () => {
                 <div
                     className="fixed  modal-pops inset-0  h-screen bg-black bg-opacity-75 grid content-center z-50"
                     onClick={() => {
-
+                        setIframe31Visible(false)
+                        setIframe32Visible(false)
+                        setIframe33Visible(false)
+                        setIframe34Visible(false)
                         setModalI(false)
                     }}
                 >
@@ -1356,6 +1681,10 @@ const Accounts = () => {
 
                             className=" text-gray-500 absolute m-2 right-4 top-2 px-4 py-3 rounded-md"
                             onClick={() => {
+                                setIframe31Visible(false)
+                                setIframe32Visible(false)
+                                setIframe33Visible(false)
+                                setIframe34Visible(false)
                                 setModalI(false)
                             }}
                         >
@@ -1366,39 +1695,132 @@ const Accounts = () => {
                         <div className="amount-container">
 
 
-                            <Input
-                                header="Amount"
-                                type="number"
-                                className="w-full"
-                                value={amounts}
-                                onChange={(e) => setAmounts(e.target.value)}
-                            />
+                            <div className="flex">
+                                <Button
 
-                            {/* <strong style={{ color: 'red' }}>
-                                {aamount !== '' && parseInt(aamount) <= userData.deposit && `The Minimum Deposit Amount is ${userData.deposit}`}
-                            </strong> */}
-                            <Button
 
-                                onClick={() => {
-                                    setIframeKey((prevKey) => prevKey + 1)
-                                    setIframe2Visible(true)
-                                    setLoading(true)
-                                }}
-                                className="w-full p-4"
-                            // disabled={parseInt(aamount) <= userData.deposit || aamount === ''}
-                            // style={{ display: but ? 'block' : 'none', marginTop: '10px', padding: '10px', backgroundColor: parseInt(aamount) >= userData.deposit ? 'var(--tgui--button_color)' : 'gray', color: 'white' }}
-                            >
-                                {/* {(ag && again) ? "Try Again" : "Continue"} */}
-                                Deposit
-                            </Button>
+                                    onClick={() => {
+
+                                        setIframe2Visible(true)
+                                        setLoading(true)
+                                    }}
+                                    className="w-full p-4"
+
+                                >
+                                    1
+                                </Button>
+                                <Button
+
+                                    onClick={() => {
+
+                                        setIframe34Visible(false)
+                                        setIframe32Visible(false)
+                                        setIframe33Visible(false)
+                                        setIframe31Visible(true)
+                                        setLoading(true)
+                                    }}
+                                    className="w-full p-4"
+
+                                >
+                                    10
+                                </Button>
+                                <Button
+
+                                    onClick={() => {
+
+                                        setIframe31Visible(false)
+                                        setIframe34Visible(false)
+                                        setIframe33Visible(false)
+                                        setIframe32Visible(true)
+                                        setLoading(true)
+                                    }}
+                                    className="w-full p-4"
+
+                                >
+                                    500
+                                </Button>
+                                <Button
+
+                                    onClick={() => {
+
+                                        setIframe31Visible(false)
+                                        setIframe32Visible(false)
+                                        setIframe34Visible(false)
+                                        setIframe33Visible(true)
+                                        setLoading(true)
+                                    }}
+                                    className="w-full p-4"
+
+                                >
+                                    2500
+                                </Button>
+                                <Button
+
+                                    onClick={() => {
+                                        setIframe31Visible(false)
+                                        setIframe32Visible(false)
+                                        setIframe33Visible(false)
+                                        setIframe34Visible(true)
+                                        setLoading(true)
+                                    }}
+                                    className="w-full p-4"
+
+                                >
+                                    5000
+                                </Button>
+                            </div>
                             <br />
                             {tb}
-                            <br />
+
                             {loading && <MyLoader />}
                             {iframe2Visible && (
                                 <iframe
                                     id="iframe2"
                                     src={generateIframeSrc2()}
+                                    width="100%"
+                                    height="310rem"
+                                    onLoad={() => setLoading(false)}
+                                    title="Iframe 2"
+                                    frameBorder="0"
+                                />
+                            )}
+                            {iframe31Visible && (
+                                <iframe
+                                    id="iframe31"
+                                    src={generateIframeSrc31()}
+                                    width="100%"
+                                    height="310rem"
+                                    onLoad={() => setLoading(false)}
+                                    title="Iframe 2"
+                                    frameBorder="0"
+                                />
+                            )}
+                            {iframe32Visible && (
+                                <iframe
+                                    id="iframe32"
+                                    src={generateIframeSrc32()}
+                                    width="100%"
+                                    height="310rem"
+                                    onLoad={() => setLoading(false)}
+                                    title="Iframe 2"
+                                    frameBorder="0"
+                                />
+                            )}
+                            {iframe33Visible && (
+                                <iframe
+                                    id="iframe33"
+                                    src={generateIframeSrc33()}
+                                    width="100%"
+                                    height="310rem"
+                                    onLoad={() => setLoading(false)}
+                                    title="Iframe 2"
+                                    frameBorder="0"
+                                />
+                            )}
+                            {iframe34Visible && (
+                                <iframe
+                                    id="iframe34"
+                                    src={generateIframeSrc34()}
                                     width="100%"
                                     height="310rem"
                                     onLoad={() => setLoading(false)}
@@ -1421,12 +1843,6 @@ const Accounts = () => {
                                             <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                                                 date
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">bank</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                                                amount
-                                            </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">sccout number</th>
-
                                         </tr>
                                     </thead>
                                     <tbody className=" ">
@@ -1435,8 +1851,8 @@ const Accounts = () => {
                                                 {/* <td className="px-6 py-4 text-sm">{items.status}</td> */}
                                                 <td className="px-6 py-4 text-sm ">{items.tid}</td>
 
-                                                <td className="px-6 py-4 text-sm ">{items.date}</td>
                                                 <td className="px-6 py-4 text-sm ">{items.amount}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.date}</td>
 
                                             </tr>
                                         ))}
@@ -1447,6 +1863,39 @@ const Accounts = () => {
 
 
                         </div>
+                    </div>
+                </div>
+            )}
+            {modalii && (
+                <div
+                    className="fixed  modal-pops inset-0  h-screen bg-black bg-opacity-75 grid content-center z-50"
+                    onClick={() => {
+
+                        setModalii(false)
+                    }}
+                >
+                    <div
+                        className="bg-white mx-auto modal-pop lg:w-4/12 p-8 rounded-lg relative w-96"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ 'width': '90%', background: 'var(--tgui--bg_color)' }}
+                    // Prevent clicking inside the modal from closing it
+                    >
+                        <div
+
+                            className=" text-gray-500 absolute m-2 right-4 top-2 px-4 py-3 rounded-md"
+                            onClick={() => {
+                                setModalii(false)
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
+                        </div>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+
+
+                        {/* <strong style={{ color: 'red' }}>
+                                {aamount !== '' && parseInt(aamount) <= userData.deposit && `The Minimum Deposit Amount is ${userData.deposit}`}
+                            </strong> */}
+
                     </div>
                 </div>
             )}

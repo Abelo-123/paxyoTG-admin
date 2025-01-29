@@ -20,7 +20,7 @@ const Orders = () => {
             const { data: initialData, error } = await supabase
                 .from("deposit")
                 .select("*")
-                .eq('father', 5928771903);
+                .eq('father', 6187538792);
             if (error) {
                 console.log(error);
             } else {
@@ -29,7 +29,31 @@ const Orders = () => {
                 setLoader(false)
 
             }
+
+
+            const channel = supabase
+            .channel("deposit_channelb")
+            .on("postgres_changes", { event: "INSERT", schema: "public", table: "deposit",filter: `father=eq.6187538792` }, (payload) => {
+                //console.log("New order inserted:", payload.new);
+              //  if(payload.new.father === 6187538792){
+                // Add the new order to the state
+                setData((prevData) => [payload.new, ...prevData]);
+                
+            })
+
+
+
+            .subscribe();
+
+        // Cleanup the subscription on component unmount
+        return () => {
+            channel.unsubscribe();
         };
+
+        };
+
+        
+          
 
         auth(); // Call the auth function when the component is mounted
     }, []);
@@ -69,10 +93,10 @@ const Orders = () => {
                                             <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                                                 uid
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">pm</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">transaction</th>
 
                                             <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                                                status
+                                                date
                                             </th>
                                         </tr>
                                     </thead>
@@ -82,8 +106,8 @@ const Orders = () => {
                                                 <td className="px-6 py-4 text-sm ">{items.did}</td>
                                                 <td className="px-6 py-4 text-sm ">{items.amount}</td>
                                                 <td className="px-6 py-4 text-sm ">{items.uid}</td>
-                                                <td className="px-6 py-4 text-sm ">{items.pm}</td>
-                                                <td className="px-6 py-4 text-sm ">{items.status}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.transaction}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.date}</td>
                                             </tr>
                                         ))}
                                     </tbody>

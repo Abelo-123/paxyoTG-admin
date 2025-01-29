@@ -23,14 +23,13 @@ const Smm = () => {
     const [searchClicked, setSearchClicked] = useState(false);
     const [bala, setBala] = useState(null);
 
-    const { userData } = useUser();
 
     const fetchUser = useCallback(async () => {
         try {
             const { data, error } = await supabase
                 .from("users")
                 .select('*')
-                .eq('father', 5928771903);
+                .eq('father', 6187538792);
             if (error) throw error;
             setUsers(data);
         } catch (error) {
@@ -60,7 +59,7 @@ const Smm = () => {
                         seen: true,
                         message: message,
                         for: messageId,
-                        father: 5928771903,
+                        father: 6187538792,
                         from: "Admin",
                     }
                 ]);
@@ -88,8 +87,21 @@ const Smm = () => {
         const subscribeToChanges = () => {
             const channel = supabase
                 .channel('users')
-                .on("postgres_changes", { event: "INSERT", schema: "public", table: "users" }, (payload) => {
+                .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.6187538792` }, (payload) => {
                     setUsers((prevData) => [...prevData, payload.new]);
+                })
+                .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.6187538792` }, (payload) => {
+
+                    setUsers((prevData) => {
+                        // Update the balance if the user ID matches
+                        return prevData.map((item) =>
+                            item.id === payload.new.id
+                                ? { ...item, balance: payload.new.balance }  // Update the balance
+                                : item  // Keep the rest unchanged
+                        );
+                    });
+
+
                 })
                 .subscribe();
 
@@ -110,7 +122,6 @@ const Smm = () => {
                     <FontAwesomeIcon onClick={() => setSearchClicked(false)} icon={faClose} style={{ margin: 'auto auto', color: "var(--tgui--section_header_text_color)" }} size="2x" />
                 )}
             </div>
-            {userData.userId}
             {searchClicked && (
                 <div>
                     <div className="mb-0">
@@ -227,6 +238,7 @@ const Smm = () => {
                             <div className="flex modal-pop">
                                 <input
                                     type="number"
+                                    placeholder={items.balance}
                                     onChange={(e) => setBala(Number(e.target.value))}
                                     value={bala}
                                     className="bg-gray-100 w-11/12 m-2 p-1"

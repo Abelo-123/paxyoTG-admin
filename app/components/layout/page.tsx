@@ -27,7 +27,7 @@ const Lays = () => {
                 .from('adminmessage')
                 .select('message')
                 .eq('to', 'Admin')
-                .eq('father', 999999999)
+                .eq('father', 6528707984)
                 .single()
 
             if (setError) {
@@ -43,27 +43,43 @@ const Lays = () => {
         const fetchBalance = async () => {
             const { data, error } = await supabase
                 .from('users')
-                .select('balance')
-                .eq('id', userData.userId)
+                .select('a_balance')
+                .eq('id', 6187538792)
                 .single(); // Get a single row
 
             if (error) {
                 console.error('Error fetching initial balance:', error);
             } else {
-                setBalance(data.balance); // Set initial balance
+                setBalance(data.a_balance); // Set initial balance
             }
         }
         fetchBalance()
         supabase
-            .channel(`users:id=eq.${userData.userId}`)
-            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users', filter: `id=eq.${userData.userId}` }, (payload) => {
-                setBalance((payload.new as { balance: number }).balance); // Update balance on real-time changes
+            .channel(`users:id=eq.6187538792`)
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users', filter: `id=eq.6187538792` }, (payload) => {
+                setBalance((payload.new as { a_balance: number }).a_balance); // Update balance on real-time changes
 
             })
 
             .subscribe();
     }, [])
 
+
+
+    useEffect(() => {
+        supabase
+            .channel("paffnl_chl")
+            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "adminmessage" }, (payload) => {
+
+                if (payload.new.father === 6528707984 && payload.new.for === "all" && payload.new.to === "Admin") {
+                    setMarq(payload.new.message)
+                }
+
+            })
+
+            .subscribe();
+
+    }, []);
 
     const seeNotification = async () => {
 
@@ -79,8 +95,8 @@ const Lays = () => {
         const { data: setNotify, error: setError } = await supabase
             .from('adminmessage')
             .select('*')
-            .eq('to', 5928771903)
-            .eq('father', 999999999)
+            .eq('to', 6187538792)
+            .eq('father', 6528707984)
 
 
 
@@ -91,8 +107,8 @@ const Lays = () => {
             const { error: setError } = await supabase
                 .from("adminmessage")
                 .update({ seen: false })
-                .eq('to', 5928771903)
-                .eq('father', 999)
+                .eq('to', 6187538792)
+                .eq('father', 6528707984)
 
 
             if (setError) {
@@ -110,7 +126,7 @@ const Lays = () => {
 
 
 
-        const { error: errorb } = await supabase.from('adminmessage').update({ seen: false }).eq('to', userData.userId); // Update all rows where `did` is greater than 0
+        const { error: errorb } = await supabase.from('adminmessage').update({ seen: false }).eq('for', userData.userId); // Update all rows where `did` is greater than 0
         if (errorb) {
             console.error(errorb.message)
         }

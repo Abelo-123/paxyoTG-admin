@@ -21,7 +21,7 @@ const Orders = () => {
             const { data: initialData, error } = await supabase
                 .from("orders")
                 .select("*")
-                .eq('father', 5928771903);
+                .eq('father', 6187538792);
             if (error) {
                 console.log(error);
             } else {
@@ -29,6 +29,40 @@ const Orders = () => {
                 setLoader(false)
 
             }
+            const channel = supabase
+            .channel("deposit_channewerlccb")
+            .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders",  filter: "father=eq.6187538792"}, (payload) => {
+                //console.log("New order inserted:", payload.new);
+              //  if(payload.new.father === 6187538792){
+                // Add the new order to the state
+                setData((prevData) => [payload.new, ...prevData]);
+                
+            })
+            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders", filter: "father=eq.6187538792" }, (payload) => {
+                //console.log("Order updated:", payload.new.status, "for oid", payload.new.oid);
+                // if (payload.new.uid == 5928771903) {
+                // Find the updated order in the current state
+                setData((prevData) =>
+                    prevData.map((item) =>
+                        item.oid === payload.new.oid
+                            ? { ...item, status: payload.new.status, start_count: payload.new.start_from, remains: payload.new.remains } // Update the status in the state
+                            : item
+                    )
+                );
+
+                // If the updated order's status is not "Completed", call fetchOrderStatus
+                
+
+            })
+
+
+
+            .subscribe();
+
+        // Cleanup the subscription on component unmount
+        return () => {
+            channel.unsubscribe();
+        };
         };
 
         auth(); // Call the auth function whethe component is mounted

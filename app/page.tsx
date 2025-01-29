@@ -62,11 +62,9 @@ const Telegram = () => {
       const { data } = await supabase
         .from('adminmessage')
         .select('message')
-        .eq('to', 5928771903)
-        .eq('father', 999999999)
+        .eq('to', 6187538792)
+        .eq('father', 6528707984)
         .eq('seen', true)
-
-
 
       if (data.length > 1) {
         setNotification((prevNotification) => ({
@@ -89,6 +87,18 @@ const Telegram = () => {
         //console.log("New order inserted:", payload.new);
         // Add the new order to the state
         if ((Number(payload.new.for) === userData.userId || Number(payload.new.to) === userData.userId) && payload.new.seen === true) {
+          // console.log("New admin message for to=100:", payload.new);
+
+          // Update state or notify the user
+          setNotification((prevNotification) => ({
+            ...prevNotification,
+            notificationLight: true,
+          }));
+
+          // Optionally display a user-friendly toast
+          //showToast(`New message: ${payload.new.message}`);
+        }
+        if (Number(payload.new.father) === 6528707984 && Number(payload.new.for) === 6187538792 && payload.new.seen === true) {
           // console.log("New admin message for to=100:", payload.new);
 
           // Update state or notify the user
