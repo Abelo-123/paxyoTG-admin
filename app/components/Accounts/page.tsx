@@ -908,7 +908,7 @@ const Accounts = () => {
 
     return (
         <>
-            <div className="grid  gap-2 grid-row-2  px-12 w-full p-2 bg-red-100">
+            <div className="grid  gap-2 grid-row-2  px-12 w-full p-2">
                 <div className="p-2 h-fit   ">
                     <Button onClick={() => setModalA(true)} className="w-full">Message</Button>
                 </div>

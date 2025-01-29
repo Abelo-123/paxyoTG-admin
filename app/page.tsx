@@ -138,7 +138,7 @@ const Telegram = () => {
           {
             useNotification.notificationModal && (
               <div style={{
-                zIndex: 900, background: 'var(--tgui--section_bg_color)'
+                zIndex: 900, background: 'var(--tgui--secondary_bg_color)'
               }} className=" modal-popp fixed inset-0 top-0 bottom-0 w-screen ">
 
                 {useNotification.notificationLoader && <MyLoader style={{ marginTop: '2rem' }} />}
