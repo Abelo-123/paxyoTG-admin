@@ -34,8 +34,7 @@ const Accounts = () => {
     const [rate, setRate] = useState('')
     const [allrate, setallRate] = useState('')
     const [searchQuery, setSearchQuery] = useState("");
-    const [loading, setLoading] = useState(false); // Loading state
-    const [filteredServices, setFilteredServices] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [services, setService] = useState([])
     const [searchTerm, setSearchTerm] = useState("");
     const [iframe1Visible, setIframe1Visible] = useState(false);
