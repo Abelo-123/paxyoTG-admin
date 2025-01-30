@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { supabase } from "@/app/lib/supabaseClient"
 import { Button, Input, Select } from "@telegram-apps/telegram-ui"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { faClose, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from '../UserContext';
 import axios from "axios";
 import MyLoader from "../Loader/page";
@@ -71,6 +71,8 @@ const Accounts = () => {
     const [depositmin, setDeposit] = useState(null)
     const [mm, setMm] = useState(null)
     const [rr, setRr] = useState(null)
+    const [loadingc, setLoadingc] = useState(false);
+
 
     const sendAdminMessage = async () => {
         if (!adminMessageFor && !adminMessageFor2 && all == "admin") { //all admin
@@ -330,7 +332,7 @@ const Accounts = () => {
                                     if (error) {
                                         console.log(error);
                                     } else {
-                                        console.log(mindepo[0].minmax)
+                                        console.log(mindepo[2].minmax)
                                     }
                                 }
                             }
@@ -354,7 +356,8 @@ const Accounts = () => {
             );
             setFilteredServices(filtered);
             setLoading(false);
-        }, 80); // Debounce for better performance
+            setLoadingc(false)
+        }, 100); // Debounce for better performance
 
         return () => clearTimeout(timer);
     }, [searchQuery, services]);
@@ -460,7 +463,7 @@ const Accounts = () => {
     };
 
     const handleEnable = async (id) => {
-
+        setLoadingIndexb(id);
         try {
             // Fetch the current 'bigvalue' data from the 'panel' table
             const { data, error } = await supabase
@@ -518,6 +521,8 @@ const Accounts = () => {
             }
         } catch (error) {
             console.error('Error in handleEnable:', error);
+        } finally {
+            setLoadingIndexb(null); // Re-enable button after operation
         }
     };
     const handleSearchChange = (e) => {
@@ -525,6 +530,7 @@ const Accounts = () => {
     };
 
     const handleDisable = async (id) => {
+        setLoadingIndex(id);
         try {
             // Fetch the current value of "bigvalue" from the "panel" table
 
@@ -554,6 +560,8 @@ const Accounts = () => {
             console.log('Updated sccessfully:', updatedValue);
         } catch (error) {
             console.error('Error updating bigvalue:', error.message);
+        } finally {
+            setLoadingIndex(null); // Re-enable button after operation
         }
     }
     const generateIframeSrc1 = () => 'https://paxyo.com/chapa.html?amount=1';
@@ -562,6 +570,9 @@ const Accounts = () => {
     const generateIframeSrc32 = () => `https://paxyo.com/chapa.html?amount=500`;
     const generateIframeSrc33 = () => `https://paxyo.com/chapa.html?amount=2500`;
     const generateIframeSrc34 = () => `https://paxyo.com/chapa.html?amount=5000`;
+
+    const [loadingIndex, setLoadingIndex] = useState(null); // Track which button is loading
+    const [loadingIndexb, setLoadingIndexb] = useState(null); // Track which button is loading
 
 
     const send = async (mess) => {
@@ -905,6 +916,14 @@ const Accounts = () => {
     //     }
     // }
 
+    const openModal = () => {
+        setLoadingc(true); // Show the spinner
+        setModalC(true);
+
+        // Simulate a short delay (you can remove this if unnecessary)
+    };
+
+
 
     return (
         <>
@@ -930,7 +949,7 @@ const Accounts = () => {
                     }} className="w-full">Rate</Button>
                 </div>
                 <div className="p-2 h-fit  ">
-                    <Button onClick={() => setModalC(true)} className="w-full">Disable</Button>
+                    <Button onClick={openModal} className="w-full">Disable</Button>
                     <Button onClick={() => setModalD(true)} className="w-full mt-2">Enable</Button>
                 </div>
                 <div className="p-2 h-fit ">
@@ -1115,16 +1134,22 @@ const Accounts = () => {
                     </div>
                 </div>
             )}
+            {loadingc && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <FontAwesomeIcon icon={faRefresh} className="text-white animate-spin text-white text-4xl" />
+                </div>
+            )}
             {modalC && (
                 <div
                     className="fixed  modal-pops inset-0  h-screen bg-black bg-opacity-75 grid content-center z-50"
                     onClick={() => {
 
                         setModalC(false)
+                        setLoadingc(false)
                     }}
                 >
                     <div
-                        className="bg-white mx-auto modal-pop lg:w-4/12 p-8 rounded-lg relative w-96"
+                        className="bg-white mx-auto modal-pop h-auto lg:w-4/12 p-8 rounded-lg relative w-96"
                         onClick={(e) => e.stopPropagation()}
                         style={{ 'width': '90%', background: 'var(--tgui--bg_color)' }}
                     // Prevent clicking inside the modal from closing it
@@ -1134,6 +1159,7 @@ const Accounts = () => {
                             className=" text-gray-500 absolute m-2 right-4 top-2 px-4 py-3 rounded-md"
                             onClick={() => {
 
+                                setLoadingc(false)
                                 setModalC(false)
                             }}
                         >
@@ -1170,9 +1196,19 @@ const Accounts = () => {
                                                     {items.service} {items.name}
                                                     <Button
                                                         className="px-6 p-2 ml-4 text-white"
-                                                        onClick={() => handleDisable(items.service)}
+                                                        onClick={() => {
+                                                            handleDisable(items.service);
+                                                            setLoadingIndex(items.service); // Set loading state when clicked
+                                                        }}
+                                                        disabled={loadingIndex === index} // Disable only the clicked button
                                                     >
-                                                        Disable
+                                                        {loadingIndex === items.service ? (
+                                                            <span className="flex items-center">
+                                                                <FontAwesomeIcon icon={faRefresh} className="animate-spin mr-2" /> Wait...
+                                                            </span>
+                                                        ) : (
+                                                            "Disable"
+                                                        )}
                                                     </Button>
                                                 </div>
                                             </li>
@@ -1243,11 +1279,24 @@ const Accounts = () => {
                                                     className="w-full p-2"
                                                 >
                                                     {serviceId} - {getServiceName(serviceId)}
+
+
+
                                                     <Button
                                                         className="px-6 p-2 ml-4 text-white"
-                                                        onClick={() => handleEnable(serviceId)}
+                                                        onClick={() => {
+                                                            handleEnable(serviceId)
+                                                            setLoadingIndexb(serviceId); // Set loading state when clicked
+                                                        }}
+                                                        disabled={loadingIndexb === index} // Disable only the clicked button
                                                     >
-                                                        Enable
+                                                        {loadingIndexb === serviceId ? (
+                                                            <span className="flex items-center">
+                                                                <FontAwesomeIcon icon={faRefresh} className="animate-spin mr-2" /> Wait...
+                                                            </span>
+                                                        ) : (
+                                                            "Enable"
+                                                        )}
                                                     </Button>
                                                 </div>
                                             </div>
