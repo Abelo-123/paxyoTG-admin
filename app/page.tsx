@@ -63,7 +63,7 @@ const Telegram = () => {
         .from('adminmessage')
         .select('message')
         .eq('to', 6528707984)
-        .eq('father', 6528707984)
+        .eq('father', 779060335)
         .eq('seen', true)
 
       if (data.length > 1) {

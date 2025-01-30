@@ -201,7 +201,7 @@ const Accounts = () => {
             if (error) {
                 console.error("Error inserting into adminmessage:", error);
             } else {
-                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 6528707984).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
+                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 779060335).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
                 if (findErrorB) {
                     console.error(findErrorB.message)
                 } else {
@@ -579,7 +579,7 @@ const Accounts = () => {
     const send = async (mess) => {
 
         const { error } = await supabase.from('admin_deposit').insert([
-            { tid: mess, amount: 3000, admin: userData.userId }
+            { tid: mess, amount: 3000, admin: 6528707984 }
         ]);
         if (error) {
             console.error(error.message)
@@ -877,6 +877,20 @@ const Accounts = () => {
                 [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: userData.current, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
 
             ))
+            setModalww(false)
+            setModalF(false)
+            Swal.fire({
+                title: 'Success!',
+                text: 'withdrawl success.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'swal2-popup',    // Apply the custom class to the popup
+                    title: 'swal2-title',    // Apply the custom class to the title
+                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                }
+            });
         }
     }
 

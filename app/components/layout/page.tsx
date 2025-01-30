@@ -27,7 +27,7 @@ const Lays = () => {
                 .from('adminmessage')
                 .select('message')
                 .eq('to', 'Admin')
-                .eq('father', 6528707984)
+                .eq('father', 779060335)
                 .single()
 
             if (setError) {
@@ -71,7 +71,7 @@ const Lays = () => {
             .channel("paffnl_chl")
             .on("postgres_changes", { event: "UPDATE", schema: "public", table: "adminmessage" }, (payload) => {
 
-                if (payload.new.father === 6528707984 && payload.new.for === "all" && payload.new.to === "Admin") {
+                if (payload.new.father === 779060335 && payload.new.for === "all" && payload.new.to === "Admin") {
                     setMarq(payload.new.message)
                 }
 
@@ -96,7 +96,7 @@ const Lays = () => {
             .from('adminmessage')
             .select('*')
             .eq('to', 6528707984)
-            .eq('father', 6528707984)
+            .eq('father', 779060335)
 
 
 
@@ -108,7 +108,7 @@ const Lays = () => {
                 .from("adminmessage")
                 .update({ seen: false })
                 .eq('to', 6528707984)
-                .eq('father', 6528707984)
+                .eq('father', 779060335)
 
 
             if (setError) {
