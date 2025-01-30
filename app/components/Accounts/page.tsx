@@ -545,7 +545,7 @@ const Accounts = () => {
                 recentDisabled: `${prevUserData.recentDisabled},${id}`,
             }));
 
-            let updatedValue = userData.recentDisabled
+            const updatedValue = userData.recentDisabled
                 ? `${userData.recentDisabled},${id}`
                 : id;
 
