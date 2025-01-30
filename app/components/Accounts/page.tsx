@@ -374,7 +374,7 @@ const Accounts = () => {
 
             try {
                 const response = await axios.get('/api/smm/fetchService');
-                setFilteredServices(response.data.response);
+
                 setService(response.data.response); // Store all services
                 // Initially, show all services
             } catch (error) {
