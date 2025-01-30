@@ -29,7 +29,7 @@ const Smm = () => {
             const { data, error } = await supabase
                 .from("users")
                 .select('*')
-                .eq('father', 6187538792);
+                .eq('father', 6528707984);
             if (error) throw error;
             setUsers(data);
         } catch (error) {
@@ -59,7 +59,7 @@ const Smm = () => {
                         seen: true,
                         message: message,
                         for: messageId,
-                        father: 6187538792,
+                        father: 6528707984,
                         from: "Admin",
                     }
                 ]);
@@ -87,10 +87,10 @@ const Smm = () => {
         const subscribeToChanges = () => {
             const channel = supabase
                 .channel('users')
-                .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.6187538792` }, (payload) => {
+                .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.6528707984` }, (payload) => {
                     setUsers((prevData) => [...prevData, payload.new]);
                 })
-                .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.6187538792` }, (payload) => {
+                .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.6528707984` }, (payload) => {
 
                     setUsers((prevData) => {
                         // Update the balance if the user ID matches

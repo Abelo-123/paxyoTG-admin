@@ -20,7 +20,7 @@ const Orders = () => {
             const { data: initialData, error } = await supabase
                 .from("deposit")
                 .select("*")
-                .eq('father', 6187538792);
+                .eq('father', 6528707984);
             if (error) {
                 console.log(error);
             } else {
@@ -33,9 +33,9 @@ const Orders = () => {
 
             const channel = supabase
             .channel("deposit_channelb")
-            .on("postgres_changes", { event: "INSERT", schema: "public", table: "deposit",filter: `father=eq.6187538792` }, (payload) => {
+            .on("postgres_changes", { event: "INSERT", schema: "public", table: "deposit",filter: `father=eq.6528707984` }, (payload) => {
                 //console.log("New order inserted:", payload.new);
-              //  if(payload.new.father === 6187538792){
+              //  if(payload.new.father === 6528707984){
                 // Add the new order to the state
                 setData((prevData) => [payload.new, ...prevData]);
                 

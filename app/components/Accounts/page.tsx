@@ -112,7 +112,7 @@ const Accounts = () => {
                 if (error) {
                     console.error("Error inserting into adminmessage:", error);
                 } else {
-                    const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('for', adminMessageFor).eq('father', 6187538792).gt('id', 0); // Update all rows where `did` is greater than 0
+                    const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('for', adminMessageFor).eq('father', 6528707984).gt('id', 0); // Update all rows where `did` is greater than 0
                     if (findErrorB) {
                         console.error(findErrorB.message)
                     } else {
@@ -159,7 +159,7 @@ const Accounts = () => {
                 setAll('')
             }
         } else if (!adminMessageFor && !adminMessageFor2 && all == "user") { //all use
-            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('father', 6187538792).eq('for', 'all'); // Update all rows where `did` is greater than 0
+            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('father', 6528707984).eq('for', 'all'); // Update all rows where `did` is greater than 0
             if (findErrorB) {
                 console.error(findErrorB.message)
             } else {
@@ -199,7 +199,7 @@ const Accounts = () => {
             if (error) {
                 console.error("Error inserting into adminmessage:", error);
             } else {
-                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 6187538792).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
+                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 6528707984).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
                 if (findErrorB) {
                     console.error(findErrorB.message)
                 } else {
@@ -228,7 +228,7 @@ const Accounts = () => {
 
     }
     const updateRate = async () => {
-        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', 6187538792).eq('key', 'rate'); // Update all rows where `did` is greater than 0
+        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', 6528707984).eq('key', 'rate'); // Update all rows where `did` is greater than 0
         if (findErrorC) {
             console.error(findErrorC.message)
         } else {
@@ -283,7 +283,7 @@ const Accounts = () => {
                     const { data: withdrawlForEach, error } = await supabase
                         .from("admin_withdrawl")
                         .select("*")
-                        .eq('for', 6187538792)
+                        .eq('for', 6528707984)
 
                     if (error) {
                         console.log(error);
@@ -300,7 +300,7 @@ const Accounts = () => {
                             const { data: amountForEach, error } = await supabase
                                 .from("admin_amount")
                                 .select("*")
-                                .eq('father', 6187538792)
+                                .eq('father', 6528707984)
 
                             if (error) {
                                 console.log(error);
@@ -310,7 +310,7 @@ const Accounts = () => {
                                 const { data: panelDisable, error } = await supabase
                                     .from("panel")
                                     .select("bigvalue")
-                                    .eq('owner', 6187538792)
+                                    .eq('owner', 6528707984)
 
 
                                 if (error) {
@@ -324,7 +324,7 @@ const Accounts = () => {
                                     const { data: mindepo, error } = await supabase
                                         .from("panel")
                                         .select("minmax")
-                                        .eq('owner', 6187538792)
+                                        .eq('owner', 6528707984)
 
 
                                     if (error) {
@@ -398,7 +398,7 @@ const Accounts = () => {
                 //console.log("New order inserted:", payload.new);
                 // Add the new order to the state
 
-                if (payload.new.for === 6187538792) {
+                if (payload.new.for === 6528707984) {
 
                     setWithdrawldatao((prevWith) => (
                         [...prevWith, { status: payload.new.status, date: payload.new.date, wid: payload.new.wid, for: payload.new.for, bank: payload.new.bank, a_name: payload.new.a_name, a_no: payload.new.a_no, amount: payload.new.amount }]
@@ -412,7 +412,7 @@ const Accounts = () => {
             .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
                 //console.log("New order inserted:", payload.new);
                 // Add the new order to the state
-                if (payload.new.for == 6187538792) {
+                if (payload.new.for == 6528707984) {
                     setWithdrawldata((prevWith) =>
                         prevWith.map((item) =>
                             item.wid === payload.new.wid
@@ -434,7 +434,7 @@ const Accounts = () => {
             // .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
             //     //console.log("New order inserted:", payload.new);
             //     // Add the new order to the state
-            //     if (payload.new.for == 6187538792) {
+            //     if (payload.new.for == 6528707984) {
             //         setWithdrawldata((prevWith) =>
             //             prevWith.map((item) =>
             //                 item.wid === payload.new.wid
@@ -467,7 +467,7 @@ const Accounts = () => {
                 .from('panel')
                 .select('bigvalue')
                 .eq('key', 'disabled')
-                .eq('owner', 6187538792)// Filter based on the 'father' or any other condition
+                .eq('owner', 6528707984)// Filter based on the 'father' or any other condition
                 .single();
 
             if (error) {
@@ -491,7 +491,7 @@ const Accounts = () => {
             const { error: updateError } = await supabase
                 .from('panel')
                 .update({ bigvalue: updatedBigValue })
-                .eq('owner', 6187538792)// Filter by correct row
+                .eq('owner', 6528707984)// Filter by correct row
 
 
             if (updateError) {
@@ -545,7 +545,7 @@ const Accounts = () => {
             const { error: updateError } = await supabase
                 .from('panel')
                 .update({ bigvalue: updatedValue })
-                .eq('owner', 6187538792)
+                .eq('owner', 6528707984)
                 .eq('key', 'disabled')
 
             if (updateError) throw updateError;
@@ -585,7 +585,7 @@ const Accounts = () => {
     const sendb = async (mess, am) => {
 
         const { error } = await supabase.from('admin_amount').insert([
-            { tid: mess, amount: am, father: 6187538792 }
+            { tid: mess, amount: am, father: 6528707984 }
         ]);
         if (error) {
             console.error(error.message)
@@ -593,7 +593,7 @@ const Accounts = () => {
             // setModalE(false)
             const { data, error } = await supabase.from('users')
                 .select('a_balance')
-                .eq('id', 6187538792)
+                .eq('id', 6528707984)
                 .single()
 
 
@@ -601,7 +601,7 @@ const Accounts = () => {
                 const news = data.a_balance + am
                 const { error } = await supabase.from('users')
                     .update({ 'a_balance': news })
-                    .eq('id', 6187538792)
+                    .eq('id', 6528707984)
 
                 if (error) {
                     console.log(error.message)
@@ -849,7 +849,7 @@ const Accounts = () => {
         const { error: setError } = await supabase
             .from('admin_withdrawl')
             .insert([{
-                for: 6187538792,
+                for: 6528707984,
                 bank: bank,
                 a_name: accountname,
                 a_no: acc,
@@ -869,7 +869,7 @@ const Accounts = () => {
     }
 
     const updateDeposit = async () => {
-        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', 6187538792).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
+        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', 6528707984).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
         if (findErrorB) {
             console.error(findErrorB.message)
         } else {
@@ -918,7 +918,7 @@ const Accounts = () => {
                         const { data: fetchRate, error } = await supabase
                             .from("panel")
                             .select("value")
-                            .eq('owner', 6187538792)
+                            .eq('owner', 6528707984)
                             .eq('key', 'rate')
 
 
@@ -955,7 +955,7 @@ const Accounts = () => {
                         const { data: fetchMinmax, error } = await supabase
                             .from("panel")
                             .select("minmax")
-                            .eq('owner', 6187538792)
+                            .eq('owner', 6528707984)
 
 
                         if (error) {
