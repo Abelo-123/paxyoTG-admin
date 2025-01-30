@@ -9,6 +9,9 @@ body {
   background: white;
 }
 
+iframe {
+  background-color: rgba(73, 73, 73, 0.4);
+}
 .common-styles {
   @apply flex p-2 border-2 border-blue-200; /* Using Tailwind's @apply directive */
 }

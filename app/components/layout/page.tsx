@@ -150,7 +150,7 @@ const Lays = () => {
                     <div className="flex">
                         <FontAwesomeIcon size="2x" icon={faBell} />
                         {useNotification.notificationLight === true ? (
-                            <div style={{ position: 'absolute', right: '0', padding: '4rem', height: '0.4rem', borderRadius: '100px', background: 'red' }}></div>
+                            <div style={{ position: 'absolute', right: '0', padding: '0.3rem', height: '0.4rem', borderRadius: '100px', background: 'red' }}></div>
                         ) : (<></>)}
                     </div>
                 </div>

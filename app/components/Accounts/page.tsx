@@ -367,7 +367,7 @@ const Accounts = () => {
 
             try {
                 const response = await axios.get('/api/smm/fetchService');
-                console.log(response.data.response)
+                setFilteredServices(response.data.response);
                 setService(response.data.response); // Store all services
                 // Initially, show all services
             } catch (error) {
@@ -1198,11 +1198,11 @@ const Accounts = () => {
                                                         className="px-6 p-2 ml-4 text-white"
                                                         onClick={() => {
                                                             handleDisable(items.service);
-                                                            setLoadingIndex(items.service); // Set loading state when clicked
+                                                            setLoadingIndex(index); // Set loading state when clicked
                                                         }}
                                                         disabled={loadingIndex === index} // Disable only the clicked button
                                                     >
-                                                        {loadingIndex === items.service ? (
+                                                        {loadingIndex === index ? (
                                                             <span className="flex items-center">
                                                                 <FontAwesomeIcon icon={faRefresh} className="animate-spin mr-2" /> Wait...
                                                             </span>
@@ -1741,23 +1741,11 @@ const Accounts = () => {
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
 
-                        <div className="amount-container">
+                        <div className=" amount-container">
 
 
-                            <div className="flex">
-                                <Button
+                            <div className="flex ">
 
-
-                                    onClick={() => {
-
-                                        setIframe2Visible(true)
-                                        setLoading(true)
-                                    }}
-                                    className="w-full p-4"
-
-                                >
-                                    1
-                                </Button>
                                 <Button
 
                                     onClick={() => {
@@ -1768,7 +1756,7 @@ const Accounts = () => {
                                         setIframe31Visible(true)
                                         setLoading(true)
                                     }}
-                                    className="w-full p-4"
+                                    className="w-full p-1"
 
                                 >
                                     10
@@ -1783,7 +1771,7 @@ const Accounts = () => {
                                         setIframe32Visible(true)
                                         setLoading(true)
                                     }}
-                                    className="w-full p-4"
+                                    className="w-full p-1"
 
                                 >
                                     500
@@ -1798,7 +1786,7 @@ const Accounts = () => {
                                         setIframe33Visible(true)
                                         setLoading(true)
                                     }}
-                                    className="w-full p-4"
+                                    className="w-full p-1"
 
                                 >
                                     2500
@@ -1812,7 +1800,7 @@ const Accounts = () => {
                                         setIframe34Visible(true)
                                         setLoading(true)
                                     }}
-                                    className="w-full p-4"
+                                    className="w-full p-1"
 
                                 >
                                     5000
@@ -1913,41 +1901,43 @@ const Accounts = () => {
 
                         </div>
                     </div>
-                </div>
+                </div >
             )}
-            {modalii && (
-                <div
-                    className="fixed  modal-pops inset-0  h-screen bg-black bg-opacity-75 grid content-center z-50"
-                    onClick={() => {
-
-                        setModalii(false)
-                    }}
-                >
+            {
+                modalii && (
                     <div
-                        className="bg-white mx-auto modal-pop lg:w-4/12 p-8 rounded-lg relative w-96"
-                        onClick={(e) => e.stopPropagation()}
-                        style={{ 'width': '90%', background: 'var(--tgui--bg_color)' }}
-                    // Prevent clicking inside the modal from closing it
+                        className="fixed  modal-pops inset-0  h-screen bg-black bg-opacity-75 grid content-center z-50"
+                        onClick={() => {
+
+                            setModalii(false)
+                        }}
                     >
                         <div
-
-                            className=" text-gray-500 absolute m-2 right-4 top-2 px-4 py-3 rounded-md"
-                            onClick={() => {
-                                setModalii(false)
-                            }}
+                            className="bg-white mx-auto modal-pop lg:w-4/12 p-8 rounded-lg relative w-96"
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ 'width': '90%', background: 'var(--tgui--bg_color)' }}
+                        // Prevent clicking inside the modal from closing it
                         >
-                            <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
-                        </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                            <div
+
+                                className=" text-gray-500 absolute m-2 right-4 top-2 px-4 py-3 rounded-md"
+                                onClick={() => {
+                                    setModalii(false)
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
+                            </div>
+                            <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
 
 
-                        {/* <strong style={{ color: 'red' }}>
+                            {/* <strong style={{ color: 'red' }}>
                                 {aamount !== '' && parseInt(aamount) <= userData.deposit && `The Minimum Deposit Amount is ${userData.deposit}`}
                             </strong> */}
 
+                        </div>
                     </div>
-                </div>
-            )}
+                )
+            }
         </>
     );
 }
