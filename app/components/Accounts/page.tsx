@@ -981,7 +981,13 @@ const Accounts = () => {
                         if (error) {
                             console.log(error);
                         } else {
-                            setMm(fetchMinmax[0].minmax)
+                            const validMinmax = fetchMinmax
+                                .map(item => item.minmax)
+                                .filter(value => value !== null && !isNaN(value)); // Ensure it's numeric
+
+                            if (validMinmax.length > 0) {
+                                setMm(validMinmax[0]); // Set the first valid number
+                            }
                         }
                     }} className="w-full">Minimum Deposit</Button>
                 </div>
