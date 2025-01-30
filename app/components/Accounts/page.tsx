@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { supabase } from "@/app/lib/supabaseClient"
 import { Button, Input, Select } from "@telegram-apps/telegram-ui"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -345,22 +345,29 @@ const Accounts = () => {
         deposit();
     }, [])
 
+    const filteredList = useMemo(() => {
+        const disabledArray = new Set(String(userData.recentDisabled || "").split(","));
 
-    useEffect(() => {
-        // Filter services whenever the search query changes
-        setLoading(true);
-        const timer = setTimeout(() => {
-            const filtered = services.filter((items) =>
-                items.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                String(items.service).toLowerCase().includes(searchQuery.toLowerCase())
-            );
-            setFilteredServices(filtered);
-            setLoading(false);
-            setLoadingc(false)
-        }, 100); // Debounce for better performance
+        const filtered = services
+            .filter((item) => {
+                const isNotDisabled = !disabledArray.has(String(item.service));
+                const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    String(item.service).toLowerCase().includes(searchQuery.toLowerCase());
+                return isNotDisabled && matchesSearch;
+            })
+            .sort((a, b) => {
+                // Check for exact match first
+                const aExact = String(a.service) === searchQuery || a.name.toLowerCase() === searchQuery.toLowerCase();
+                const bExact = String(b.service) === searchQuery || b.name.toLowerCase() === searchQuery.toLowerCase();
 
-        return () => clearTimeout(timer);
-    }, [searchQuery, services]);
+                if (aExact && !bExact) return -1; // Move `a` to the top
+                if (!aExact && bExact) return 1; // Move `b` to the top
+                return 0; // Otherwise, keep order
+            });
+
+        return filtered;
+    }, [services, userData.recentDisabled, searchQuery]); // Dependencies
+
 
     useEffect(() => {
         const fetchServices = async () => {
@@ -532,38 +539,32 @@ const Accounts = () => {
     const handleDisable = async (id) => {
         setLoadingIndex(id);
         try {
-            // Fetch the current value of "bigvalue" from the "panel" table
-
-            setUserData((prevNotification) => ({
-                ...prevNotification, // Spread the previous state
-                recentDisabled: [...prevNotification.recentDisabled, `${userData.recentDisabled},${id}`], // Append new value to the array
-
-                // Update the `deposit` field
+            // Update local state immediately for a better UI experience
+            setUserData((prevUserData) => ({
+                ...prevUserData,
+                recentDisabled: `${prevUserData.recentDisabled},${id}`,
             }));
-            let updatedValue = id;
 
-            // Append the new value to the existing data if it exists
-            if (userData.recentDisabled) {
-                updatedValue = `${userData.recentDisabled},${id}`;
-            }
+            let updatedValue = userData.recentDisabled
+                ? `${userData.recentDisabled},${id}`
+                : id;
 
-            // Update the "bigvalue" column in the "panel" table
+            // Update the database
             const { error: updateError } = await supabase
-                .from('panel')
+                .from("panel")
                 .update({ bigvalue: updatedValue })
-                .eq('owner', 6528707984)
-                .eq('key', 'disabled')
+                .eq("owner", 6528707984)
+                .eq("key", "disabled");
 
             if (updateError) throw updateError;
 
-
-            console.log('Updated sccessfully:', updatedValue);
+            console.log("Updated successfully:", updatedValue);
         } catch (error) {
-            console.error('Error updating bigvalue:', error.message);
+            console.error("Error updating bigvalue:", error.message);
         } finally {
             setLoadingIndex(null); // Re-enable button after operation
         }
-    }
+    };
     const generateIframeSrc1 = () => 'https://paxyo.com/chapa.html?amount=1';
     const generateIframeSrc2 = () => `https://paxyo.com/chapa.html?amount=1`;
     const generateIframeSrc31 = () => `https://paxyo.com/chapa.html?amount=10`;
@@ -1182,37 +1183,29 @@ const Accounts = () => {
                                 {loading ? (
                                     <li className="p-2 text-gray-500">Loading...</li>
                                 ) : (
-                                    filteredServices
-                                        .filter((items) => {
-                                            const disabledArray = String(userData.recentDisabled || '').split(',');
-                                            return !disabledArray.includes(String(items.service));
-                                        })
-                                        .map((items, index) => (
-                                            <li key={index}>
-                                                <div
-                                                    style={{ borderBottom: '1px solid black' }}
-                                                    className="w-full p-2"
+                                    filteredList.map((items, index) => (
+                                        <li key={index}>
+                                            <div style={{ borderBottom: "1px solid black" }} className="w-full p-2">
+                                                {items.service} {items.name}
+                                                <Button
+                                                    className="px-6 p-2 ml-4 text-white"
+                                                    onClick={() => {
+                                                        handleDisable(items.service);
+                                                        setLoadingIndex(index); // Set loading state when clicked
+                                                    }}
+                                                    disabled={loadingIndex === index} // Disable only the clicked button
                                                 >
-                                                    {items.service} {items.name}
-                                                    <Button
-                                                        className="px-6 p-2 ml-4 text-white"
-                                                        onClick={() => {
-                                                            handleDisable(items.service);
-                                                            setLoadingIndex(index); // Set loading state when clicked
-                                                        }}
-                                                        disabled={loadingIndex === index} // Disable only the clicked button
-                                                    >
-                                                        {loadingIndex === index ? (
-                                                            <span className="flex items-center">
-                                                                <FontAwesomeIcon icon={faRefresh} className="animate-spin mr-2" /> Wait...
-                                                            </span>
-                                                        ) : (
-                                                            "Disable"
-                                                        )}
-                                                    </Button>
-                                                </div>
-                                            </li>
-                                        ))
+                                                    {loadingIndex === index ? (
+                                                        <span className="flex items-center">
+                                                            <FontAwesomeIcon icon={faRefresh} className="animate-spin mr-2" /> Wait...
+                                                        </span>
+                                                    ) : (
+                                                        "Disable"
+                                                    )}
+                                                </Button>
+                                            </div>
+                                        </li>
+                                    ))
                                 )}
 
                             </ul>
