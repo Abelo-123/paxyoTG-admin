@@ -58,89 +58,74 @@ const Telegram = () => {
   // }, []);
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://telegram.org/js/telegram-web-app.js?2";
-    script.async = true;
-    document.body.appendChild(script);
+    const checkNot = async () => {
+      const { data } = await supabase
+        .from('adminmessage')
+        .select('message')
+        .eq('to', 6528707984)
+        .eq('father', 779060335)
+        .eq('seen', true)
 
-    script.onload = async () => {
-      const Telegram = window.Telegram;
-      Telegram.WebApp.expand();
-      if (window.Telegram && window.Telegram.WebApp) {
-        window.Telegram.WebApp.ready();
+      if (data.length > 1) {
+        setNotification((prevNotification) => ({
+          ...prevNotification,
+          notificationLight: true,
+        }));
 
-        const { user } = Telegram.WebApp.initDataUnsafe;
-
-        const checkNot = async () => {
-          const { data } = await supabase
-            .from('adminmessage')
-            .select('message')
-            .eq('to', user.id)
-            .eq('father', 779060335)
-            .eq('seen', true)
-
-          if (data.length > 1) {
-            setNotification((prevNotification) => ({
-              ...prevNotification,
-              notificationLight: true,
-            }));
-
-          } else {
-            //console.log("no data")
-          }
-        }
-        checkNot()
-
-
-        //status, trId  ,amount, date
-
-        const channel = supabase
-          .channel('adminmessage')
-          .on("postgres_changes", { event: "INSERT", schema: "public", table: "adminmessage" }, (payload) => {
-            //console.log("New order inserted:", payload.new);
-            // Add the new order to the state
-            if ((Number(payload.new.for) === userData.userId || Number(payload.new.to) === userData.userId) && payload.new.seen === true) {
-              // console.log("New admin message for to=100:", payload.new);
-
-              // Update state or notify the user
-              setNotification((prevNotification) => ({
-                ...prevNotification,
-                notificationLight: true,
-              }));
-
-              // Optionally display a user-friendly toast
-              //showToast(`New message: ${payload.new.message}`);
-            }
-            if (Number(payload.new.father) === user.id && Number(payload.new.for) === user.id && payload.new.seen === true) {
-              // console.log("New admin message for to=100:", payload.new);
-
-              // Update state or notify the user
-              setNotification((prevNotification) => ({
-                ...prevNotification,
-                notificationLight: true,
-              }));
-
-              // Optionally display a user-friendly toast
-              //showToast(`New message: ${payload.new.message}`);
-            }
-            // if (payload.new.seen === true) {
-            //   setNotification((prevNotification) => ({
-            //     ...prevNotification, // Spread the previous state
-            //     notificationLight: true
-            //     // Update the `deposit` field
-            //   }));
-            //   //  console.log(payload.new)
-            // }
-
-          })
-          .subscribe();
-
-
-        return () => {
-          channel.unsubscribe();
-        };
+      } else {
+        //console.log("no data")
       }
     }
+    checkNot()
+
+
+    //status, trId  ,amount, date
+
+    const channel = supabase
+      .channel('adminmessage')
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "adminmessage" }, (payload) => {
+        //console.log("New order inserted:", payload.new);
+        // Add the new order to the state
+        if ((Number(payload.new.for) === userData.userId || Number(payload.new.to) === userData.userId) && payload.new.seen === true) {
+          // console.log("New admin message for to=100:", payload.new);
+
+          // Update state or notify the user
+          setNotification((prevNotification) => ({
+            ...prevNotification,
+            notificationLight: true,
+          }));
+
+          // Optionally display a user-friendly toast
+          //showToast(`New message: ${payload.new.message}`);
+        }
+        if (Number(payload.new.father) === 6528707984 && Number(payload.new.for) === 6528707984 && payload.new.seen === true) {
+          // console.log("New admin message for to=100:", payload.new);
+
+          // Update state or notify the user
+          setNotification((prevNotification) => ({
+            ...prevNotification,
+            notificationLight: true,
+          }));
+
+          // Optionally display a user-friendly toast
+          //showToast(`New message: ${payload.new.message}`);
+        }
+        // if (payload.new.seen === true) {
+        //   setNotification((prevNotification) => ({
+        //     ...prevNotification, // Spread the previous state
+        //     notificationLight: true
+        //     // Update the `deposit` field
+        //   }));
+        //   //  console.log(payload.new)
+        // }
+
+      })
+      .subscribe();
+
+
+    return () => {
+      channel.unsubscribe();
+    };
   }, [])
 
 
