@@ -21,7 +21,7 @@ const Orders = () => {
             const { data: initialData, error } = await supabase
                 .from("orders")
                 .select("*")
-                .eq('father', 6528707984);
+                .eq('father', userData.userId);
             if (error) {
                 console.log(error);
             } else {
@@ -31,14 +31,14 @@ const Orders = () => {
             }
             const channel = supabase
             .channel("deposit_channewerlccb")
-            .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders",  filter: "father=eq.6528707984"}, (payload) => {
+            .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders",  filter: "father=eq.userData.userId"}, (payload) => {
                 //console.log("New order inserted:", payload.new);
-              //  if(payload.new.father === 6528707984){
+              //  if(payload.new.father === userData.userId){
                 // Add the new order to the state
                 setData((prevData) => [payload.new, ...prevData]);
                 
             })
-            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders", filter: "father=eq.6528707984" }, (payload) => {
+            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders", filter: "father=eq.userData.userId" }, (payload) => {
                 //console.log("Order updated:", payload.new.status, "for oid", payload.new.oid);
                 // if (payload.new.uid == 5928771903) {
                 // Find the updated order in the current state

@@ -44,7 +44,7 @@ const Lays = () => {
             const { data, error } = await supabase
                 .from('users')
                 .select('a_balance')
-                .eq('id', 6528707984)
+                .eq('id', userData.userId)
                 .single(); // Get a single row
 
             if (error) {
@@ -55,8 +55,8 @@ const Lays = () => {
         }
         fetchBalance()
         supabase
-            .channel(`users:id=eq.6528707984`)
-            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users', filter: `id=eq.6528707984` }, (payload) => {
+            .channel(`users:id=eq.${userData.userId}`)
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users', filter: `id=eq.${userData.userId}` }, (payload) => {
                 setBalance((payload.new as { a_balance: number }).a_balance); // Update balance on real-time changes
 
             })
@@ -95,7 +95,7 @@ const Lays = () => {
         const { data: setNotify, error: setError } = await supabase
             .from('adminmessage')
             .select('*')
-            .eq('to', 6528707984)
+            .eq('to', userData.userId)
             .eq('father', 779060335)
 
 
@@ -107,7 +107,7 @@ const Lays = () => {
             const { error: setError } = await supabase
                 .from("adminmessage")
                 .update({ seen: false })
-                .eq('to', 6528707984)
+                .eq('to', userData.userId)
                 .eq('father', 779060335)
 
 
@@ -126,7 +126,7 @@ const Lays = () => {
 
 
 
-        const { error: errorb } = await supabase.from('adminmessage').update({ seen: false }).eq('for', 6528707984); // Update all rows where `did` is greater than 0
+        const { error: errorb } = await supabase.from('adminmessage').update({ seen: false }).eq('for', userData.userId); // Update all rows where `did` is greater than 0
         if (errorb) {
             console.error(errorb.message)
         }

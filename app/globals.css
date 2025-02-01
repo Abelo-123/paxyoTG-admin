@@ -5,7 +5,7 @@
 
 
 body {
-  color: #ffffff;
+  color: var(--tgui--text_color);
   background: var(--tgui--secondary_bg_color); ;
 }
 
