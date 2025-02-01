@@ -17,13 +17,26 @@ const Orders = () => {
     const [data, setData] = useState([]); // Adjust the type based on your data structure
 
     useEffect(() => {
+          //   // Load the Telegram Web App JavaScript SDK
+    const script = document.createElement("script");
+    script.src = "https://telegram.org/js/telegram-web-app.js?2";
+    script.async = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      const Telegram = window.Telegram;
+
+      if (window.Telegram && window.Telegram.WebApp) {
+        Telegram.WebApp.expand() // Get the app version
+        const { user } = Telegram.WebApp.initDataUnsafe;
+
         const auth = async () => {
             setLoader(true)
             // Fetch the initial data (orders) from Supabase or any other source
             const { data: initialData, error } = await supabase
                 .from("orders")
                 .select("*")
-                .eq('father', userData.userId);
+                .eq('father', user.id);
             if (error) {
                 console.log(error);
             } else {
@@ -33,14 +46,14 @@ const Orders = () => {
             }
             const channel = supabase
             .channel("deposit_channewerlccb")
-            .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders",  filter: "father=eq.userData.userId"}, (payload) => {
+            .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders",  filter: `father=eq.${user.id}`}, (payload) => {
                 //console.log("New order inserted:", payload.new);
               //  if(payload.new.father === userData.userId){
                 // Add the new order to t he state
                 setData((prevData) => [payload.new, ...prevData]);
                 
             })
-            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders", filter: "father=eq.userData.userId" }, (payload) => {
+            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "orders", filter: `father=eq.${user.id}` }, (payload) => {
                 //console.log("Order updated:", payload.new.status, "for oid", payload.new.oid);
                 // if (payload.new.uid == 5928771903) {
                 // Find the updated order in the current state
@@ -67,7 +80,9 @@ const Orders = () => {
         };
         };
 
-        auth(); // Call the auth function whethe component is mounted
+        auth(); 
+    }
+}// Call the auth function whethe component is mounted
     }, []);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

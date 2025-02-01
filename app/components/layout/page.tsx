@@ -40,6 +40,7 @@ const Lays = () => {
     }, [])
 
     useEffect(() => {
+
         const fetchBalance = async () => {
             const { data, error } = await supabase
                 .from('users')

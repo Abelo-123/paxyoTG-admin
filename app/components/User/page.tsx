@@ -65,25 +65,39 @@ const Smm = () => {
         (item.name?.toLowerCase() || "").includes(nameSearchQuery.toLowerCase())
     );
 
-    const sendMessage = async () => {
+    const sendMessage = () => {
+        //   // Load the Telegram Web App JavaScript SDK
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
 
-        try {
-            const { error } = await supabase
-                .from('adminmessage')
-                .insert([
-                    {
-                        seen: true,
-                        message: message,
-                        for: messageId,
-                        father: userData.userId,
-                        from: "Admin",
-                    }
-                ]);
-            if (error) throw error;
-            setIsModalOpen(false);
+        script.onload = async () => {
+            const Telegram = window.Telegram;
 
-        } catch (error) {
-            console.error("Error sending message:", error.message);
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.expand() // Get the app version
+                const { user } = Telegram.WebApp.initDataUnsafe;
+
+                try {
+                    const { error } = await supabase
+                        .from('adminmessage')
+                        .insert([
+                            {
+                                seen: true,
+                                message: message,
+                                for: messageId,
+                                father: user.id,
+                                from: "Admin",
+                            }
+                        ]);
+                    if (error) throw error;
+                    setIsModalOpen(false);
+
+                } catch (error) {
+                    console.error("Error sending message:", error.message);
+                }
+            }
         }
     };
 
@@ -103,33 +117,48 @@ const Smm = () => {
     };
 
     useEffect(() => {
-        const subscribeToChanges = () => {
-            const channel = supabase
-                .channel('users')
-                .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.${userData.userId}` }, (payload) => {
-                    setUsers((prevData) => [...prevData, payload.new]);
-                })
-                .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.${userData.userId}` }, (payload) => {
+        //   // Load the Telegram Web App JavaScript SDK
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
 
-                    setUsers((prevData) => {
-                        // Update the balance if the user ID matches
-                        return prevData.map((item) =>
-                            item.id === payload.new.id
-                                ? { ...item, balance: payload.new.balance }  // Update the balance
-                                : item  // Keep the rest unchanged
-                        );
-                    });
+        script.onload = () => {
+            const Telegram = window.Telegram;
+
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.expand() // Get the app version
+                const { user } = Telegram.WebApp.initDataUnsafe;
+
+                const subscribeToChanges = () => {
+                    const channel = supabase
+                        .channel('users')
+                        .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.${user.id}` }, (payload) => {
+                            setUsers((prevData) => [...prevData, payload.new]);
+                        })
+                        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.${user.id}` }, (payload) => {
+
+                            setUsers((prevData) => {
+                                // Update the balance if the user ID matches
+                                return prevData.map((item) =>
+                                    item.id === payload.new.id
+                                        ? { ...item, balance: payload.new.balance }  // Update the balance
+                                        : item  // Keep the rest unchanged
+                                );
+                            });
 
 
-                })
-                .subscribe();
+                        })
+                        .subscribe();
 
-            return () => {
-                supabase.removeChannel(channel);
-            };
-        };
+                    return () => {
+                        supabase.removeChannel(channel);
+                    };
+                };
 
-        subscribeToChanges();
+                subscribeToChanges();
+            }
+        }
     }, []);
 
     return (
@@ -165,7 +194,6 @@ const Smm = () => {
                     </div>
                 </div>
             )}
-            {userData.userId}
             <div className="w-full overflow-auto" style={{ height: '29rem' }}>
                 <ul className="overflow-hidden">
                     {filteredUsers.map((items, index) => (
