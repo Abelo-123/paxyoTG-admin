@@ -8,7 +8,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "@/app/lib/supabaseClient";
 import { useEffect, useState, useCallback } from "react";
 import { Avatar, Input } from '@telegram-apps/telegram-ui'; // Adjust as necessary
-import useUser from "../UserContext";
+import { useUser } from "../UserContext";
 
 const Smm = () => {
     const [showDetail, setShowDetail] = useState(0);
