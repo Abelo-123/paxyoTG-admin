@@ -25,30 +25,15 @@ const Smm = () => {
 
 
     const fetchUser = useCallback(async () => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
-
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                try {
-                    const { data, error } = await supabase
-                        .from("users")
-                        .select('*')
-                        .eq('father', user.id);
-                    if (error) throw error;
-                    setUsers(data);
-                } catch (error) {
-                    console.error("Error fetching users:", error);
-                }
-            }
+        try {
+            const { data, error } = await supabase
+                .from("users")
+                .select('*')
+                .eq('father', 6528707984);
+            if (error) throw error;
+            setUsers(data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
         }
     }, []);
 
@@ -66,39 +51,23 @@ const Smm = () => {
     );
 
     const sendMessage = async () => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        try {
+            const { error } = await supabase
+                .from('adminmessage')
+                .insert([
+                    {
+                        seen: true,
+                        message: message,
+                        for: messageId,
+                        father: 6528707984,
+                        from: "Admin",
+                    }
+                ]);
+            if (error) throw error;
+            setIsModalOpen(false);
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-
-                try {
-                    const { error } = await supabase
-                        .from('adminmessage')
-                        .insert([
-                            {
-                                seen: true,
-                                message: message,
-                                for: messageId,
-                                father: user.id,
-                                from: "Admin",
-                            }
-                        ]);
-                    if (error) throw error;
-                    setIsModalOpen(false);
-
-                } catch (error) {
-                    console.error("Error sending message:", error.message);
-                }
-            }
+        } catch (error) {
+            console.error("Error sending message:", error.message);
         }
     };
 
@@ -118,48 +87,33 @@ const Smm = () => {
     };
 
     useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        const subscribeToChanges = () => {
+            const channel = supabase
+                .channel('users')
+                .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.6528707984` }, (payload) => {
+                    setUsers((prevData) => [...prevData, payload.new]);
+                })
+                .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.6528707984` }, (payload) => {
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                const subscribeToChanges = () => {
-                    const channel = supabase
-                        .channel('users')
-                        .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.${user.id}` }, (payload) => {
-                            setUsers((prevData) => [...prevData, payload.new]);
-                        })
-                        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.${user.id}` }, (payload) => {
-
-                            setUsers((prevData) => {
-                                // Update the balance if the user ID matches
-                                return prevData.map((item) =>
-                                    item.id === payload.new.id
-                                        ? { ...item, balance: payload.new.balance }  // Update the balance
-                                        : item  // Keep the rest unchanged
-                                );
-                            });
+                    setUsers((prevData) => {
+                        // Update the balance if the user ID matches
+                        return prevData.map((item) =>
+                            item.id === payload.new.id
+                                ? { ...item, balance: payload.new.balance }  // Update the balance
+                                : item  // Keep the rest unchanged
+                        );
+                    });
 
 
-                        })
-                        .subscribe();
+                })
+                .subscribe();
 
-                    return () => {
-                        supabase.removeChannel(channel);
-                    };
-                };
+            return () => {
+                supabase.removeChannel(channel);
+            };
+        };
 
-                subscribeToChanges();
-            }
-        }
+        subscribeToChanges();
     }, []);
 
     return (

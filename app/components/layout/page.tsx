@@ -40,43 +40,28 @@ const Lays = () => {
     }, [])
 
     useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        const fetchBalance = async () => {
+            const { data, error } = await supabase
+                .from('users')
+                .select('a_balance')
+                .eq('id', 6528707984)
+                .single(); // Get a single row
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                const fetchBalance = async () => {
-                    const { data, error } = await supabase
-                        .from('users')
-                        .select('a_balance')
-                        .eq('id', user.id)
-                        .single(); // Get a single row
-
-                    if (error) {
-                        console.error('Error fetching initial balance:', error);
-                    } else {
-                        setBalance(data.a_balance); // Set initial balance
-                    }
-                }
-                fetchBalance()
-                supabase
-                    .channel(`users:id=eq.${user.id}`)
-                    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users', filter: `id=eq.${user.id}` }, (payload) => {
-                        setBalance((payload.new as { a_balance: number }).a_balance); // Update balance on real-time changes
-
-                    })
-
-                    .subscribe();
+            if (error) {
+                console.error('Error fetching initial balance:', error);
+            } else {
+                setBalance(data.a_balance); // Set initial balance
             }
         }
+        fetchBalance()
+        supabase
+            .channel(`users:id=eq.6528707984`)
+            .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'users', filter: `id=eq.6528707984` }, (payload) => {
+                setBalance((payload.new as { a_balance: number }).a_balance); // Update balance on real-time changes
+
+            })
+
+            .subscribe();
     }, [])
 
 
@@ -98,67 +83,52 @@ const Lays = () => {
 
     const seeNotification = async () => {
 
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
-
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
 
 
+        setNotification((prevNotification) => ({
+            ...prevNotification, // Spread the previous state
+            notificationModal: true,
+            smmModal: true,
+            // Update the `deposit` field
+        }));
 
+        const { data: setNotify, error: setError } = await supabase
+            .from('adminmessage')
+            .select('*')
+            .eq('to', 6528707984)
+            .eq('father', 779060335)
+
+
+
+
+        if (setError) {
+            console.error('Error fetching initial balance:', setError);
+        } else {
+            const { error: setError } = await supabase
+                .from("adminmessage")
+                .update({ seen: false })
+                .eq('to', 6528707984)
+                .eq('father', 779060335)
+
+
+            if (setError) {
+                console.error('Error fetching initial balance:', setError);
+            } else {
                 setNotification((prevNotification) => ({
                     ...prevNotification, // Spread the previous state
-                    notificationModal: true,
-                    smmModal: true,
+                    notificationLoader: false,
+                    notificationData: setNotify,
+                    notificationLight: false,
                     // Update the `deposit` field
                 }));
-
-                const { data: setNotify, error: setError } = await supabase
-                    .from('adminmessage')
-                    .select('*')
-                    .eq('to', user.id)
-                    .eq('father', 779060335)
-
-
-
-
-                if (setError) {
-                    console.error('Error fetching initial balance:', setError);
-                } else {
-                    const { error: setError } = await supabase
-                        .from("adminmessage")
-                        .update({ seen: false })
-                        .eq('to', user.id)
-                        .eq('father', 779060335)
-
-
-                    if (setError) {
-                        console.error('Error fetching initial balance:', setError);
-                    } else {
-                        setNotification((prevNotification) => ({
-                            ...prevNotification, // Spread the previous state
-                            notificationLoader: false,
-                            notificationData: setNotify,
-                            notificationLight: false,
-                            // Update the `deposit` field
-                        }));
-                    }
-                }
-
-
-
-                const { error: errorb } = await supabase.from('adminmessage').update({ seen: false }).eq('for', userData.userId); // Update all rows where `did` is greater than 0
-                if (errorb) {
-                    console.error(errorb.message)
-                }
             }
+        }
+
+
+
+        const { error: errorb } = await supabase.from('adminmessage').update({ seen: false }).eq('for', userData.userId); // Update all rows where `did` is greater than 0
+        if (errorb) {
+            console.error(errorb.message)
         }
     }
 
