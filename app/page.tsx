@@ -21,7 +21,7 @@ import { faRotateBackward } from "@fortawesome/free-solid-svg-icons";
 const Telegram = () => {
   const { activePage } = useActivePage();
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  const { setUserData, userData } = useUser();
+  const { setUserData } = useUser();
   /* eslint-disable @typescript-eslint/no-unused-vars */
   const { useNotification, setNotification } = useNot();
   useEffect(() => {
