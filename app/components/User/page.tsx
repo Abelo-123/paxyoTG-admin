@@ -25,15 +25,30 @@ const Smm = () => {
 
 
     const fetchUser = useCallback(async () => {
-        try {
-            const { data, error } = await supabase
-                .from("users")
-                .select('*')
-                .eq('father', 6528707984);
-            if (error) throw error;
-            setUsers(data);
-        } catch (error) {
-            console.error("Error fetching users:", error);
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
+
+        script.onload = async () => {
+            const Telegram = window.Telegram;
+            Telegram.WebApp.expand();
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.ready();
+
+                const { user } = Telegram.WebApp.initDataUnsafe;
+
+                try {
+                    const { data, error } = await supabase
+                        .from("users")
+                        .select('*')
+                        .eq('father', user.id);
+                    if (error) throw error;
+                    setUsers(data);
+                } catch (error) {
+                    console.error("Error fetching users:", error);
+                }
+            }
         }
     }, []);
 
@@ -51,26 +66,44 @@ const Smm = () => {
     );
 
     const sendMessage = async () => {
-        try {
-            const { error } = await supabase
-                .from('adminmessage')
-                .insert([
-                    {
-                        seen: true,
-                        message: message,
-                        for: messageId,
-                        father: 6528707984,
-                        from: "Admin",
-                    }
-                ]);
-            if (error) throw error;
-            setIsModalOpen(false);
-        } catch (error) {
-            console.error("Error sending message:", error.message);
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
+
+        script.onload = async () => {
+            const Telegram = window.Telegram;
+            Telegram.WebApp.expand();
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.ready();
+
+                const { user } = Telegram.WebApp.initDataUnsafe;
+
+
+                try {
+                    const { error } = await supabase
+                        .from('adminmessage')
+                        .insert([
+                            {
+                                seen: true,
+                                message: message,
+                                for: messageId,
+                                father: user.id,
+                                from: "Admin",
+                            }
+                        ]);
+                    if (error) throw error;
+                    setIsModalOpen(false);
+
+                } catch (error) {
+                    console.error("Error sending message:", error.message);
+                }
+            }
         }
     };
 
     const updateBalance = async () => {
+        setBala(null);
         try {
             const { error } = await supabase
                 .from('users')
@@ -78,39 +111,55 @@ const Smm = () => {
                 .eq("id", messageId);
             if (error) throw error;
             setShowBox(0);
+
         } catch (error) {
             console.error("Error updating balance:", error.message);
         }
     };
 
     useEffect(() => {
-        const subscribeToChanges = () => {
-            const channel = supabase
-                .channel('users')
-                .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.6528707984` }, (payload) => {
-                    setUsers((prevData) => [...prevData, payload.new]);
-                })
-                .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.6528707984` }, (payload) => {
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
 
-                    setUsers((prevData) => {
-                        // Update the balance if the user ID matches
-                        return prevData.map((item) =>
-                            item.id === payload.new.id
-                                ? { ...item, balance: payload.new.balance }  // Update the balance
-                                : item  // Keep the rest unchanged
-                        );
-                    });
+        script.onload = async () => {
+            const Telegram = window.Telegram;
+            Telegram.WebApp.expand();
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.ready();
+
+                const { user } = Telegram.WebApp.initDataUnsafe;
+
+                const subscribeToChanges = () => {
+                    const channel = supabase
+                        .channel('users')
+                        .on("postgres_changes", { event: "INSERT", schema: "public", table: "users", filter: `father=eq.${user.id}` }, (payload) => {
+                            setUsers((prevData) => [...prevData, payload.new]);
+                        })
+                        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "users", filter: `father=eq.${user.id}` }, (payload) => {
+
+                            setUsers((prevData) => {
+                                // Update the balance if the user ID matches
+                                return prevData.map((item) =>
+                                    item.id === payload.new.id
+                                        ? { ...item, balance: payload.new.balance }  // Update the balance
+                                        : item  // Keep the rest unchanged
+                                );
+                            });
 
 
-                })
-                .subscribe();
+                        })
+                        .subscribe();
 
-            return () => {
-                supabase.removeChannel(channel);
-            };
-        };
+                    return () => {
+                        supabase.removeChannel(channel);
+                    };
+                };
 
-        subscribeToChanges();
+                subscribeToChanges();
+            }
+        }
     }, []);
 
     return (
@@ -146,109 +195,113 @@ const Smm = () => {
                     </div>
                 </div>
             )}
-            <ul className="overflow-hidden">
-                {filteredUsers.map((items, index) => (
-                    <li key={index} className="block p-2" style={{ borderTop: '1px solid var(--tgui--header_bg_color)', borderBottom: '1px solid var(--tgui--header_bg_color)' }}>
-                        <div className="flex">
-                            <div className="p-2 block w-2/12">
-                                <div className="relative w-fit">
-                                    <Avatar size={48} src={items.profile} />
-                                </div>
-                                <div className="m-1" style={{ fontSize: '0.8rem', lineHeight: '1' }}>
-                                    <strong>{items.name}</strong>
-                                </div>
-                                <div className="m-1" style={{ fontSize: '0.5rem', lineHeight: '1' }}>{items.id}</div>
-                            </div>
-                            <div className="flex gap-1 my-auto w-full place-content-center">
-                                {items.username && (
-                                    <button
-                                        onClick={() => {
-                                            const script = document.createElement("script");
-                                            script.src = "https://telegram.org/js/telegram-web-app.js?2";
-                                            script.async = true;
-                                            document.body.appendChild(script);
+            <div className="w-full overflow-auto" style={{ height: '29rem' }}>
+                <ul className="overflow-hidden">
+                    {filteredUsers.map((items, index) => (
 
-                                            script.onload = () => {
-                                                const Telegram = window.Telegram;
-                                                if (Telegram && Telegram.WebApp) {
-                                                    Telegram.WebApp.close();
-                                                    const chatLink = `https://t.me/${items.username}`;
-                                                    Telegram.WebApp.openLink(chatLink);
-                                                }
-                                            };
-                                        }}
+                        <li key={index} className="block p-2" style={{ borderTop: '1px solid var(--tgui--header_bg_color)', borderBottom: '1px solid var(--tgui--header_bg_color)' }}>
+                            <div className="flex">
+                                <div className="p-2 block w-2/12">
+                                    <div className="relative w-fit">
+                                        <Avatar size={48} src={items.profile} />
+                                    </div>
+                                    <div className="m-1" style={{ fontSize: '0.8rem', lineHeight: '1' }}>
+                                        <strong>{items.name}</strong>
+                                    </div>
+                                    <div className="m-1" style={{ fontSize: '0.5rem', lineHeight: '1' }}>{items.id}</div>
+                                </div>
+                                <div className="flex gap-1 my-auto w-full place-content-center">
+                                    {items.username && (
+                                        <button
+                                            onClick={() => {
+                                                const script = document.createElement("script");
+                                                script.src = "https://telegram.org/js/telegram-web-app.js?2";
+                                                script.async = true;
+                                                document.body.appendChild(script);
+
+                                                script.onload = () => {
+                                                    const Telegram = window.Telegram;
+                                                    if (Telegram && Telegram.WebApp) {
+                                                        Telegram.WebApp.close();
+                                                        const chatLink = `https://t.me/${items.username}`;
+                                                        Telegram.WebApp.openLink(chatLink);
+                                                    }
+                                                };
+                                            }}
+                                            style={{ fontSize: '0.8rem' }}
+                                            className="p-1 flex flex-wrap flex-col place-content-center h-fit w-fit px-4"
+                                        >
+                                            <FontAwesomeIcon className="mx-auto text-2xl mb-1" icon={faTelegram} />
+                                            chat
+                                        </button>
+                                    )}
+                                    <button
                                         style={{ fontSize: '0.8rem' }}
+                                        onClick={() => {
+                                            setIsModalOpen(true);
+                                            setMessageId(items.id);
+                                            setMessageTo(items.name);
+                                        }}
                                         className="p-1 flex flex-wrap flex-col place-content-center h-fit w-fit px-4"
                                     >
-                                        <FontAwesomeIcon className="mx-auto text-2xl mb-1" icon={faTelegram} />
-                                        chat
+                                        <FontAwesomeIcon className="text-2xl mx-auto mb-1" icon={faComment} />
+                                        message
                                     </button>
-                                )}
-                                <button
-                                    style={{ fontSize: '0.8rem' }}
-                                    onClick={() => {
-                                        setIsModalOpen(true);
-                                        setMessageId(items.id);
-                                        setMessageTo(items.name);
-                                    }}
-                                    className="p-1 flex flex-wrap flex-col place-content-center h-fit w-fit px-4"
-                                >
-                                    <FontAwesomeIcon className="text-2xl mx-auto mb-1" icon={faComment} />
-                                    message
-                                </button>
-                                <button
-                                    style={{
-                                        fontSize: '0.8REM',
-                                        background: showBox === items.id ? 'var(--tgui--accent_text_color)' : ''
-                                    }}
-                                    className="p-1 h-fit flex flex-wrap flex-col place-content-center w-fit px-4"
-                                    onClick={() => {
-                                        setShowBox((prev) => (prev === items.id ? 0 : items.id));
-                                        setShowDetail(0);
-                                        setMessageId(items.id);
-                                    }}
-                                >
-                                    <FontAwesomeIcon className="text-2xl mx-auto mb-1" icon={faMoneyBill} />
-                                    update
-                                </button>
-                                <button
-                                    style={{
-                                        fontSize: '0.8rem',
-                                        background: showDetail === items.id ? 'var(--tgui--accent_text_color)' : ''
-                                    }}
-                                    className="p-1 h-fit flex flex-wrap flex-col place-content-center w-fit px-4"
-                                    onClick={() => {
-                                        setShowDetail((prev) => (prev === items.id ? 0 : items.id));
-                                        setShowBox(0);
-                                    }}
-                                >
-                                    <FontAwesomeIcon className="text-2xl mx-auto mb-1" icon={faSortDown} />
-                                    Detail
-                                </button>
+                                    <button
+                                        style={{
+                                            fontSize: '0.8REM',
+                                            background: showBox === items.id ? 'var(--tgui--accent_text_color)' : ''
+                                        }}
+                                        className="p-1 h-fit flex flex-wrap flex-col place-content-center w-fit px-4"
+                                        onClick={() => {
+                                            setShowBox((prev) => (prev === items.id ? 0 : items.id));
+                                            setShowDetail(0);
+                                            setMessageId(items.id);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon className="text-2xl mx-auto mb-1" icon={faMoneyBill} />
+                                        update
+                                    </button>
+                                    <button
+                                        style={{
+                                            fontSize: '0.8rem',
+                                            background: showDetail === items.id ? 'var(--tgui--accent_text_color)' : ''
+                                        }}
+                                        className="p-1 h-fit flex flex-wrap flex-col place-content-center w-fit px-4"
+                                        onClick={() => {
+                                            setShowDetail((prev) => (prev === items.id ? 0 : items.id));
+                                            setShowBox(0);
+                                        }}
+                                    >
+                                        <FontAwesomeIcon className="text-2xl mx-auto mb-1" icon={faSortDown} />
+                                        Detail
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        {showDetail === items.id && (
-                            <div style={{ background: 'var(--tgui--subtitle_text_color)', color: 'var(--tgui--button_text_color)' }} className="modal-pop ml-auto w-full rounded-lg m-2 p-2 inline-block">
-                                <p>Balance: {items.balance}</p>
-                                <p>Phone: {items.phone}</p>
-                                <p>username: @{items.username}</p>
-                            </div>
-                        )}
-                        {showBox === items.id && (
-                            <div className="flex modal-pop">
-                                <input
-                                    type="number"
-                                    placeholder={items.balance}
-                                    onChange={(e) => setBala(Number(e.target.value))}
-                                    value={bala}
-                                    className="bg-gray-100 w-11/12 m-2 p-1"
-                                />
-                                <button className="px-4 h-fit bg-gray-100 py-2 my-auto" onClick={updateBalance}>update</button>
-                            </div>
-                        )}
-                    </li>
-                ))}
-            </ul>
+                            {showDetail === items.id && (
+                                <div style={{ background: 'var(--tgui--subtitle_text_color)', color: 'var(--tgui--button_text_color)' }} className="modal-pop ml-auto w-full rounded-lg m-2 p-2 inline-block">
+                                    <p>Balance: {items.balance}</p>
+                                    <p>Phone: {items.phone}</p>
+                                    <p>username: @{items.username}</p>
+                                </div>
+                            )}
+                            {showBox === items.id && (
+                                <div className="flex modal-pop">
+                                    <input
+                                        type="number"
+                                        placeholder={items.balance}
+                                        onChange={(e) => setBala(Number(e.target.value))}
+                                        value={bala}
+                                        className="bg-gray-100 w-11/12 m-2 p-1"
+                                    />
+                                    <button className="px-4 h-fit bg-gray-100 py-2 my-auto" onClick={updateBalance}>update</button>
+                                </div>
+                            )}
+                        </li>
+
+                    ))}
+                </ul>
+            </div>
             {isModalOpen && (
                 <div
                     style={{ background: 'rgba(0, 0, 0,0.4)' }}

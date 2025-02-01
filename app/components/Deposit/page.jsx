@@ -15,12 +15,25 @@ const Orders = () => {
 
     useEffect(() => {
         const auth = async () => {
+            const script = document.createElement("script");
+            script.src = "https://telegram.org/js/telegram-web-app.js?2";
+            script.async = true;
+            document.body.appendChild(script);
+    
+            script.onload = async () => {
+                const Telegram = window.Telegram;
+                Telegram.WebApp.expand();
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.ready();
+    
+                    const { user } = Telegram.WebApp.initDataUnsafe;
+
             setLoader(true)
             // Fetch the initial data (orders) from Supabase or any other source
             const { data: initialData, error } = await supabase
                 .from("deposit")
                 .select("*")
-                .eq('father', 6528707984);
+                .eq('father', user.id);
             if (error) {
                 console.log(error);
             } else {
@@ -33,7 +46,7 @@ const Orders = () => {
 
             const channel = supabase
             .channel("deposit_channelb")
-            .on("postgres_changes", { event: "INSERT", schema: "public", table: "deposit",filter: `father=eq.6528707984` }, (payload) => {
+            .on("postgres_changes", { event: "INSERT", schema: "public", table: "deposit",filter: `father=eq.${user.id}` }, (payload) => {
                 //console.log("New order inserted:", payload.new);
               //  if(payload.new.father === 6528707984){
                 // Add the new order to the state
@@ -49,6 +62,8 @@ const Orders = () => {
         return () => {
             channel.unsubscribe();
         };
+    }
+}
 
         };
 

@@ -54,9 +54,8 @@ iframe {
 
 
 .scrollable {
-  overflow: auto; /* Enable vertical scrolling */
-  border: 1px solid #ccc; /* Optional border for visibility */
-  padding: 10px; /* Add some padding for content */
+  overflow: auto; /* Enable vertical scrolling */ /* Optional border for visibility */
+  padding: 5px; /* Add some padding for content */
   scrollbar-width: thin; /* For Firefox: thin scrollbar */
   scrollbar-color: var(--tgui--section_header_text_color) var(--tgui--secondary_bg_color); /* For Firefox: thumb and track color */
 }
