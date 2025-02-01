@@ -16,13 +16,26 @@ const Orders = () => {
     const [data, setData] = useState([]); // Adjust the type based on your data structure
 
     useEffect(() => {
+          //   // Load the Telegram Web App JavaScript SDK
+    const script = document.createElement("script");
+    script.src = "https://telegram.org/js/telegram-web-app.js?2";
+    script.async = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      const Telegram = window.Telegram;
+
+      if (window.Telegram && window.Telegram.WebApp) {
+        Telegram.WebApp.expand() // Get the app version
+        const { user } = Telegram.WebApp.initDataUnsafe;
+
         const auth = async () => {
             setLoader(true)
             // Fetch the initial data (orders) from Supabase or any other source
             const { data: initialData, error } = await supabase
                 .from("deposit")
                 .select("*")
-                .eq('father', userData.userId);
+                .eq('father', user.id);
             if (error) {
                 console.log(error);
             } else {
@@ -35,7 +48,7 @@ const Orders = () => {
 
             const channel = supabase
             .channel("deposit_channelb")
-            .on("postgres_changes", { event: "INSERT", schema: "public", table: "deposit",filter: `father=eq.${userData.userId}` }, (payload) => {
+            .on("postgres_changes", { event: "INSERT", schema: "public", table: "deposit",filter: `father=eq.${user.id}` }, (payload) => {
                 //console.log("New order inserted:", payload.new);
               //  if(payload.new.father === userData.userId){
                 // Add the new order to the state
@@ -57,7 +70,9 @@ const Orders = () => {
         
           
 
-        auth(); // Call the auth function when the component is mounted
+        auth(); 
+    }
+}// Call the auth function when the component is mounted
     }, []);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filteredData = data.filter((item) =>
