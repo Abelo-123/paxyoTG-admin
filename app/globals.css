@@ -6,7 +6,7 @@
 
 body {
   color: #ffffff;
-  background: white;
+  background: var(--tgui--secondary_bg_color); ;
 }
 
 iframe {
