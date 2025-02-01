@@ -29,7 +29,7 @@ const Smm = () => {
             const { data, error } = await supabase
                 .from("users")
                 .select('*')
-                .eq('father', userData.userId);
+                .eq('father', parseInt(userData.userId));
             if (error) throw error;
             setUsers(data);
         } catch (error) {
