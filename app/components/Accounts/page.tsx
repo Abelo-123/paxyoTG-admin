@@ -97,112 +97,52 @@ const Accounts = () => {
 
 
     const sendAdminMessage = async () => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        if (!adminMessageFor && !adminMessageFor2 && all == "admin") { //all admin
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
+            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('to', 'Admin').eq('father', 6528707984); // Update all rows where `did` is greater than 0
+            if (findErrorB) {
+                console.error(findErrorB.message)
+            } else {
+                window.alert("sending all admin")
+                setAdminMessageFor('')
+                setAdminMessageFor2('')
+                setAdminMessage('')
+                setAll('')
+            }
 
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                if (!adminMessageFor && !adminMessageFor2 && all == "admin") { //all admin
-
-                    const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('to', 'Admin').eq('father', user.id); // Update all rows where `did` is greater than 0
-                    if (findErrorB) {
-                        console.error(findErrorB.message)
-                    } else {
-                        window.alert("sending all admin")
-                        setAdminMessageFor('')
-                        setAdminMessageFor2('')
-                        setAdminMessage('')
-                        setAll('')
-                    }
-
-                } else if (!adminMessageFor && adminMessageFor2) { //specific user
-                    const { error } = await supabase
-                        .from('users')
-                        .select('id')
-                        .eq("father", adminMessageFor2)
-                        .single()
+        } else if (!adminMessageFor && adminMessageFor2) { //specific user
+            const { error } = await supabase
+                .from('users')
+                .select('id')
+                .eq("father", adminMessageFor2)
+                .single()
 
 
 
-                    if (error) {
-                        alert(error);
-                    } else {
-                        const { error } = await supabase
-                            .from('adminmessage')
-                            .insert([
-                                {
-                                    message: adminMessage, // Replace with your dynamic value if needed
-                                    for: adminMessageFor2, // Replace with the desired value for the "for" column
-                                    from: "Admin",
-                                    father: userData.userId,
-                                }
-                            ]);
-
-                        if (error) {
-                            console.error("Error inserting into adminmessage:", error);
-                        } else {
-                            const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('for', adminMessageFor).eq('father', user.id).gt('id', 0); // Update all rows where `did` is greater than 0
-                            if (findErrorB) {
-                                console.error(findErrorB.message)
-                            } else {
-                                Swal.fire({
-                                    title: 'Success!',
-                                    text: 'Message sent to user.',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK',
-                                    customClass: {
-                                        popup: 'swal2-popup',    // Apply the custom class to the popup
-                                        title: 'swal2-title',    // Apply the custom class to the title
-                                        confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
-                                        cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
-                                    }
-                                });
-                                setIndi(null)
-                                setAdminMessageFor('')
-                                setAdminMessageFor2('')
-                                setAdminMessage('')
-                                setAll('')
-                            }
+            if (error) {
+                alert(error);
+            } else {
+                const { error } = await supabase
+                    .from('adminmessage')
+                    .insert([
+                        {
+                            message: adminMessage, // Replace with your dynamic value if needed
+                            for: adminMessageFor2, // Replace with the desired value for the "for" column
+                            from: "Admin",
+                            father: userData.userId,
                         }
-                    }
-                } else if (adminMessageFor && !adminMessageFor2) { //specici admin
-                    const { error } = await supabase
-                        .from('adminmessage')
-                        .insert([
-                            {
-                                message: adminMessage, // Replace with the desired value for the "for" column
-                                from: "Admin", // Replace with the desired value for the "from" column
-                                to: adminMessageFor,
-                                seen: true,
-                                father: user.id
-                            }
-                        ]);
+                    ]);
 
-                    if (error) {
-                        console.error("Error inserting into adminmessage:", error);
-                    } else {
-                        window.alert("sendind specific admin")
-                        setAdminMessageFor('')
-                        setAdminMessageFor2('')
-                        setAdminMessage('')
-                        setAll('')
-                    }
-                } else if (!adminMessageFor && !adminMessageFor2 && all == "user") { //all use
-                    const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('father', user.id).eq('for', 'all'); // Update all rows where `did` is greater than 0
+                if (error) {
+                    console.error("Error inserting into adminmessage:", error);
+                } else {
+                    const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('for', adminMessageFor).eq('father', 6528707984).gt('id', 0); // Update all rows where `did` is greater than 0
                     if (findErrorB) {
                         console.error(findErrorB.message)
                     } else {
                         Swal.fire({
                             title: 'Success!',
-                            text: 'Message sent to all users',
+                            text: 'Message sent to user.',
                             icon: 'success',
                             confirmButtonText: 'OK',
                             customClass: {
@@ -217,76 +157,79 @@ const Accounts = () => {
                         setAdminMessageFor2('')
                         setAdminMessage('')
                         setAll('')
-                        setModalA(false)
                     }
                 }
-                else if (!adminMessageFor && !adminMessageFor2 && all == "adminuser") { //all user and admin
-                    const { error } = await supabase
-                        .from('adminmessage')
-                        .insert([
-                            {
-                                message: adminMessage, // Replace with your dynamic value if needed
-                                for: 'all', // Replace with the desired value for the "for" column
-                                from: "Admin",
-                                father: userData.userId,
-                                to: "Admin"
-                            }
-                        ]);
-
-                    if (error) {
-                        console.error("Error inserting into adminmessage:", error);
-                    } else {
-                        const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 779060335).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
-                        if (findErrorB) {
-                            console.error(findErrorB.message)
-                        } else {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Message sent to all users.',
-                                icon: 'success',
-                                confirmButtonText: 'OK',
-                                customClass: {
-                                    popup: 'swal2-popup',    // Apply the custom class to the popup
-                                    title: 'swal2-title',    // Apply the custom class to the title
-                                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
-                                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
-                                }
-                            });
-                            setAdminMessageFor('')
-                            setAdminMessageFor2('')
-                            setAdminMessage('')
-                            setAll('')
-                        }
+            }
+        } else if (adminMessageFor && !adminMessageFor2) { //specici admin
+            const { error } = await supabase
+                .from('adminmessage')
+                .insert([
+                    {
+                        message: adminMessage, // Replace with the desired value for the "for" column
+                        from: "Admin", // Replace with the desired value for the "from" column
+                        to: adminMessageFor,
+                        seen: true,
+                        father: 6528707984
                     }
-                }
+                ]);
 
-
+            if (error) {
+                console.error("Error inserting into adminmessage:", error);
+            } else {
+                window.alert("sendind specific admin")
+                setAdminMessageFor('')
+                setAdminMessageFor2('')
+                setAdminMessage('')
+                setAll('')
+            }
+        } else if (!adminMessageFor && !adminMessageFor2 && all == "user") { //all use
+            const { error: findErrorB } = await supabase.from('adminmessage').update({ message: adminMessage, seen: null }).eq('father', 6528707984).eq('for', 'all'); // Update all rows where `did` is greater than 0
+            if (findErrorB) {
+                console.error(findErrorB.message)
+            } else {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Message sent to all users',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        popup: 'swal2-popup',    // Apply the custom class to the popup
+                        title: 'swal2-title',    // Apply the custom class to the title
+                        confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                        cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                    }
+                });
+                setIndi(null)
+                setAdminMessageFor('')
+                setAdminMessageFor2('')
+                setAdminMessage('')
+                setAll('')
+                setModalA(false)
             }
         }
+        else if (!adminMessageFor && !adminMessageFor2 && all == "adminuser") { //all user and admin
+            const { error } = await supabase
+                .from('adminmessage')
+                .insert([
+                    {
+                        message: adminMessage, // Replace with your dynamic value if needed
+                        for: 'all', // Replace with the desired value for the "for" column
+                        from: "Admin",
+                        father: userData.userId,
+                        to: "Admin"
+                    }
+                ]);
 
-    }
-    const updateRate = async () => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
-
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', user.id).eq('key', 'rate'); // Update all rows where `did` is greater than 0
-                if (findErrorC) {
-                    console.error(findErrorC.message)
+            if (error) {
+                console.error("Error inserting into adminmessage:", error);
+            } else {
+                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 779060335).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
+                if (findErrorB) {
+                    console.error(findErrorB.message)
                 } else {
-                    setModalB(false)
                     Swal.fire({
                         title: 'Success!',
-                        text: 'Rate updated.',
+                        text: 'Message sent to all users.',
                         icon: 'success',
                         confirmButtonText: 'OK',
                         customClass: {
@@ -296,8 +239,36 @@ const Accounts = () => {
                             cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
                         }
                     });
+                    setAdminMessageFor('')
+                    setAdminMessageFor2('')
+                    setAdminMessage('')
+                    setAll('')
                 }
             }
+        }
+
+
+
+
+    }
+    const updateRate = async () => {
+        const { error: findErrorC } = await supabase.from('panel').update({ value: parseInt(rate) }).eq('owner', 6528707984).eq('key', 'rate'); // Update all rows where `did` is greater than 0
+        if (findErrorC) {
+            console.error(findErrorC.message)
+        } else {
+            setModalB(false)
+            Swal.fire({
+                title: 'Success!',
+                text: 'Rate updated.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'swal2-popup',    // Apply the custom class to the popup
+                    title: 'swal2-title',    // Apply the custom class to the title
+                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                }
+            });
         }
     }
     const updateAllRate = async () => {
@@ -312,102 +283,88 @@ const Accounts = () => {
     }
 
     useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        const deposit = async () => {
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
+            // Fetch the initial data (orders) from Supabase or any other source
+            const { data: depositForEach, error } = await supabase
+                .from("admin_deposit")
+                .select("*")
+                .eq('admin', userData.userId)
 
-                const { user } = Telegram.WebApp.initDataUnsafe;
-                const deposit = async () => {
+            if (error) {
+                console.log(error);
+            } else {
+                setDepo(depositForEach)
 
-                    // Fetch the initial data (orders) from Supabase or any other source
-                    const { data: depositForEach, error } = await supabase
-                        .from("admin_deposit")
+                const { data: depositForAdmin, error } = await supabase
+                    .from("admin_deposit")
+                    .select("*")
+
+                if (error) {
+                    console.log(error);
+                } else {
+                    setDepoo(depositForAdmin)
+                    const { data: withdrawlForEach, error } = await supabase
+                        .from("admin_withdrawl")
                         .select("*")
-                        .eq('admin', userData.userId)
+                        .eq('for', 6528707984)
 
                     if (error) {
                         console.log(error);
                     } else {
-                        setDepo(depositForEach)
-
-                        const { data: depositForAdmin, error } = await supabase
-                            .from("admin_deposit")
+                        setWithdrawldata(withdrawlForEach)
+                        const { data: withdrawlForAdmin, error } = await supabase
+                            .from("admin_withdrawl")
                             .select("*")
 
                         if (error) {
                             console.log(error);
                         } else {
-                            setDepoo(depositForAdmin)
-                            const { data: withdrawlForEach, error } = await supabase
-                                .from("admin_withdrawl")
+                            setWithdrawldatao(withdrawlForAdmin)
+                            const { data: amountForEach, error } = await supabase
+                                .from("admin_amount")
                                 .select("*")
-                                .eq('for', user.id)
+                                .eq('father', 6528707984)
 
                             if (error) {
                                 console.log(error);
                             } else {
-                                setWithdrawldata(withdrawlForEach)
-                                const { data: withdrawlForAdmin, error } = await supabase
-                                    .from("admin_withdrawl")
-                                    .select("*")
+                                setDepob(amountForEach)
+
+                                const { data: panelDisable, error } = await supabase
+                                    .from("panel")
+                                    .select("bigvalue")
+                                    .eq('owner', 6528707984)
+
 
                                 if (error) {
                                     console.log(error);
                                 } else {
-                                    setWithdrawldatao(withdrawlForAdmin)
-                                    const { data: amountForEach, error } = await supabase
-                                        .from("admin_amount")
-                                        .select("*")
-                                        .eq('father', user.id)
+                                    setUserData((prevNotification) => ({
+                                        ...prevNotification, // Spread the previous state
+                                        recentDisabled: panelDisable[2].bigvalue, // Fallback to `false` if undefined
+                                    }));
+
+                                    const { data: mindepo, error } = await supabase
+                                        .from("panel")
+                                        .select("minmax")
+                                        .eq('owner', 6528707984)
+
 
                                     if (error) {
                                         console.log(error);
                                     } else {
-                                        setDepob(amountForEach)
-
-                                        const { data: panelDisable, error } = await supabase
-                                            .from("panel")
-                                            .select("bigvalue")
-                                            .eq('owner', user.id)
-
-
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            setUserData((prevNotification) => ({
-                                                ...prevNotification, // Spread the previous state
-                                                recentDisabled: panelDisable[2].bigvalue, // Fallback to `false` if undefined
-                                            }));
-
-                                            const { data: mindepo, error } = await supabase
-                                                .from("panel")
-                                                .select("minmax")
-                                                .eq('owner', user.id)
-
-
-                                            if (error) {
-                                                console.log(error);
-                                            } else {
-                                                console.log(mindepo[2].minmax)
-                                            }
-                                        }
+                                        console.log(mindepo[2].minmax)
                                     }
                                 }
                             }
                         }
                     }
-                };
-
-                deposit();
+                }
             }
-        }
+        };
+
+        deposit();
     }, [])
 
     const filteredList = useMemo(() => {
@@ -453,95 +410,80 @@ const Accounts = () => {
     }, []);
 
     useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        supabase
+            .channel("panl_channel")
+            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "panel" }, (payload) => {
+                //console.log("New order inserted:", payload.new);
+                // Add the new order to the state
+                if (payload.new.owner === userData.userId && payload.new.key === 'disabled') {
+                    setUserData((prevNotification) => ({
+                        ...prevNotification, // Spread the previous state
+                        recentDisabled: [...prevNotification.recentDisabled, payload.new.bigvalue], // Append new value to the array
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
+                        // Update the `deposit` field
+                    }));
+                }
 
-                const { user } = Telegram.WebApp.initDataUnsafe;
+                //console.log(payload.new)
+            })
+            .on("postgres_changes", { event: "INSERT", schema: "public", table: "admin_withdrawl" }, (payload) => {
+                //console.log("New order inserted:", payload.new);
+                // Add the new order to the state
 
-                supabase
-                    .channel("panl_channel")
-                    .on("postgres_changes", { event: "UPDATE", schema: "public", table: "panel" }, (payload) => {
-                        //console.log("New order inserted:", payload.new);
-                        // Add the new order to the state
-                        if (payload.new.owner === userData.userId && payload.new.key === 'disabled') {
-                            setUserData((prevNotification) => ({
-                                ...prevNotification, // Spread the previous state
-                                recentDisabled: [...prevNotification.recentDisabled, payload.new.bigvalue], // Append new value to the array
+                if (payload.new.for === 6528707984) {
 
-                                // Update the `deposit` field
-                            }));
-                        }
+                    setWithdrawldatao((prevWith) => (
+                        [...prevWith, { status: payload.new.status, date: payload.new.date, wid: payload.new.wid, for: payload.new.for, bank: payload.new.bank, a_name: payload.new.a_name, a_no: payload.new.a_no, amount: payload.new.amount }]
 
-                        //console.log(payload.new)
-                    })
-                    .on("postgres_changes", { event: "INSERT", schema: "public", table: "admin_withdrawl" }, (payload) => {
-                        //console.log("New order inserted:", payload.new);
-                        // Add the new order to the state
-
-                        if (payload.new.for === user.id) {
-
-                            setWithdrawldatao((prevWith) => (
-                                [...prevWith, { status: payload.new.status, date: payload.new.date, wid: payload.new.wid, for: payload.new.for, bank: payload.new.bank, a_name: payload.new.a_name, a_no: payload.new.a_no, amount: payload.new.amount }]
-
-                            ))
-                        }
+                    ))
+                }
 
 
-                        //console.log(payload.new)
-                    })
-                    .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
-                        //console.log("New order inserted:", payload.new);
-                        // Add the new order to the state
-                        if (payload.new.for == user.id) {
-                            setWithdrawldata((prevWith) =>
-                                prevWith.map((item) =>
-                                    item.wid === payload.new.wid
-                                        ? { ...item, status: 'Sent' } // Update status to 'sent' if wid matches id
-                                        : item // Keep the other items unchanged
-                                )
-                            );
-                            setWithdrawldatao((prevWith) =>
-                                prevWith.map((item) =>
-                                    item.wid === payload.new.wid
-                                        ? { ...item, status: 'Sent' } // Update status to 'sent' if wid matches id
-                                        : item // Keep the other items unchanged
-                                )
-                            );
-                        }
+                //console.log(payload.new)
+            })
+            .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
+                //console.log("New order inserted:", payload.new);
+                // Add the new order to the state
+                if (payload.new.for == 6528707984) {
+                    setWithdrawldata((prevWith) =>
+                        prevWith.map((item) =>
+                            item.wid === payload.new.wid
+                                ? { ...item, status: 'Sent' } // Update status to 'sent' if wid matches id
+                                : item // Keep the other items unchanged
+                        )
+                    );
+                    setWithdrawldatao((prevWith) =>
+                        prevWith.map((item) =>
+                            item.wid === payload.new.wid
+                                ? { ...item, status: 'Sent' } // Update status to 'sent' if wid matches id
+                                : item // Keep the other items unchanged
+                        )
+                    );
+                }
 
-                        //console.log(payload.new)
-                    })
-                    // .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
-                    //     //console.log("New order inserted:", payload.new);
-                    //     // Add the new order to the state
-                    //     if (payload.new.for == 6528707984) {
-                    //         setWithdrawldata((prevWith) =>
-                    //             prevWith.map((item) =>
-                    //                 item.wid === payload.new.wid
-                    //                     ? { ...item, status: 'Sent' } // Update status to 'sent' if wid matches id
-                    //                     : item // Keep the other items unchanged
-                    //             )
-                    //         );
-                    //     }
+                //console.log(payload.new)
+            })
+            // .on("postgres_changes", { event: "UPDATE", schema: "public", table: "admin_withdrawl" }, (payload) => {
+            //     //console.log("New order inserted:", payload.new);
+            //     // Add the new order to the state
+            //     if (payload.new.for == 6528707984) {
+            //         setWithdrawldata((prevWith) =>
+            //             prevWith.map((item) =>
+            //                 item.wid === payload.new.wid
+            //                     ? { ...item, status: 'Sent' } // Update status to 'sent' if wid matches id
+            //                     : item // Keep the other items unchanged
+            //             )
+            //         );
+            //     }
 
-                    //     //console.log(payload.new)
-                    // })
+            //     //console.log(payload.new)
+            // })
 
 
 
 
 
-                    .subscribe();
-            }
-        }
+            .subscribe();
     }, [])
 
     const getServiceName = (serviceId) => {
@@ -550,81 +492,66 @@ const Accounts = () => {
     };
 
     const handleEnable = async (id) => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        setLoadingIndexb(id);
+        try {
+            // Fetch the current 'bigvalue' data from the 'panel' table
+            const { data, error } = await supabase
+                .from('panel')
+                .select('bigvalue')
+                .eq('key', 'disabled')
+                .eq('owner', 6528707984)// Filter based on the 'father' or any other condition
+                .single();
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                setLoadingIndexb(id);
-                try {
-                    // Fetch the current 'bigvalue' data from the 'panel' table
-                    const { data, error } = await supabase
-                        .from('panel')
-                        .select('bigvalue')
-                        .eq('key', 'disabled')
-                        .eq('owner', user.id)// Filter based on the 'father' or any other condition
-                        .single();
-
-                    if (error) {
-                        console.error('Error fetching data:', error);
-                        return;
-                    }
-
-                    // Split the bigvalue into an array
-                    let bigValueArray = String(data.bigvalue || "").split(",");
-
-                    // Filter out the ID from the array (if necessary)
-                    bigValueArray = bigValueArray.filter((item) => item !== id.toString());
-
-                    // Join the array back into a comma-separated string
-                    const updatedBigValue = bigValueArray.join(",");
-                    setUserData((prevNotification) => ({
-                        ...prevNotification, // Spread the previous state
-                        recentDisabled: updatedBigValue, // Remove the ID from the array
-                    }));
-                    // Update the 'bigvalue' column in the 'panel' table
-                    const { error: updateError } = await supabase
-                        .from('panel')
-                        .update({ bigvalue: updatedBigValue })
-                        .eq('owner', user.id)// Filter by correct row
-
-
-                    if (updateError) {
-                        console.error('Error updating bigvalue:', updateError);
-                    } else {
-
-
-                        console.log('Bigvalue updated successfully');
-
-                        // Now update `recentDisabled` in the userData state
-                        setUserData((prevNotification) => {
-                            // Split current recentDisabled and remove duplicates
-                            const recentDisabledArray = [
-                                ...new Set(String(prevNotification.recentDisabled || "").split(",")),
-                                ...bigValueArray, // Add the updated bigValueArray
-                            ];
-
-                            // Join the array back into a string and update the state
-                            return {
-                                ...prevNotification,
-                                recentDisabled: recentDisabledArray.join(","),
-                            };
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error in handleEnable:', error);
-                } finally {
-                    setLoadingIndexb(null); // Re-enable button after operation
-                }
+            if (error) {
+                console.error('Error fetching data:', error);
+                return;
             }
+
+            // Split the bigvalue into an array
+            let bigValueArray = String(data.bigvalue || "").split(",");
+
+            // Filter out the ID from the array (if necessary)
+            bigValueArray = bigValueArray.filter((item) => item !== id.toString());
+
+            // Join the array back into a comma-separated string
+            const updatedBigValue = bigValueArray.join(",");
+            setUserData((prevNotification) => ({
+                ...prevNotification, // Spread the previous state
+                recentDisabled: updatedBigValue, // Remove the ID from the array
+            }));
+            // Update the 'bigvalue' column in the 'panel' table
+            const { error: updateError } = await supabase
+                .from('panel')
+                .update({ bigvalue: updatedBigValue })
+                .eq('owner', 6528707984)// Filter by correct row
+
+
+            if (updateError) {
+                console.error('Error updating bigvalue:', updateError);
+            } else {
+
+
+                console.log('Bigvalue updated successfully');
+
+                // Now update `recentDisabled` in the userData state
+                setUserData((prevNotification) => {
+                    // Split current recentDisabled and remove duplicates
+                    const recentDisabledArray = [
+                        ...new Set(String(prevNotification.recentDisabled || "").split(",")),
+                        ...bigValueArray, // Add the updated bigValueArray
+                    ];
+
+                    // Join the array back into a string and update the state
+                    return {
+                        ...prevNotification,
+                        recentDisabled: recentDisabledArray.join(","),
+                    };
+                });
+            }
+        } catch (error) {
+            console.error('Error in handleEnable:', error);
+        } finally {
+            setLoadingIndexb(null); // Re-enable button after operation
         }
     };
     const handleSearchChange = (e) => {
@@ -632,47 +559,32 @@ const Accounts = () => {
     };
 
     const handleDisable = async (id) => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        setLoadingIndex(id);
+        try {
+            // Update local state immediately for a better UI experience
+            setUserData((prevUserData) => ({
+                ...prevUserData,
+                recentDisabled: `${prevUserData.recentDisabled},${id}`,
+            }));
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
+            const updatedValue = userData.recentDisabled
+                ? `${userData.recentDisabled},${id}`
+                : id;
 
-                const { user } = Telegram.WebApp.initDataUnsafe;
+            // Update the database
+            const { error: updateError } = await supabase
+                .from("panel")
+                .update({ bigvalue: updatedValue })
+                .eq("owner", 6528707984)
+                .eq("key", "disabled");
 
-                setLoadingIndex(id);
-                try {
-                    // Update local state immediately for a better UI experience
-                    setUserData((prevUserData) => ({
-                        ...prevUserData,
-                        recentDisabled: `${prevUserData.recentDisabled},${id}`,
-                    }));
+            if (updateError) throw updateError;
 
-                    const updatedValue = userData.recentDisabled
-                        ? `${userData.recentDisabled},${id}`
-                        : id;
-
-                    // Update the database
-                    const { error: updateError } = await supabase
-                        .from("panel")
-                        .update({ bigvalue: updatedValue })
-                        .eq("owner", user.id)
-                        .eq("key", "disabled");
-
-                    if (updateError) throw updateError;
-
-                    console.log("Updated successfully:", updatedValue);
-                } catch (error) {
-                    console.error("Error updating bigvalue:", error.message);
-                } finally {
-                    setLoadingIndex(null); // Re-enable button after operation
-                }
-            }
+            console.log("Updated successfully:", updatedValue);
+        } catch (error) {
+            console.error("Error updating bigvalue:", error.message);
+        } finally {
+            setLoadingIndex(null); // Re-enable button after operation
         }
     };
     const generateIframeSrc1 = () => 'https://paxyo.com/chapa.html?amount=1';
@@ -687,81 +599,53 @@ const Accounts = () => {
 
 
     const send = async (mess) => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
+        const { error } = await supabase.from('admin_deposit').insert([
+            { tid: mess, amount: 3000, admin: 6528707984 }
+        ]);
+        if (error) {
+            console.error(error.message)
+        } else {
+            // setModalE(false)
 
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                const { error } = await supabase.from('admin_deposit').insert([
-                    { tid: mess, amount: 3000, admin: user.id }
-                ]);
-                if (error) {
-                    console.error(error.message)
-                } else {
-                    // setModalE(false)
-
-                    setDepo((prevData) => [...prevData, {
-                        status: "Pending",
-                        date: new Date().toISOString(),
-                        tid: mess,
-                        amount: 3000
-                    }]);
-                }
-            }
+            setDepo((prevData) => [...prevData, {
+                status: "Pending",
+                date: new Date().toISOString(),
+                tid: mess,
+                amount: 3000
+            }]);
         }
     }
     const sendb = async (mess, am) => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
+        const { error } = await supabase.from('admin_amount').insert([
+            { tid: mess, amount: am, father: 6528707984 }
+        ]);
+        if (error) {
+            console.error(error.message)
+        } else {
+            // setModalE(false)
+            const { data, error } = await supabase.from('users')
+                .select('a_balance')
+                .eq('id', 6528707984)
+                .single()
 
-                const { user } = Telegram.WebApp.initDataUnsafe;
 
-                const { error } = await supabase.from('admin_amount').insert([
-                    { tid: mess, amount: am, father: user.id }
-                ]);
+            if (!error) {
+                const news = data.a_balance + am
+                const { error } = await supabase.from('users')
+                    .update({ 'a_balance': news })
+                    .eq('id', 6528707984)
+
                 if (error) {
-                    console.error(error.message)
+                    console.log(error.message)
                 } else {
-                    // setModalE(false)
-                    const { data, error } = await supabase.from('users')
-                        .select('a_balance')
-                        .eq('id', user.id)
-                        .single()
-
-
-                    if (!error) {
-                        const news = data.a_balance + am
-                        const { error } = await supabase.from('users')
-                            .update({ 'a_balance': news })
-                            .eq('id', user.id)
-
-                        if (error) {
-                            console.log(error.message)
-                        } else {
-                            setDepob((prevData) => [...prevData, {
-                                status: "Done",
-                                date: new Date().toISOString(),
-                                tid: mess,
-                                amount: am
-                            }]);
-                        }
-                    }
+                    setDepob((prevData) => [...prevData, {
+                        status: "Done",
+                        date: new Date().toISOString(),
+                        tid: mess,
+                        amount: am
+                    }]);
                 }
             }
         }
@@ -994,92 +878,62 @@ const Accounts = () => {
     }, []);
 
     const addWithdrawl = async () => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
+        const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
 
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
-
-                const { error: setError } = await supabase
-                    .from('admin_withdrawl')
-                    .insert([{
-                        for: user.id,
-                        bank: bank,
-                        a_name: accountname,
-                        a_no: acc,
-                        wid: wid,
-                        amount: amount
-                    }])
+        const { error: setError } = await supabase
+            .from('admin_withdrawl')
+            .insert([{
+                for: 6528707984,
+                bank: bank,
+                a_name: accountname,
+                a_no: acc,
+                wid: wid,
+                amount: amount
+            }])
 
 
-                if (setError) {
-                    console.error('Error fetching initial balance:', setError)
-                } else {
-                    setWithdrawldata((prevWith) => (
-                        [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: userData.current, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
+        if (setError) {
+            console.error('Error fetching initial balance:', setError)
+        } else {
+            setWithdrawldata((prevWith) => (
+                [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: userData.current, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
 
-                    ))
-                    setModalww(false)
-                    setModalF(false)
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'withdrawl success.',
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                        customClass: {
-                            popup: 'swal2-popup',    // Apply the custom class to the popup
-                            title: 'swal2-title',    // Apply the custom class to the title
-                            confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
-                            cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
-                        }
-                    });
+            ))
+            setModalww(false)
+            setModalF(false)
+            Swal.fire({
+                title: 'Success!',
+                text: 'withdrawl success.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'swal2-popup',    // Apply the custom class to the popup
+                    title: 'swal2-title',    // Apply the custom class to the title
+                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
                 }
-            }
+            });
         }
     }
 
     const updateDeposit = async () => {
-        const script = document.createElement("script");
-        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-        script.async = true;
-        document.body.appendChild(script);
-
-        script.onload = async () => {
-            const Telegram = window.Telegram;
-            Telegram.WebApp.expand();
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.ready();
-
-                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', user.id).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
-                if (findErrorB) {
-                    console.error(findErrorB.message)
-                } else {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Minimum Deposit updated.',
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                        customClass: {
-                            popup: 'swal2-popup',    // Apply the custom class to the popup
-                            title: 'swal2-title',    // Apply the custom class to the title
-                            confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
-                            cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
-                        }
-                    });
-                    setModalG(false)
+        const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', 6528707984).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
+        if (findErrorB) {
+            console.error(findErrorB.message)
+        } else {
+            Swal.fire({
+                title: 'Success!',
+                text: 'Minimum Deposit updated.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+                customClass: {
+                    popup: 'swal2-popup',    // Apply the custom class to the popup
+                    title: 'swal2-title',    // Apply the custom class to the title
+                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
                 }
-            }
+            });
+            setModalG(false)
         }
     }
 
@@ -1117,33 +971,18 @@ const Accounts = () => {
                 </div>
                 <div className="p-2 h-fit ">
                     <Button onClick={async () => {
-                        const script = document.createElement("script");
-                        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-                        script.async = true;
-                        document.body.appendChild(script);
-
-                        script.onload = async () => {
-                            const Telegram = window.Telegram;
-                            Telegram.WebApp.expand();
-                            if (window.Telegram && window.Telegram.WebApp) {
-                                window.Telegram.WebApp.ready();
-
-                                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                                setModalB(true)
-                                const { data: fetchRate, error } = await supabase
-                                    .from("panel")
-                                    .select("value")
-                                    .eq('owner', user.id)
-                                    .eq('key', 'rate')
+                        setModalB(true)
+                        const { data: fetchRate, error } = await supabase
+                            .from("panel")
+                            .select("value")
+                            .eq('owner', 6528707984)
+                            .eq('key', 'rate')
 
 
-                                if (error) {
-                                    console.log(error);
-                                } else {
-                                    setRr(fetchRate[0].value)
-                                }
-                            }
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            setRr(fetchRate[0].value)
                         }
                     }} className="w-full">Rate</Button>
                 </div>
@@ -1168,37 +1007,23 @@ const Accounts = () => {
                 </div>
                 <div className="p-2 h-fit ">
                     <Button onClick={async () => {
-                        const script = document.createElement("script");
-                        script.src = "https://telegram.org/js/telegram-web-app.js?2";
-                        script.async = true;
-                        document.body.appendChild(script);
 
-                        script.onload = async () => {
-                            const Telegram = window.Telegram;
-                            Telegram.WebApp.expand();
-                            if (window.Telegram && window.Telegram.WebApp) {
-                                window.Telegram.WebApp.ready();
-
-                                const { user } = Telegram.WebApp.initDataUnsafe;
-
-                                setModalG(true)
-                                const { data: fetchMinmax, error } = await supabase
-                                    .from("panel")
-                                    .select("minmax")
-                                    .eq('owner', user.id)
+                        setModalG(true)
+                        const { data: fetchMinmax, error } = await supabase
+                            .from("panel")
+                            .select("minmax")
+                            .eq('owner', 6528707984)
 
 
-                                if (error) {
-                                    console.log(error);
-                                } else {
-                                    const validMinmax = fetchMinmax
-                                        .map(item => item.minmax)
-                                        .filter(value => value !== null && !isNaN(value)); // Ensure it's numeric
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            const validMinmax = fetchMinmax
+                                .map(item => item.minmax)
+                                .filter(value => value !== null && !isNaN(value)); // Ensure it's numeric
 
-                                    if (validMinmax.length > 0) {
-                                        setMm(validMinmax[0]); // Set the first valid number
-                                    }
-                                }
+                            if (validMinmax.length > 0) {
+                                setMm(validMinmax[0]); // Set the first valid number
                             }
                         }
                     }} className="w-full">Minimum Deposit</Button>
