@@ -6,11 +6,13 @@ import { supabase } from "@/app/lib/supabaseClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faSearch } from "@fortawesome/free-solid-svg-icons";
 
+import { useUser } from "./components/UserContext";
+
 const Orders = () => {
     const [loader, setLoader] = useState(false)
     const [searchQuery, setSearchQuery] = useState("");
     const [searchClicked, setsearchClicked] = useState(false)
-
+    const { userData } = useUser();
     const [data, setData] = useState([]); // Adjust the type based on your data structure
 
     useEffect(() => {
