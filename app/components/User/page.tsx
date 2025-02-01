@@ -24,12 +24,13 @@ const Smm = () => {
     const [bala, setBala] = useState(null);
     const { userData } = useUser();
 
-    const fetchUser = useCallback(async () => {
+    const fetchUser = useCallback(async (id) => {
+
         try {
             const { data, error } = await supabase
                 .from("users")
                 .select('*')
-                .eq('father', parseInt(userData.userId));
+                .eq('father', id);
             if (error) throw error;
             setUsers(data);
         } catch (error) {
@@ -38,7 +39,21 @@ const Smm = () => {
     }, []);
 
     useEffect(() => {
-        fetchUser();
+        //   // Load the Telegram Web App JavaScript SDK
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
+
+        script.onload = () => {
+            const Telegram = window.Telegram;
+
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.expand() // Get the app version
+                const { user } = Telegram.WebApp.initDataUnsafe;
+                fetchUser(user.id);
+            }
+        }
     }, [fetchUser]);
 
     const closeModal = () => {
@@ -51,6 +66,7 @@ const Smm = () => {
     );
 
     const sendMessage = async () => {
+
         try {
             const { error } = await supabase
                 .from('adminmessage')
