@@ -36,7 +36,7 @@ const Orders = () => {
             .on("postgres_changes", { event: "INSERT", schema: "public", table: "orders",  filter: "father=eq.userData.userId"}, (payload) => {
                 //console.log("New order inserted:", payload.new);
               //  if(payload.new.father === userData.userId){
-                // Add the new order to the state
+                // Add the new order to t he state
                 setData((prevData) => [payload.new, ...prevData]);
                 
             })
