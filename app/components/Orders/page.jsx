@@ -2,12 +2,11 @@
 import { Input, Section } from "@telegram-apps/telegram-ui";
 import MyLoader from "../Loader/page";
 import { useState, useEffect } from "react";
+import { useUser } from "../UserContext";
 
-import { useUser } from "./components/UserContext";
 import { supabase } from "@/app/lib/supabaseClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faSearch } from "@fortawesome/free-solid-svg-icons";
-
 
 const Orders = () => {
     const { userData } = useUser();

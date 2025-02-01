@@ -6,7 +6,7 @@ import { supabase } from "@/app/lib/supabaseClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faSearch } from "@fortawesome/free-solid-svg-icons";
 
-import { useUser } from "./components/UserContext";
+import { useUser } from "../UserContext";
 
 const Orders = () => {
     const [loader, setLoader] = useState(false)
