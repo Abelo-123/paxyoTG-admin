@@ -24,38 +24,38 @@ const Telegram = () => {
   const { setUserData, userData } = useUser();
   /* eslint-disable @typescript-eslint/no-unused-vars */
   const { useNotification, setNotification } = useNot();
-  // useEffect(() => {
-  //   // Load the Telegram Web App JavaScript SDK
-  //   const script = document.createElement("script");
-  //   script.src = "https://telegram.org/js/telegram-web-app.js?2";
-  //   script.async = true;
-  //   document.body.appendChild(script);
+  useEffect(() => {
+    //   // Load the Telegram Web App JavaScript SDK
+    const script = document.createElement("script");
+    script.src = "https://telegram.org/js/telegram-web-app.js?2";
+    script.async = true;
+    document.body.appendChild(script);
 
-  //   script.onload = () => {
-  //     const Telegram = window.Telegram;
+    script.onload = () => {
+      const Telegram = window.Telegram;
 
-  //     if (window.Telegram && window.Telegram.WebApp) {
-  //       Telegram.WebApp.expand() // Get the app version
-  //       const { user } = Telegram.WebApp.initDataUnsafe;
-  //       setUserData((prevNotification) => ({
-  //         ...prevNotification,
-  //         username: user.username,
-  //         firstName: user.first_name,
-  //         lastName: user.last_name,
-  //         userId: user.id,
-  //         profile: user.photo_url,
-  //         father: user.first_name
-  //       }));
-  //     }
+      if (window.Telegram && window.Telegram.WebApp) {
+        Telegram.WebApp.expand() // Get the app version
+        const { user } = Telegram.WebApp.initDataUnsafe;
+        setUserData((prevNotification) => ({
+          ...prevNotification,
+          username: user.username,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          userId: user.id,
+          profile: user.photo_url,
+          father: user.first_name
+        }));
+      }
 
-  //   };
+    };
 
 
 
-  //   return () => {
-  //     document.body.removeChild(script);
-  //   };
-  // }, []);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   useEffect(() => {
     const checkNot = async () => {

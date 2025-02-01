@@ -8,7 +8,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { supabase } from "@/app/lib/supabaseClient";
 import { useEffect, useState, useCallback } from "react";
 import { Avatar, Input } from '@telegram-apps/telegram-ui'; // Adjust as necessary
-
+import useUser from "../UserContext";
 
 const Smm = () => {
     const [showDetail, setShowDetail] = useState(0);
@@ -22,7 +22,7 @@ const Smm = () => {
     const [nameSearchQuery, setNameSearchQuery] = useState("");
     const [searchClicked, setSearchClicked] = useState(false);
     const [bala, setBala] = useState(null);
-
+    const { userData } = useUser();
 
     const fetchUser = useCallback(async () => {
         try {
@@ -149,6 +149,7 @@ const Smm = () => {
                     </div>
                 </div>
             )}
+            {userData.userId}
             <div className="w-full overflow-auto" style={{ height: '29rem' }}>
                 <ul className="overflow-hidden">
                     {filteredUsers.map((items, index) => (

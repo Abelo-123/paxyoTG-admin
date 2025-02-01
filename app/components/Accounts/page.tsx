@@ -129,7 +129,7 @@ const Accounts = () => {
                             message: adminMessage, // Replace with your dynamic value if needed
                             for: adminMessageFor2, // Replace with the desired value for the "for" column
                             from: "Admin",
-                            father: userData.userId,
+                            father: 6528707984,
                         }
                     ]);
 
@@ -215,7 +215,7 @@ const Accounts = () => {
                         message: adminMessage, // Replace with your dynamic value if needed
                         for: 'all', // Replace with the desired value for the "for" column
                         from: "Admin",
-                        father: userData.userId,
+                        father: 6528707984,
                         to: "Admin"
                     }
                 ]);
@@ -289,7 +289,7 @@ const Accounts = () => {
             const { data: depositForEach, error } = await supabase
                 .from("admin_deposit")
                 .select("*")
-                .eq('admin', userData.userId)
+                .eq('admin', 6528707984)
 
             if (error) {
                 console.log(error);
@@ -415,7 +415,7 @@ const Accounts = () => {
             .on("postgres_changes", { event: "UPDATE", schema: "public", table: "panel" }, (payload) => {
                 //console.log("New order inserted:", payload.new);
                 // Add the new order to the state
-                if (payload.new.owner === userData.userId && payload.new.key === 'disabled') {
+                if (payload.new.owner === 6528707984 && payload.new.key === 'disabled') {
                     setUserData((prevNotification) => ({
                         ...prevNotification, // Spread the previous state
                         recentDisabled: [...prevNotification.recentDisabled, payload.new.bigvalue], // Append new value to the array

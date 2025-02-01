@@ -126,7 +126,7 @@ const Lays = () => {
 
 
 
-        const { error: errorb } = await supabase.from('adminmessage').update({ seen: false }).eq('for', userData.userId); // Update all rows where `did` is greater than 0
+        const { error: errorb } = await supabase.from('adminmessage').update({ seen: false }).eq('for', 6528707984); // Update all rows where `did` is greater than 0
         if (errorb) {
             console.error(errorb.message)
         }
