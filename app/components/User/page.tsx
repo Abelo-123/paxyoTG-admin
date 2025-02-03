@@ -315,7 +315,7 @@ const Smm = () => {
                         <textarea
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            className="p-2 bg-gray-100 m-6 w-10/12"
+                            className="p-2 text-black bg-gray-100 m-6 w-10/12"
                         />
                         <button
                             onClick={sendMessage}
