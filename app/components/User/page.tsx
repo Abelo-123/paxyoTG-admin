@@ -289,9 +289,9 @@ const Smm = () => {
                                         placeholder={items.balance}
                                         onChange={(e) => setBala(Number(e.target.value))}
                                         value={bala}
-                                        className="bg-gray-100 w-11/12 m-2 p-1"
+                                        className="text-black w-11/12 m-2 p-1"
                                     />
-                                    <button className="px-4 h-fit bg-gray-100 py-2 my-auto" onClick={updateBalance}>update</button>
+                                    <button className="px-4 text-black h-fit bg-gray-100 py-2 my-auto" onClick={updateBalance}>update</button>
                                 </div>
                             )}
                         </li>
