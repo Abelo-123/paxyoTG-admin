@@ -39,12 +39,12 @@ const Telegram = () => {
         const { user } = Telegram.WebApp.initDataUnsafe;
         setUserData((prevNotification) => ({
           ...prevNotification,
-          username: user.username,
-          firstName: user.first_name,
-          lastName: user.last_name,
-          userId: user.id,
-          profile: user.photo_url,
-          father: user.first_name
+          username: user?.username,
+          firstName: user?.first_name,
+          lastName: user?.last_name,
+          userId: user?.id,
+          profile: user?.photo_url,
+          father: user?.first_name
         }));
       }
 
@@ -62,8 +62,8 @@ const Telegram = () => {
       const { data } = await supabase
         .from('adminmessage')
         .select('message')
-        .eq('to', 6528707984)
-        .eq('father', 779060335)
+        .eq('to', 'User')
+        .eq('father', 6528707984)
         .eq('seen', true)
 
       if (data.length > 1) {

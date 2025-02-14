@@ -223,7 +223,7 @@ const Accounts = () => {
             if (error) {
                 console.error("Error inserting into adminmessage:", error);
             } else {
-                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 779060335).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
+                const { error: findErrorB } = await supabase.from('adminmessage').update({ seen: true }).eq('father', 6528707984).eq('for', 'all').gt('id', 0); // Update all rows where `did` is greater than 0
                 if (findErrorB) {
                     console.error(findErrorB.message)
                 } else {
@@ -986,17 +986,15 @@ const Accounts = () => {
                         }
                     }} className="w-full">Rate</Button>
                 </div>
-                <div className="p-2 h-fit  ">
+                <div className="p-2 flex h-fit gap-2 ">
                     <Button onClick={openModal} className="w-full">Disable</Button>
-                    <Button onClick={() => setModalD(true)} className="w-full mt-2">Enable</Button>
+                    <Button onClick={() => setModalD(true)} className="w-full ">Enable</Button>
                 </div>
-                <div className="p-2 h-fit ">
+                <div className="p-2 h-fit flex gap-2 ">
                     <Button onClick={() => {
                         setTg('')
                         setModalE(true)
                     }} className="w-full">Deposit M</Button>
-                </div>
-                <div className="p-2 h-fit ">
                     <Button onClick={() => {
                         setTb('')
                         setModalI(true)
@@ -1071,7 +1069,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Message</h2>
 
                         <div className="amount-container">
 
@@ -1162,7 +1160,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Rate</h2>
 
                         <div className="amount-container">
 
@@ -1226,7 +1224,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Disable</h2>
 
                         <div style={{ height: '42rem' }} className="amount-container">
 
@@ -1299,7 +1297,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Enable</h2>
 
                         <div style={{ height: '42rem' }} className="amount-container">
 
@@ -1388,7 +1386,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">M Deposit</h2>
 
                         <div className="amount-container">
 
@@ -1455,7 +1453,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Withdrawl</h2>
                         <p className="mb-4">Enter the amount you want to deposit:</p>
 
                         <Button onClick={() => setModalww(true)} className="w-full">WITHDRAWL</Button>
@@ -1531,7 +1529,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Withdrawl</h2>
 
                         <Select header="bank" value={bank} onChange={(e) => setBank(e.target.value)}>
                             <option value="">Select an option</option>
@@ -1606,7 +1604,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Add amount</h2>
 
                         <Input
                             header="Amount"
@@ -1677,7 +1675,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Minimum Deposit</h2>
 
                         <div className="amount-container">
 
@@ -1732,7 +1730,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">All Rate</h2>
 
                         <div className="amount-container">
 
@@ -1795,7 +1793,7 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Make Deposit</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Add amount</h2>
 
                         <div className=" amount-container">
 
