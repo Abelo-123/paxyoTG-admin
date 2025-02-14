@@ -41,7 +41,7 @@ const Tab = () => {
                     <div className='flex flex-col'>
 
                         <FontAwesomeIcon icon={faUser} style={{ color: activePage === 4 ? 'var(--tgui--link_color)' : 'var(--tgui--subtitle_text_color)', fontSize: '1.2rem' }} />
-                        <Text weight="3" style={{ color: activePage === 4 ? 'var(--tgui--link_color)' : 'var(--tgui--subtitle_text_color)', fontSize: '0.82rem' }}>Account</Text>
+                        <Text weight="3" style={{ color: activePage === 4 ? 'var(--tgui--link_color)' : 'var(--tgui--subtitle_text_color)', fontSize: '0.82rem' }}>Dashboard</Text>
                     </div>
                 </Tabbar.Item>
                 {/* <Tabbar.Item onClick={() => updateActivePage(5)}>

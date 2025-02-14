@@ -102,7 +102,14 @@ const Orders = () => {
                 />
             </div>
             )}
-            <Section header="Orders"style={{color: 'black',backgroundColor: 'var(--tgui--section_header_background_color)'}} >
+            <Section  header={(
+                    <>
+                        <div className="tgui-c3e2e598bd70eee6 tgui-080a44e6ac3f4d27 tgui-d0251b46536ac046 tgui-809f1f8a3f64154d tgui-266b6ffdbad2b90e tgui-8f63cd31b2513281 tgui-9c200683b316fde6">Order history
+                            <div style={{ fontSize: '12px' }} className="ml-auto inline w-fit text-white font-mono pl-4">24hrs: 101ETB  Monthly: 1000ETB </div>
+                        </div>
+
+                    </>
+                )}style={{color: 'black',backgroundColor: 'var(--tgui--section_header_background_color)'}} >
                 <div style={{ width: "100%" }} className=" mx-auto">
                     {loader && <MyLoader />}
                     <div style={{ borderRadius: "10px" }} className="scrollabler w-full overflow-x-auto">

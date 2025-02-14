@@ -966,9 +966,6 @@ const Accounts = () => {
     return (
         <>
             <div className="grid  gap-2 grid-row-2  px-12 w-full p-2">
-                <div className="p-2 h-fit   ">
-                    <Button onClick={() => setModalA(true)} className="w-full">Message</Button>
-                </div>
                 <div className="p-2 h-fit ">
                     <Button onClick={async () => {
                         setModalB(true)
@@ -984,24 +981,7 @@ const Accounts = () => {
                         } else {
                             setRr(fetchRate[0].value)
                         }
-                    }} className="w-full">Rate</Button>
-                </div>
-                <div className="p-2 flex h-fit gap-2 ">
-                    <Button onClick={openModal} className="w-full">Disable</Button>
-                    <Button onClick={() => setModalD(true)} className="w-full ">Enable</Button>
-                </div>
-                <div className="p-2 h-fit flex gap-2 ">
-                    <Button onClick={() => {
-                        setTg('')
-                        setModalE(true)
-                    }} className="w-full">Deposit M</Button>
-                    <Button onClick={() => {
-                        setTb('')
-                        setModalI(true)
-                    }} className="w-full">Deposit</Button>
-                </div>
-                <div className="p-2 h-fit  ">
-                    <Button onClick={() => setModalF(true)} className="w-full">Withdrawl</Button>
+                    }} className="w-full">Profit Margin</Button>
                 </div>
                 <div className="p-2 h-fit ">
                     <Button onClick={async () => {
@@ -1025,6 +1005,33 @@ const Accounts = () => {
                             }
                         }
                     }} className="w-full">Minimum Deposit</Button>
+                </div>
+                <div className="p-2 h-fit ">
+                    <Button onClick={() => {
+                        setTb('')
+                        setModalI(true)
+                    }} className="w-full">Deposit Amount</Button>
+                </div>
+
+
+
+                <div className="p-2 h-fit  ">
+                    <Button onClick={() => setModalF(true)} className="w-full">Withdrawl Earnings</Button>
+                </div>
+
+                <div className="p-2 h-fit ">
+                    <Button onClick={() => {
+                        setTg('')
+                        setModalE(true)
+                    }} className="w-full">Subscription Payment</Button>
+
+                </div>
+                <div className="p-2 flex h-fit gap-2 ">
+                    <Button onClick={openModal} className="w-full">Disable</Button>
+                    <Button onClick={() => setModalD(true)} className="w-full ">Enable</Button>
+                </div>
+                <div className="p-2 h-fit   ">
+                    <Button onClick={() => setModalA(true)} className="w-full">Message</Button>
                 </div>
                 {/* <div className="p-2 h-fit ">
                     <Button onClick={async () => {
