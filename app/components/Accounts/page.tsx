@@ -316,6 +316,7 @@ const Accounts = () => {
                         const { data: withdrawlForAdmin, error } = await supabase
                             .from("admin_withdrawl")
                             .select("*")
+                            .order("created_at", { ascending: false });
 
                         if (error) {
                             console.log(error);
@@ -1031,7 +1032,7 @@ const Accounts = () => {
                     <Button onClick={() => setModalD(true)} className="w-full ">Enable</Button>
                 </div>
                 <div className="p-2 h-fit   ">
-                    <Button onClick={() => setModalA(true)} className="w-full">Message</Button>
+                    <Button onClick={() => setModalA(true)} className="w-full">Ticker Display</Button>
                 </div>
                 {/* <div className="p-2 h-fit ">
                     <Button onClick={async () => {
@@ -1066,6 +1067,7 @@ const Accounts = () => {
                         style={{ 'width': '90%', background: 'var(--tgui--bg_color)' }}
                     // Prevent clicking inside the modal from closing it
                     >
+
                         <div
 
                             className=" text-gray-500 absolute m-2 right-4 top-2 px-4 py-3 rounded-md"
@@ -1167,8 +1169,8 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Rate</h2>
-
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Rate</h2>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This sets your profit margin. For example, if sets to 100%, your profit margin is 100% over the cost of the service, Adjust this to control the markup you earn on services offered.</div>
                         <div className="amount-container">
 
 
@@ -1231,7 +1233,8 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Disable</h2>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Disable</h2>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Click here to temporariy remove a service from the avialable offerings in your panel. The service will no longer be visble or acessible to your users until enabled again</div>
 
                         <div style={{ height: '42rem' }} className="amount-container">
 
@@ -1304,8 +1307,8 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Enable</h2>
-
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Enable</h2>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Re-enable any previously disabled services. This will make the service avialable again for your users to purchase.</div>
                         <div style={{ height: '42rem' }} className="amount-container">
 
                             <Input
@@ -1393,8 +1396,8 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">M Deposit</h2>
-
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Subscription Payment</h2>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This payment is for the technical team's monthly support to keep your panel running smoothly and without interruptions. Ensure your Subscription is active to maintain service stability.</div>
                         <div className="amount-container">
 
 
@@ -1460,8 +1463,8 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Withdrawl</h2>
-                        <p className="mb-4">Enter the amount you want to deposit:</p>
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Withdrawl</h2>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Withdrawl your profits accumulated from user orders. This is the amount you've earned after service sales and user transactions.</div>
 
                         <Button onClick={() => setModalww(true)} className="w-full">WITHDRAWL</Button>
                         <div style={{ overflow: 'auto' }} className="scrollable amount-container">
@@ -1477,15 +1480,15 @@ const Accounts = () => {
                                                 wid
                                             </th>
                                             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">amount</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                                                date
-                                            </th>
+
                                             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">bank</th>
                                             <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                                                 account name
                                             </th>
                                             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">sccout number</th>
-
+                                            <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
+                                                date
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody className=" ">
@@ -1495,10 +1498,11 @@ const Accounts = () => {
                                                 <td className="px-6 py-4 text-sm ">{items.wid}</td>
 
                                                 <td className="px-6 py-4 text-sm ">{items.amount}</td>
-                                                <td className="px-6 py-4 text-sm ">{items.date}</td>
+
                                                 <td className="px-6 py-4 text-sm ">{items.bank}</td>
                                                 <td className="px-6 py-4 text-sm ">{items.a_name}</td>
                                                 <td className="px-6 py-4 text-sm ">{items.a_no}</td>
+                                                <td className="px-6 py-4 text-sm ">{items.date}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -1540,23 +1544,26 @@ const Accounts = () => {
 
                         <Select header="bank" value={bank} onChange={(e) => setBank(e.target.value)}>
                             <option value="">Select an option</option>
-                            <option>CBE</option>
                             <option>Telebirr</option>
+                            <option>Commercial Bank of Ethiopia</option>
+                            <option>Mpesa</option>
+                            <option>Bank of Abyssinia</option>
+                            <option>CBE Birr</option>
                         </Select>
                         <Input
-                            header="account name"
+                            header="Account holder name"
                             type="text"
                             className="w-full"
-                            placeholder="account name"
+                            placeholder="Enter Account holder name"
                             value={accountname}
                             onChange={(e) => setAccountname(e.target.value)}
 
                         />
                         <Input
-                            header="acc no"
+                            header="Account number"
                             type="number"
                             className="w-full"
-                            placeholder="Enter acc"
+                            placeholder="Enter your Account Number"
                             value={acc}
 
                             onChange={(e) => setAcc(Number(e.target.value))}
@@ -1566,7 +1573,7 @@ const Accounts = () => {
                             header="Amount"
                             type="number"
                             className="w-full"
-                            placeholder="Enter amount"
+                            placeholder="Enter Amount"
                             value={amount}
 
                             onChange={(e) => setAmount(Number(e.target.value))}
@@ -1611,8 +1618,8 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Add amount</h2>
-
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Service Deposit</h2>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This is the amount you deposit into  your panel accont, which allows you to purchase services that users can order. Make sure you maintain enough balance for.</div>
                         <Input
                             header="Amount"
                             type="number"
@@ -1682,8 +1689,8 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Minimum Deposit</h2>
-
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Minimum Deposit</h2>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Set the minimum amount users must deposit into their accounts to be able to purchase services. This helps manage the lowest entry threshold for your users.</div>
                         <div className="amount-container">
 
 
@@ -1800,8 +1807,8 @@ const Accounts = () => {
                         >
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
-                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-4">Add amount</h2>
-
+                        <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Service Deposit</h2>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This is the amount you deposit into  your panel accont, which allows you to purchase services that users can order. Make sure you maintain enough balance for.</div>
                         <div className=" amount-container">
 
 
