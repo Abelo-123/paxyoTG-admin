@@ -588,12 +588,12 @@ const Accounts = () => {
             setLoadingIndex(null); // Re-enable button after operation
         }
     };
-    const generateIframeSrc1 = () => 'https://paxyo.com/chapa.html?amount=1';
-    const generateIframeSrc2 = () => `https://paxyo.com/chapa.html?amount=1`;
-    const generateIframeSrc31 = () => `https://paxyo.com/chapa.html?amount=10`;
-    const generateIframeSrc32 = () => `https://paxyo.com/chapa.html?amount=500`;
-    const generateIframeSrc33 = () => `https://paxyo.com/chapa.html?amount=2500`;
-    const generateIframeSrc34 = () => `https://paxyo.com/chapa.html?amount=5000`;
+    const generateIframeSrc1 = () => 'https://chapaaa.netlify.app/chapa.html?amount=1';
+    const generateIframeSrc2 = () => `https://chapaaa.netlify.app/chapa.html?amount=1`;
+    const generateIframeSrc31 = () => `https://chapaaa.netlify.app/chapa.html?amount=10`;
+    const generateIframeSrc32 = () => `https://chapaaa.netlify.app/chapa.html?amount=500`;
+    const generateIframeSrc33 = () => `https://chapaaa.netlify.app/chapa.html?amount=2500`;
+    const generateIframeSrc34 = () => `https://chapaaa.netlify.app/chapa.html?amount=5000`;
 
     const [loadingIndex, setLoadingIndex] = useState(null); // Track which button is loading
     const [loadingIndexb, setLoadingIndexb] = useState(null); // Track which button is loading
