@@ -1397,7 +1397,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Subscription Payment</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This payment is for the technical team's monthly support to keep your panel running smoothly and without interruptions. Ensure your Subscription is active to maintain service stability.</div>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This payment is for the technical team&apos;s monthly support to keep your panel running smoothly and without interruptions. Ensure your Subscription is active to maintain service stability.</div>
                         <div className="amount-container">
 
 
@@ -1464,7 +1464,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Withdrawl</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Withdrawl your profits accumulated from user orders. This is the amount you've earned after service sales and user transactions.</div>
+                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Withdrawl your profits accumulated from user orders. This is the amount you&apos;ve earned after service sales and user transactions.</div>
 
                         <Button onClick={() => setModalww(true)} className="w-full">WITHDRAWL</Button>
                         <div style={{ overflow: 'auto' }} className="scrollable amount-container">
