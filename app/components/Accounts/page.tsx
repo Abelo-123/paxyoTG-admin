@@ -655,7 +655,7 @@ const Accounts = () => {
 
     useEffect(() => {
         const handleIframeMessage = (event, iframeId) => {
-            if (event.origin !== 'https://paxyo.com') return;
+            if (event.origin !== 'https://chapaaa.netlify.app') return;
 
             const { type, message } = event.data;
 
@@ -1170,7 +1170,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Rate</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This sets your profit margin. For example, if sets to 100%, your profit margin is 100% over the cost of the service, Adjust this to control the markup you earn on services offered.</div>
+                        <div style={{ fontSize: '13px', color: 'gray', opacity: '0.8' }}>This sets your profit margin. For example, if sets to 100%, your profit margin is 100% over the cost of the service, Adjust this to control the markup you earn on services offered.</div>
                         <div className="amount-container">
 
 
@@ -1234,7 +1234,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Disable</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Click here to temporariy remove a service from the avialable offerings in your panel. The service will no longer be visble or acessible to your users until enabled again</div>
+                        <div style={{ fontSize: '13px', color: 'gray', opacity: '0.8' }}>Click here to temporariy remove a service from the avialable offerings in your panel. The service will no longer be visble or acessible to your users until enabled again</div>
 
                         <div style={{ height: '42rem' }} className="amount-container">
 
@@ -1308,7 +1308,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Enable</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Re-enable any previously disabled services. This will make the service avialable again for your users to purchase.</div>
+                        <div style={{ fontSize: '13px', color: 'gray', opacity: '0.8' }}>Re-enable any previously disabled services. This will make the service avialable again for your users to purchase.</div>
                         <div style={{ height: '42rem' }} className="amount-container">
 
                             <Input
@@ -1397,7 +1397,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Subscription Payment</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This payment is for the technical team&apos;s monthly support to keep your panel running smoothly and without interruptions. Ensure your Subscription is active to maintain service stability.</div>
+                        <div style={{ fontSize: '13px', color: 'gray', opacity: '0.8' }}>This payment is for the technical team&apos;s monthly support to keep your panel running smoothly and without interruptions. Ensure your Subscription is active to maintain service stability.</div>
                         <div className="amount-container">
 
 
@@ -1464,7 +1464,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Withdrawl</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Withdrawl your profits accumulated from user orders. This is the amount you&apos;ve earned after service sales and user transactions.</div>
+                        <div style={{ fontSize: '13px', color: 'gray', opacity: '0.8' }}>Withdrawl your profits accumulated from user orders. This is the amount you&apos;ve earned after service sales and user transactions.</div>
 
                         <Button onClick={() => setModalww(true)} className="w-full">WITHDRAWL</Button>
                         <div style={{ overflow: 'auto' }} className="scrollable amount-container">
@@ -1619,7 +1619,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Service Deposit</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This is the amount you deposit into  your panel accont, which allows you to purchase services that users can order. Make sure you maintain enough balance for.</div>
+                        <div style={{ fontSize: '13px', color: 'gray', opacity: '0.8' }}>This is the amount you deposit into  your panel accont, which allows you to purchase services that users can order. Make sure you maintain enough balance for.</div>
                         <Input
                             header="Amount"
                             type="number"
@@ -1690,7 +1690,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Minimum Deposit</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>Set the minimum amount users must deposit into their accounts to be able to purchase services. This helps manage the lowest entry threshold for your users.</div>
+                        <div style={{ fontSize: '13px', color: 'gray', opacity: '0.8' }}>Set the minimum amount users must deposit into their accounts to be able to purchase services. This helps manage the lowest entry threshold for your users.</div>
                         <div className="amount-container">
 
 
@@ -1808,7 +1808,7 @@ const Accounts = () => {
                             <FontAwesomeIcon icon={faClose} style={{ 'margin': 'auto auto' }} size="2x" />
                         </div>
                         <h2 style={{ color: 'var(--tgui--section_header_text_color)' }} className="text-xl font-semibold mb-1">Service Deposit</h2>
-                        <div style={{ fontSize: '13px', color: 'var(--tgui--section_header_text_color)' }}>This is the amount you deposit into  your panel accont, which allows you to purchase services that users can order. Make sure you maintain enough balance for.</div>
+                        <div style={{ fontSize: '13px', color: 'gray', opacity: '0.8' }}>This is the amount you deposit into  your panel accont, which allows you to purchase services that users can order. Make sure you maintain enough balance for.</div>
                         <div className=" amount-container">
 
 
