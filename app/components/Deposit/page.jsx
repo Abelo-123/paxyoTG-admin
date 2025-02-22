@@ -13,7 +13,7 @@ const Orders = () => {
     const [searchClicked, setsearchClicked] = useState(false)
   //  const { userData } = useUser();
     const [data, setData] = useState([]); // Adjust the type based on your data structure
-
+    const [totalDeposited, setTotalDeposited] = useState(0);
     useEffect(() => {
           //   // Load the Telegram Web App JavaScript SDK
     const script = document.createElement("script");
@@ -72,12 +72,32 @@ const Orders = () => {
         auth(); 
     }
 }// Call the auth function when the component is mounted
-    }, []);
+async function getDepositedAmount() {
+    const { data, error } = await supabase
+      .from('deposit')
+      .select('amount')
+      .eq('father', 6187538792)
+      .gte('created', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+  
+    if (error) {
+      console.error('Error fetching deposit data:', error);
+      return;
+    }
+  
+    // Calculate total deposited amount
+    const totalDeposited = data.reduce((sum, row) => sum + Number(row.amount), 0);
+    setTotalDeposited(totalDeposited);
+    
+  }
+  getDepositedAmount();
+
+}, []);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filteredData = data.filter((item) =>
         item.did?.toString().toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+   
     return (
         <>
             <div className="grid place-content-end pr-12 w-screen p-3 ">
@@ -103,6 +123,7 @@ const Orders = () => {
                 )} style={{ color: 'white',backgroundColor: 'var(--tgui--secondary_bg_color)' }}>
                 <div style={{ width: "100%"}} className=" mx-auto">
                     {loader && <MyLoader />}
+                    total: {totalDeposited}
                     <div style={{ borderRadius: "10px" }} className="scrollabler w-full overflow-x-auto">
                         <ul>
                             {!loader &&

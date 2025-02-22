@@ -316,7 +316,7 @@ const Accounts = () => {
                         const { data: withdrawlForAdmin, error } = await supabase
                             .from("admin_withdrawl")
                             .select("*")
-                            .order("created_at", { ascending: false });
+                            .order("created_at", { ascending: true });
 
                         if (error) {
                             console.log(error);
