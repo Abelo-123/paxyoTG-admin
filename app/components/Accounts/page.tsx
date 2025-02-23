@@ -892,43 +892,59 @@ const Accounts = () => {
 
     const addWithdrawl = async () => {
 
-
-        const { data: fetchWithdrawl } = await supabase
+        const { data: fetchWithdrawl, error } = await supabase
             .from("admin_withdrawl")
-            .select("*")
-            .eq('for', userData.userId)
-            .eq('status', 'Pending')
+            .select("wid")
+            .eq("for", 6187538792)
+            .eq("status", "Pending");
 
-        if (fetchWithdrawl[0].wid == null) {
+        if (error) {
+            console.error("Error fetching withdrawal data:", error);
+        } else {
+            if (fetchWithdrawl && fetchWithdrawl.length == 0) {
+                if (amount < userData.profit) {
+                    const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
 
-            if (amount < userData.profit) {
-                const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
-
-                const { error: setError } = await supabase
-                    .from('admin_withdrawl')
-                    .insert([{
-                        for: userData.userId,
-                        bank: bank,
-                        a_name: accountname,
-                        a_no: acc,
-                        wid: wid,
-                        amount: amount
-                    }])
+                    const { error: setError } = await supabase
+                        .from('admin_withdrawl')
+                        .insert([{
+                            for: 6187538792,
+                            bank: bank,
+                            a_name: accountname,
+                            a_no: acc,
+                            wid: wid,
+                            amount: amount
+                        }])
 
 
-                if (setError) {
-                    console.error('Error fetching initial balance:', setError)
+                    if (setError) {
+                        console.error('Error fetching initial balance:', setError)
+                    } else {
+                        setWithdrawldata((prevWith) => (
+                            [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: 6187538792, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
+
+                        ))
+                        setModalww(false)
+                        setModalF(false)
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'withdrawl success.',
+                            icon: 'success',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                popup: 'swal2-popup',    // Apply the custom class to the popup
+                                title: 'swal2-title',    // Apply the custom class to the title
+                                confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                                cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                            }
+                        });
+                    }
                 } else {
-                    setWithdrawldata((prevWith) => (
-                        [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: userData.userId, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
-
-                    ))
-                    setModalww(false)
-                    setModalF(false)
+                    console.log(amount + " and " + userData.profit)
                     Swal.fire({
-                        title: 'Success!',
-                        text: 'withdrawl success.',
-                        icon: 'success',
+                        title: 'Inseffucient balance!',
+                        text: 'You cant withdrawl that amount.',
+                        icon: 'error',
                         confirmButtonText: 'OK',
                         customClass: {
                             popup: 'swal2-popup',    // Apply the custom class to the popup
@@ -937,12 +953,13 @@ const Accounts = () => {
                             cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
                         }
                     });
+                    setModalww(false)
+
                 }
             } else {
-
                 Swal.fire({
-                    title: 'Inseffucient balance!',
-                    text: 'You cant withdrawl that amount.',
+                    title: 'Unfinished!',
+                    text: 'You have unfinished previous withdrawl waiting for admins..',
                     icon: 'error',
                     confirmButtonText: 'OK',
                     customClass: {
@@ -952,26 +969,9 @@ const Accounts = () => {
                         cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
                     }
                 });
-                setModalww(false)
-
             }
-        } else {
-            Swal.fire({
-                title: 'Unfinished!',
-                text: 'You have unfinished previous withdrawl waiting for admins..',
-                icon: 'error',
-                confirmButtonText: 'OK',
-                customClass: {
-                    popup: 'swal2-popup',    // Apply the custom class to the popup
-                    title: 'swal2-title',    // Apply the custom class to the title
-                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
-                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
-                }
-            });
         }
     }
-
-
 
     const updateDeposit = async () => {
         const { error: findErrorB } = await supabase.from('panel').update({ minmax: depositmin }).eq('owner', userData.userId).eq('key', 'minmax'); // Update all rows where `did` is greater than 0
