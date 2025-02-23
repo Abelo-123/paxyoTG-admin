@@ -911,7 +911,7 @@ const Accounts = () => {
                     .eq('status', 'Pending')
 
                 if (fetchWithdrawl[0].wid == null) {
-                    console.log(fetchWithdrawl)
+
                     if (amount < userData.profit) {
                         const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
 
@@ -931,7 +931,7 @@ const Accounts = () => {
                             console.error('Error fetching initial balance:', setError)
                         } else {
                             setWithdrawldata((prevWith) => (
-                                [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: userData.current, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
+                                [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: user.id, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
 
                             ))
                             setModalww(false)
