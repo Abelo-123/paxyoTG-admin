@@ -918,7 +918,7 @@ const Accounts = () => {
                         const { error: setError } = await supabase
                             .from('admin_withdrawl')
                             .insert([{
-                                for: userData.userId,
+                                for: user.id,
                                 bank: bank,
                                 a_name: accountname,
                                 a_no: acc,
@@ -950,7 +950,7 @@ const Accounts = () => {
                             });
                         }
                     } else {
-                        console.log(amount + " and " + userData.profit)
+
                         Swal.fire({
                             title: 'Inseffucient balance!',
                             text: 'You cant withdrawl that amount.',
