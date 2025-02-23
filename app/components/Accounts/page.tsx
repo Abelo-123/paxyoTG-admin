@@ -891,45 +891,87 @@ const Accounts = () => {
     }, []);
 
     const addWithdrawl = async () => {
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
 
-        const { data: fetchWithdrawl, error } = await supabase
-            .from("admin_withdrawl")
-            .select("wid")
-            .eq("for", 6187538792)
-            .eq("status", "Pending");
+        script.onload = async () => {
+            const Telegram = window.Telegram;
 
-        if (error) {
-            console.error("Error fetching withdrawal data:", error);
-        } else {
-            if (fetchWithdrawl && fetchWithdrawl.length == 0) {
-                if (amount < userData.profit) {
-                    const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.expand() // Get the app version
+                const { user } = Telegram.WebApp.initDataUnsafe;
 
-                    const { error: setError } = await supabase
-                        .from('admin_withdrawl')
-                        .insert([{
-                            for: 6187538792,
-                            bank: bank,
-                            a_name: accountname,
-                            a_no: acc,
-                            wid: wid,
-                            amount: amount
-                        }])
+                const { data: fetchWithdrawl, error } = await supabase
+                    .from("admin_withdrawl")
+                    .select("wid")
+                    .eq("for", user.id)
+                    .eq("status", "Pending");
+
+                if (error) {
+                    console.error("Error fetching withdrawal data:", error);
+                } else {
+                    if (fetchWithdrawl && fetchWithdrawl.length == 0) {
+                        if (amount < userData.profit) {
+                            const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
+
+                            const { error: setError } = await supabase
+                                .from('admin_withdrawl')
+                                .insert([{
+                                    for: user.id,
+                                    bank: bank,
+                                    a_name: accountname,
+                                    a_no: acc,
+                                    wid: wid,
+                                    amount: amount
+                                }])
 
 
-                    if (setError) {
-                        console.error('Error fetching initial balance:', setError)
+                            if (setError) {
+                                console.error('Error fetching initial balance:', setError)
+                            } else {
+                                setWithdrawldata((prevWith) => (
+                                    [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: user.id, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
+
+                                ))
+                                setModalww(false)
+                                setModalF(false)
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'withdrawl success.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                    customClass: {
+                                        popup: 'swal2-popup',    // Apply the custom class to the popup
+                                        title: 'swal2-title',    // Apply the custom class to the title
+                                        confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                                        cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                                    }
+                                });
+                            }
+                        } else {
+                            console.log(amount + " and " + userData.profit)
+                            Swal.fire({
+                                title: 'Inseffucient balance!',
+                                text: 'You cant withdrawl that amount.',
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    popup: 'swal2-popup',    // Apply the custom class to the popup
+                                    title: 'swal2-title',    // Apply the custom class to the title
+                                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                                }
+                            });
+                            setModalww(false)
+
+                        }
                     } else {
-                        setWithdrawldata((prevWith) => (
-                            [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: 6187538792, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
-
-                        ))
-                        setModalww(false)
-                        setModalF(false)
                         Swal.fire({
-                            title: 'Success!',
-                            text: 'withdrawl success.',
-                            icon: 'success',
+                            title: 'Unfinished!',
+                            text: 'You have unfinished previous withdrawl waiting for admins..',
+                            icon: 'error',
                             confirmButtonText: 'OK',
                             customClass: {
                                 popup: 'swal2-popup',    // Apply the custom class to the popup
@@ -939,36 +981,7 @@ const Accounts = () => {
                             }
                         });
                     }
-                } else {
-                    console.log(amount + " and " + userData.profit)
-                    Swal.fire({
-                        title: 'Inseffucient balance!',
-                        text: 'You cant withdrawl that amount.',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                        customClass: {
-                            popup: 'swal2-popup',    // Apply the custom class to the popup
-                            title: 'swal2-title',    // Apply the custom class to the title
-                            confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
-                            cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
-                        }
-                    });
-                    setModalww(false)
-
                 }
-            } else {
-                Swal.fire({
-                    title: 'Unfinished!',
-                    text: 'You have unfinished previous withdrawl waiting for admins..',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    customClass: {
-                        popup: 'swal2-popup',    // Apply the custom class to the popup
-                        title: 'swal2-title',    // Apply the custom class to the title
-                        confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
-                        cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
-                    }
-                });
             }
         }
     }
