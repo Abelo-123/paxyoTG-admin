@@ -283,89 +283,101 @@ const Accounts = () => {
     }
 
     useEffect(() => {
-        const deposit = async () => {
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
 
-            // Fetch the initial data (orders) from Supabase or any other source
-            const { data: depositForEach, error } = await supabase
-                .from("admin_deposit")
-                .select("*")
-                .eq('admin', userData.userId)
+        script.onload = () => {
+            const Telegram = window.Telegram;
 
-            if (error) {
-                console.log(error);
-            } else {
-                setDepo(depositForEach)
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.expand() // Get the app version
+                const { user } = Telegram.WebApp.initDataUnsafe;
+                const deposit = async () => {
 
-                const { data: depositForAdmin, error } = await supabase
-                    .from("admin_deposit")
-                    .select("*")
-
-                if (error) {
-                    console.log(error);
-                } else {
-                    setDepoo(depositForAdmin)
-                    const { data: withdrawlForEach, error } = await supabase
-                        .from("admin_withdrawl")
+                    // Fetch the initial data (orders) from Supabase or any other source
+                    const { data: depositForEach, error } = await supabase
+                        .from("admin_deposit")
                         .select("*")
-                        .eq('for', 6187538792)
+                        .eq('admin', user.id)
 
                     if (error) {
                         console.log(error);
                     } else {
-                        setWithdrawldata(withdrawlForEach)
-                        const { data: withdrawlForAdmin, error } = await supabase
-                            .from("admin_withdrawl")
+                        setDepo(depositForEach)
+
+                        const { data: depositForAdmin, error } = await supabase
+                            .from("admin_deposit")
                             .select("*")
-                            .order("created_at", { ascending: true });
 
                         if (error) {
                             console.log(error);
                         } else {
-                            setWithdrawldatao(withdrawlForAdmin)
-                            const { data: amountForEach, error } = await supabase
-                                .from("admin_amount")
+                            setDepoo(depositForAdmin)
+                            const { data: withdrawlForEach, error } = await supabase
+                                .from("admin_withdrawl")
                                 .select("*")
-                                .eq('father', userData.userId)
+                                .eq('for', user.id)
 
                             if (error) {
                                 console.log(error);
                             } else {
-                                setDepob(amountForEach)
-
-                                const { data: panelDisable, error } = await supabase
-                                    .from("panel")
-                                    .select("bigvalue")
-                                    .eq('owner', userData.userId)
-
+                                setWithdrawldata(withdrawlForEach)
+                                const { data: withdrawlForAdmin, error } = await supabase
+                                    .from("admin_withdrawl")
+                                    .select("*")
+                                    .order("created_at", { ascending: true });
 
                                 if (error) {
                                     console.log(error);
                                 } else {
-                                    setUserData((prevNotification) => ({
-                                        ...prevNotification, // Spread the previous state
-                                        recentDisabled: panelDisable[2].bigvalue, // Fallback to `false` if undefined
-                                    }));
-
-                                    const { data: mindepo, error } = await supabase
-                                        .from("panel")
-                                        .select("minmax")
-                                        .eq('owner', userData.userId)
-
+                                    setWithdrawldatao(withdrawlForAdmin)
+                                    const { data: amountForEach, error } = await supabase
+                                        .from("admin_amount")
+                                        .select("*")
+                                        .eq('father', user.id)
 
                                     if (error) {
                                         console.log(error);
                                     } else {
-                                        console.log(mindepo[2].minmax)
+                                        setDepob(amountForEach)
+
+                                        const { data: panelDisable, error } = await supabase
+                                            .from("panel")
+                                            .select("bigvalue")
+                                            .eq('owner', user.id)
+
+
+                                        if (error) {
+                                            console.log(error);
+                                        } else {
+                                            setUserData((prevNotification) => ({
+                                                ...prevNotification, // Spread the previous state
+                                                recentDisabled: panelDisable[2].bigvalue, // Fallback to `false` if undefined
+                                            }));
+
+                                            const { data: mindepo, error } = await supabase
+                                                .from("panel")
+                                                .select("minmax")
+                                                .eq('owner', user.id)
+
+
+                                            if (error) {
+                                                console.log(error);
+                                            } else {
+                                                console.log(mindepo[2].minmax)
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
+                };
+                deposit();
             }
-        };
-
-        deposit();
+        }
     }, [])
 
     const filteredList = useMemo(() => {
@@ -894,11 +906,12 @@ const Accounts = () => {
 
                 const { data: fetchWithdrawl } = await supabase
                     .from("admin_withdrawl")
-                    .select("*")
-                    .eq('for', 6187538792)
+                    .select("wid")
+                    .eq('for', user.id)
                     .eq('status', 'Pending')
 
-                if (fetchWithdrawl && fetchWithdrawl.length > 0) {
+                if (!fetchWithdrawl && fetchWithdrawl.length < 0) {
+                    console.log(fetchWithdrawl)
                     if (amount < userData.profit) {
                         const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
 
@@ -937,6 +950,7 @@ const Accounts = () => {
                             });
                         }
                     } else {
+                        console.log(amount + " and " + userData.profit)
                         Swal.fire({
                             title: 'Inseffucient balance!',
                             text: 'You cant withdrawl that amount.',
