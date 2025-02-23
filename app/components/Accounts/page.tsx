@@ -912,7 +912,7 @@ const Accounts = () => {
 
                 if (fetchWithdrawl[0].wid == null) {
 
-                    if (amount < userData.profit) {
+                    if (amount < 3) {
                         const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
 
                         const { error: setError } = await supabase
