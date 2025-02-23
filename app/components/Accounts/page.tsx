@@ -879,41 +879,94 @@ const Accounts = () => {
     }, []);
 
     const addWithdrawl = async () => {
-        const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js?2";
+        script.async = true;
+        document.body.appendChild(script);
 
-        const { error: setError } = await supabase
-            .from('admin_withdrawl')
-            .insert([{
-                for: userData.userId,
-                bank: bank,
-                a_name: accountname,
-                a_no: acc,
-                wid: wid,
-                amount: amount
-            }])
+        script.onload = async () => {
+            const Telegram = window.Telegram;
+
+            if (window.Telegram && window.Telegram.WebApp) {
+                Telegram.WebApp.expand() // Get the app version
+                const { user } = Telegram.WebApp.initDataUnsafe;
 
 
-        if (setError) {
-            console.error('Error fetching initial balance:', setError)
-        } else {
-            setWithdrawldata((prevWith) => (
-                [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: userData.current, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
+                const { data: fetchWithdrawl } = await supabase
+                    .from("panel")
+                    .select("value")
+                    .eq('for', user.id)
+                    .eq('status', 'Pending')
 
-            ))
-            setModalww(false)
-            setModalF(false)
-            Swal.fire({
-                title: 'Success!',
-                text: 'withdrawl success.',
-                icon: 'success',
-                confirmButtonText: 'OK',
-                customClass: {
-                    popup: 'swal2-popup',    // Apply the custom class to the popup
-                    title: 'swal2-title',    // Apply the custom class to the title
-                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
-                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                if (fetchWithdrawl) {
+                    if (amount < userData.profit) {
+                        const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
+
+                        const { error: setError } = await supabase
+                            .from('admin_withdrawl')
+                            .insert([{
+                                for: userData.userId,
+                                bank: bank,
+                                a_name: accountname,
+                                a_no: acc,
+                                wid: wid,
+                                amount: amount
+                            }])
+
+
+                        if (setError) {
+                            console.error('Error fetching initial balance:', setError)
+                        } else {
+                            setWithdrawldata((prevWith) => (
+                                [...prevWith, { status: 'Pending', date: new Date().toISOString(), wid: wid, for: userData.current, bank: bank, a_name: accountname, a_no: acc, amount: amount }]
+
+                            ))
+                            setModalww(false)
+                            setModalF(false)
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'withdrawl success.',
+                                icon: 'success',
+                                confirmButtonText: 'OK',
+                                customClass: {
+                                    popup: 'swal2-popup',    // Apply the custom class to the popup
+                                    title: 'swal2-title',    // Apply the custom class to the title
+                                    confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                                    cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                                }
+                            });
+                        }
+                    } else {
+                        Swal.fire({
+                            title: 'Inseffucient balance!',
+                            text: 'You cant withdrawl that amount.',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                popup: 'swal2-popup',    // Apply the custom class to the popup
+                                title: 'swal2-title',    // Apply the custom class to the title
+                                confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                                cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                            }
+                        });
+                        setModalww(false)
+
+                    }
+                } else {
+                    Swal.fire({
+                        title: 'Unfinished!',
+                        text: 'You have unfinished previous withdrawl waiting for admins..',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        customClass: {
+                            popup: 'swal2-popup',    // Apply the custom class to the popup
+                            title: 'swal2-title',    // Apply the custom class to the title
+                            confirmButton: 'swal2-confirm', // Apply the custom class to the confirm button
+                            cancelButton: 'swal2-cancel' // Apply the custom class to the cancel button
+                        }
+                    });
                 }
-            });
+            }
         }
     }
 

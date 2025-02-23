@@ -122,7 +122,7 @@ const Lays = () => {
                     .from('adminmessage')
                     .select('*')
                     .eq('to', user.id)
-                    .eq('father',)
+                    .eq('father', 6528707984)
 
 
 
