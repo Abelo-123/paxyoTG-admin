@@ -134,7 +134,7 @@ async function getDepositedAmount() {
             setUserData((prevData) => ({ ...prevData, profit: Number(Number(total) - Number(totalwithdrawl)) }));
         }}
     }
-        }
+
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -251,6 +251,6 @@ async function getDepositedAmount() {
             </Section>
         </>
     );
-
+};
 
 export default Orders;
