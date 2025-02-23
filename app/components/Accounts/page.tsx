@@ -307,7 +307,7 @@ const Accounts = () => {
                     const { data: withdrawlForEach, error } = await supabase
                         .from("admin_withdrawl")
                         .select("*")
-                        .eq('for', userData.userId)
+                        .eq('for', 6187538792)
 
                     if (error) {
                         console.log(error);
@@ -893,8 +893,8 @@ const Accounts = () => {
 
 
                 const { data: fetchWithdrawl } = await supabase
-                    .from("panel")
-                    .select("value")
+                    .from("admin_withdrawl")
+                    .select("wid")
                     .eq('for', user.id)
                     .eq('status', 'Pending')
 
