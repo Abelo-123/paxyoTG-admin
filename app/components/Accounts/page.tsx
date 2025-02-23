@@ -894,11 +894,11 @@ const Accounts = () => {
 
                 const { data: fetchWithdrawl } = await supabase
                     .from("admin_withdrawl")
-                    .select("wid")
-                    .eq('for', user.id)
+                    .select("*")
+                    .eq('for', 6187538792)
                     .eq('status', 'Pending')
 
-                if (fetchWithdrawl) {
+                if (fetchWithdrawl && fetchWithdrawl.length > 0) {
                     if (amount < userData.profit) {
                         const wid = Math.floor(10000 + Math.random() * 90000); // generates a 5-digit random number
 
